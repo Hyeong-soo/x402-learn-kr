@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "x402 한국어 학습 허브",
+  title: "x402-learn-kr",
   description:
     "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
   openGraph: {
-    title: "x402 한국어 학습 허브",
+    title: "x402-learn-kr",
     description: "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요",
     type: "website",
   },
@@ -49,7 +49,7 @@ export default function RootLayout({
                 </a>
               </p>
               <p className="text-center text-sm text-white/40 md:text-right">
-                x402 프로토콜 한국어 학습 허브
+                x402-learn-kr
               </p>
             </div>
           </footer>

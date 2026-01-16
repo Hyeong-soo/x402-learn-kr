@@ -31,7 +31,7 @@ export default function Home() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8">
             <Sparkles className="h-4 w-4 text-emerald-400" />
-            <span className="text-sm text-white/80">x402 프로토콜 한국어 학습 허브</span>
+            <span className="text-sm text-white/80">x402-learn-kr</span>
           </div>
 
           {/* Main heading */}

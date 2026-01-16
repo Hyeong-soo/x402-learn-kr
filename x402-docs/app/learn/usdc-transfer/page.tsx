@@ -12,13 +12,16 @@ export default function USDCTransferPage() {
         <div className="flex items-center gap-2 text-sm text-white/50 mb-8">
           <Link href="/learn" className="hover:text-white">학습</Link>
           <span>/</span>
-          <span className="text-white">USDC transferWithAuthorization</span>
+          <span className="text-white">USDC 가스리스 전송</span>
         </div>
 
         {/* Title */}
         <h1 className="text-4xl font-bold text-white mb-6">
-          USDC transferWithAuthorization
+          USDC 가스리스 전송
         </h1>
+        <p className="text-lg text-white/50 mb-8">
+          EIP-3009 <code className="text-emerald-400">transferWithAuthorization</code> 함수의 작동 방식
+        </p>
 
         {/* Overview */}
         <div className="glass rounded-2xl p-8 mb-12">

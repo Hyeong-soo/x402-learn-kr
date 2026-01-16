@@ -15,6 +15,7 @@ import {
   Copy,
   Terminal,
 } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function PaywallDemoPage() {
   const [humanVerified, setHumanVerified] = useState<boolean | null>(null);
@@ -195,9 +196,7 @@ export default function PaywallDemoPage() {
                 (브라우저가 아니므로 Human Token이 없어 402 응답)
               </p>
               <div className="relative">
-                <pre className="bg-black/50 rounded-xl p-4 overflow-x-auto text-sm text-emerald-400 font-mono">
-                  {curlCommand}
-                </pre>
+                <CodeBlock code={curlCommand} language="bash" />
                 <Button
                   size="sm"
                   variant="ghost"
@@ -210,15 +209,16 @@ export default function PaywallDemoPage() {
 
               <div className="mt-4 p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
                 <h4 className="text-amber-400 font-medium mb-2">예상 응답:</h4>
-                <pre className="text-sm text-white/70 font-mono overflow-x-auto">
-{`{
+                <CodeBlock
+                  code={`{
   "error": "Payment Required",
   "message": "AI agents must pay $0.01 USDC",
   "price": 0.01,
   "network": "eip155:84532",
   "paymentDetails": { ... }
 }`}
-                </pre>
+                  language="json"
+                />
               </div>
             </div>
           </div>

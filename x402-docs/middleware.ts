@@ -9,6 +9,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // ============================================
+// Search Engine Crawlers (SEO)
+// ============================================
+
+const SEARCH_ENGINE_BOTS = [
+  "googlebot",
+  "bingbot",
+  "slurp",        // Yahoo
+  "duckduckbot",
+  "baiduspider",
+  "yandexbot",
+  "sogou",
+  "exabot",
+  "facebot",      // Facebook
+  "ia_archiver",  // Alexa
+];
+
+function isSearchEngineCrawler(userAgent: string): boolean {
+  const ua = userAgent.toLowerCase();
+  return SEARCH_ENGINE_BOTS.some(bot => ua.includes(bot));
+}
+
+// ============================================
 // Configuration (inline for Edge runtime)
 // ============================================
 
@@ -42,6 +64,60 @@ const PRICING: Record<string, string> = {
   "/demo/protected-content": "10000", // $0.01
   "/docs/advanced": "10000",          // $0.01
   "/docs/enterprise": "50000",        // $0.05
+};
+
+// Generate random flag for each deployment (changes on restart)
+const SUCCESS_FLAG = `x402_SUCCESS_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+
+// Log the flag for testing (remove in production)
+console.log(`[x402] Current success flag: ${SUCCESS_FLAG}`);
+
+// AI-optimized markdown content for protected routes
+const AI_CONTENT: Record<string, string> = {
+  "/demo/protected-content": `# x402 Protected Content - Access Granted
+
+## Verification Flag
+\`\`\`
+${SUCCESS_FLAG}
+\`\`\`
+
+Congratulations! Your AI agent successfully paid $0.01 USDC via x402 protocol and accessed this protected content.
+
+## What This Demonstrates
+
+1. **Payment Successful**: Your agent's wallet was charged $0.01 USDC on Base Sepolia
+2. **x402 Protocol Works**: The 402 Payment Required → Payment → Access flow completed
+3. **Token Efficient**: This markdown response saves tokens compared to full HTML
+
+## Premium API Documentation
+
+### Secret Configuration
+\`\`\`json
+{
+  "secret_key": "x402-premium-content-key",
+  "api_endpoint": "https://api.example.com/v2",
+  "features": {
+    "advanced_analytics": true,
+    "custom_webhooks": true,
+    "priority_support": true
+  }
+}
+\`\`\`
+
+### Enterprise Integration Steps
+1. Configure your SSO provider
+2. Set up webhook endpoints
+3. Enable audit logging
+4. Configure rate limiting policies
+
+## Summary
+- **Humans**: Free access (verified via JavaScript)
+- **AI Agents**: Pay via x402 protocol (you just did this!)
+- **Maintainers**: Earn revenue from AI usage
+
+---
+*Content served via x402 protocol. Flag: ${SUCCESS_FLAG}*
+`,
 };
 
 // ============================================
@@ -169,6 +245,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // ---- Check 0: Search Engine Crawlers (SEO) ----
+  const userAgent = request.headers.get("User-Agent") || "";
+  if (isSearchEngineCrawler(userAgent)) {
+    // Search engine bots get FREE access for SEO indexing
+    console.log(`[x402] Search engine crawler detected: ${userAgent.substring(0, 50)}...`);
+    return NextResponse.next();
+  }
+
   // ---- Check 1: Human Token ----
   const humanToken = request.cookies.get(X402_CONFIG.humanTokenCookie)?.value;
   if (humanToken) {
@@ -230,14 +314,36 @@ export async function middleware(request: NextRequest) {
 
     console.log("[x402] Payment verified and settled:", checkResult.txHash);
 
-    // Payment successful - allow access
+    // Payment successful - return markdown content for AI agents (token efficient)
+    const aiContent = AI_CONTENT[pathname];
+    if (aiContent) {
+      const paymentResponse = btoa(JSON.stringify({
+        settled: true,
+        txHash: checkResult.txHash,
+        amount: price,
+      }));
+
+      console.log(`[x402] Payment settled for ${pathname}: ${checkResult.txHash}`);
+      console.log(`[x402] Returning markdown content for AI agent`);
+
+      return new NextResponse(aiContent, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/markdown; charset=utf-8",
+          "PAYMENT-RESPONSE": paymentResponse,
+          "X-PAYMENT-RESPONSE": paymentResponse,
+          "Access-Control-Expose-Headers": "PAYMENT-RESPONSE, X-PAYMENT-RESPONSE",
+        },
+      });
+    }
+
+    // Fallback: allow access to Next.js page
     const response = NextResponse.next();
     const paymentResponse = btoa(JSON.stringify({
       settled: true,
       txHash: checkResult.txHash,
       amount: price,
     }));
-    // Set both headers for compatibility
     response.headers.set("PAYMENT-RESPONSE", paymentResponse);
     response.headers.set("X-PAYMENT-RESPONSE", paymentResponse);
 

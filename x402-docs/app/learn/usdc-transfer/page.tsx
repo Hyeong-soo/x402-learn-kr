@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Coins, Zap, Shield, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function USDCTransferPage() {
   return (
@@ -121,26 +122,36 @@ export default function USDCTransferPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-white mb-4">함수 시그니처</h2>
 
-          <div className="glass rounded-xl overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-              <span className="text-sm text-white/40 font-mono">USDC.sol</span>
-            </div>
-            <div className="p-4 bg-black/30">
-              <pre className="text-xs text-emerald-400 font-mono overflow-x-auto">
-{`function transferWithAuthorization(
-    address from,          // 토큰 보내는 사람
-    address to,            // 토큰 받는 사람
-    uint256 value,         // 전송 금액 (6 decimals)
-    uint256 validAfter,    // 유효 시작 시간 (Unix timestamp)
-    uint256 validBefore,   // 유효 종료 시간 (Unix timestamp)
-    bytes32 nonce,         // 고유 식별자
-    uint8 v,               // 서명 v 값
-    bytes32 r,             // 서명 r 값
-    bytes32 s              // 서명 s 값
+          <CodeBlock
+            code={`// USDC 컨트랙트의 가스리스 전송 함수 (EIP-3009)
+// 서명만 있으면 누구나 이 함수를 호출하여 토큰을 전송할 수 있습니다.
+// 가스비는 함수를 호출하는 사람(퍼실리테이터)이 부담합니다.
+
+function transferWithAuthorization(
+    address from,          // 토큰을 보내는 지갑 주소
+                           // 반드시 서명을 생성한 주소와 일치해야 함
+
+    address to,            // 토큰을 받을 지갑 주소
+                           // 콘텐츠 제공자의 지갑 주소
+
+    uint256 value,         // 전송할 금액 (6 decimals 적용)
+                           // 예: 10000 = $0.01, 1000000 = $1.00
+
+    uint256 validAfter,    // 서명 유효 시작 시간 (Unix timestamp)
+                           // 0이면 즉시 유효, 특정 시간 설정 가능
+
+    uint256 validBefore,   // 서명 만료 시간 (Unix timestamp)
+                           // 이 시간 이후 서명은 무효화됨
+
+    bytes32 nonce,         // 32바이트 고유 식별자
+                           // 같은 서명의 재사용 방지 (replay attack 차단)
+
+    uint8 v,               // ECDSA 서명의 recovery id (27 또는 28)
+    bytes32 r,             // ECDSA 서명의 r 값 (32바이트)
+    bytes32 s              // ECDSA 서명의 s 값 (32바이트)
 ) external;`}
-              </pre>
-            </div>
-          </div>
+            language="solidity"
+          />
 
           <div className="mt-6 space-y-4">
             <div className="glass rounded-xl p-4">
@@ -317,60 +328,92 @@ export default function USDCTransferPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-white mb-4">완전한 예제</h2>
 
-          <div className="glass rounded-xl overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-              <span className="text-sm text-white/40 font-mono">executeTransfer.ts</span>
-            </div>
-            <div className="p-4 bg-black/30">
-              <pre className="text-xs text-emerald-400 font-mono overflow-x-auto">
-{`import { ethers } from 'ethers';
+          <CodeBlock
+            code={`import { ethers, Wallet, JsonRpcProvider, Signature } from 'ethers';
 
-// USDC ABI (필요한 부분만)
+// ============================================================
+// USDC 컨트랙트 ABI (필요한 함수만 포함)
+// ============================================================
+// 전체 ABI가 아닌 사용할 함수만 정의하면 번들 크기를 줄일 수 있습니다.
 const USDC_ABI = [
   "function transferWithAuthorization(address from, address to, uint256 value, uint256 validAfter, uint256 validBefore, bytes32 nonce, uint8 v, bytes32 r, bytes32 s)"
 ];
 
+/**
+ * 퍼실리테이터가 클라이언트의 서명을 사용해 결제를 실행합니다.
+ * 이 함수는 서버 측(퍼실리테이터)에서 실행됩니다.
+ *
+ * 흐름: 클라이언트가 서명 생성 → 서버가 이 함수로 온체인 실행
+ */
 async function executePayment(
-  provider: ethers.providers.Provider,
-  executorWallet: ethers.Wallet,  // 트랜잭션 실행자 (퍼실리테이터)
-  usdcAddress: string,
-  from: string,
-  to: string,
-  value: string,
-  validAfter: number,
-  validBefore: number,
-  nonce: string,
-  signature: string  // 클라이언트가 생성한 서명
+  provider: JsonRpcProvider,            // ethers v6 Provider
+                                        // 블록체인 연결 (Alchemy, Infura 등)
+
+  executorWallet: Wallet,               // 퍼실리테이터의 지갑
+                                        // 이 지갑이 가스비를 지불합니다
+                                        // ETH 잔액이 있어야 함!
+
+  usdcAddress: string,                  // USDC 컨트랙트 주소
+                                        // Base: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+
+  from: string,                         // 토큰 보내는 사람 (클라이언트 지갑)
+  to: string,                           // 토큰 받는 사람 (콘텐츠 제공자)
+  value: string,                        // 전송 금액 (6 decimals)
+  validAfter: number,                   // 유효 시작 시간
+  validBefore: number,                  // 유효 종료 시간
+  nonce: string,                        // 고유 식별자
+
+  signature: string                     // 클라이언트가 EIP-712로 생성한 서명
+                                        // 65바이트 hex string
 ) {
+  // ============================================================
+  // 1단계: USDC 컨트랙트 인스턴스 생성
+  // ============================================================
+  // executorWallet을 연결하면 이 지갑으로 트랜잭션이 전송됩니다.
   const usdc = new ethers.Contract(usdcAddress, USDC_ABI, executorWallet);
 
-  // 서명 분해 (v, r, s)
-  const sig = ethers.utils.splitSignature(signature);
+  // ============================================================
+  // 2단계: 서명 분해 (v, r, s)
+  // ============================================================
+  // ethers v6에서는 Signature.from()을 사용합니다.
+  // EIP-712 서명은 65바이트로, r(32) + s(32) + v(1)로 구성됩니다.
+  const sig = Signature.from(signature);
 
-  // 트랜잭션 실행
+  // ============================================================
+  // 3단계: 온체인 트랜잭션 실행
+  // ============================================================
+  // transferWithAuthorization을 호출하면:
+  // - USDC 컨트랙트가 서명 검증
+  // - 유효하면 from → to로 토큰 전송
+  // - 가스비는 executorWallet에서 차감
   const tx = await usdc.transferWithAuthorization(
-    from,
-    to,
-    value,
-    validAfter,
-    validBefore,
-    nonce,
-    sig.v,
-    sig.r,
-    sig.s
+    from,           // 서명자 주소 (토큰 출금 주소)
+    to,             // 수신자 주소 (토큰 입금 주소)
+    value,          // 전송 금액
+    validAfter,     // 유효 시작
+    validBefore,    // 유효 종료
+    nonce,          // 고유 ID
+    sig.v,          // 서명 v (recovery id: 27 또는 28)
+    sig.r,          // 서명 r (32바이트)
+    sig.s           // 서명 s (32바이트)
   );
 
-  // 트랜잭션 확인 대기
+  // ============================================================
+  // 4단계: 트랜잭션 확인 대기
+  // ============================================================
+  // wait()는 트랜잭션이 블록에 포함될 때까지 대기합니다.
+  // Base에서는 보통 2-3초 소요됩니다.
   const receipt = await tx.wait();
 
+  // 성공 결과 반환
+  // hash로 블록 익스플로러에서 트랜잭션 확인 가능
   return {
     success: true,
-    txHash: receipt.transactionHash
+    txHash: receipt.hash  // ethers v6: transactionHash → hash
   };
 }`}
-              </pre>
-            </div>
-          </div>
+            language="typescript"
+          />
         </section>
 
         {/* Navigation */}

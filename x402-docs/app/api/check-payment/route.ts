@@ -17,8 +17,8 @@ const X402_CONFIG = {
 
 const NETWORKS = {
   "base-sepolia": {
-    v1Network: "base-sepolia",
-    chainId: "eip155:84532",
+    v1Network: "base-sepolia",  // SDK uses this format
+    chainId: "eip155:84532",     // CAIP-2 format (for x402 v2)
     assetAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
   },
   "base": {
@@ -32,17 +32,24 @@ export async function POST(request: Request) {
   try {
     const { paymentPayload, price, resource } = await request.json();
 
+    // Construct full URL for resource (required by x402 SDK)
+    const origin = request.headers.get("origin") || request.headers.get("host") || "localhost:3010";
+    const protocol = origin.includes("localhost") ? "http" : "https";
+    const resourceUrl = `${protocol}://${origin.replace(/^https?:\/\//, "")}${resource}`;
+
     const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
     const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
 
     const paymentRequirements = {
       scheme: "exact",
-      // v2 uses CAIP-2 format
-      network: network.chainId,
+      // Facilitator expects network name (v1 format), not CAIP-2
+      network: network.v1Network,
       maxAmountRequired: price,
-      amount: price,
-      resource,
+      resource: resourceUrl,
+      description: `Access to ${resource}`,
+      mimeType: "text/html",
       payTo: X402_CONFIG.wallet,
+      maxTimeoutSeconds: 60,
       asset: network.assetAddress,
       // EIP-712 domain parameters - must match USDC contract domain
       extra: {
@@ -51,15 +58,16 @@ export async function POST(request: Request) {
       },
     };
 
+    console.log("[x402] Payment requirements:", JSON.stringify(paymentRequirements, null, 2));
+
     console.log("[x402] Verifying payment...");
 
     // Verify payment with facilitator
-    // Must include x402Version at top level
+    // SDK expects x402Version: 1
     const verifyResponse = await fetch(`${X402_CONFIG.facilitatorUrl}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        x402Version: paymentPayload.x402Version || 2,
         paymentPayload,
         paymentRequirements,
       }),
@@ -92,7 +100,6 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        x402Version: paymentPayload.x402Version || 2,
         paymentPayload,
         paymentRequirements,
       }),

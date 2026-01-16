@@ -1,226 +1,290 @@
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, BookOpen, Zap } from "lucide-react";
+import { CheckCircle2, ArrowRight, Zap, Terminal, FileCode, Rocket, ExternalLink } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
+import { Button } from "@/components/ui/button";
 
 export default function GettingStartedPage() {
   return (
-    <div className="min-h-screen">
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+    <div className="min-h-screen py-20">
+      <div className="container max-w-4xl px-4">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-white/50 mb-8">
+          <Link href="/docs" className="hover:text-white">문서</Link>
+          <span>/</span>
+          <span className="text-white">빠른 시작</span>
+        </div>
 
-        <div className="container relative z-10 max-w-4xl px-4">
-          {/* Header */}
-          <div className="mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
-              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-mono">Free</span>
-              <span className="text-sm text-white/80">Getting Started</span>
+        {/* Header */}
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Zap className="h-4 w-4 text-emerald-400" />
+            <span className="text-sm text-white/80">5분 가이드</span>
+          </div>
+          <h1 className="text-4xl font-bold text-white mb-4">
+            빠른 시작 가이드
+          </h1>
+          <p className="text-lg text-white/60">
+            x402를 프로젝트에 통합하여 AI 에이전트로부터 수익을 창출하세요.
+          </p>
+        </div>
+
+        {/* Notice */}
+        <div className="glass rounded-xl p-6 mb-12 border border-purple-500/30">
+          <p className="text-white/80">
+            <strong className="text-purple-400">참고:</strong> 이 가이드의 코드는 개념적 구현 예시입니다.
+            실제 프로젝트에서는{" "}
+            <a href="https://github.com/coinbase/x402" target="_blank" rel="noreferrer" className="text-emerald-400 underline hover:text-emerald-300">
+              공식 SDK
+            </a>
+            를 사용하세요.
+          </p>
+        </div>
+
+        {/* Prerequisites */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+            사전 준비
+          </h2>
+          <div className="glass rounded-xl p-6">
+            <ul className="space-y-4">
+              <li className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                  <span className="text-emerald-400 font-mono text-sm">1</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">문서 사이트</h4>
+                  <p className="text-white/60 text-sm">Next.js, Docusaurus, 또는 유사한 프레임워크로 만든 사이트</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                  <span className="text-emerald-400 font-mono text-sm">2</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">암호화폐 지갑 주소</h4>
+                  <p className="text-white/60 text-sm">USDC를 받을 Base 네트워크 지갑 (MetaMask, Coinbase Wallet 등)</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                  <span className="text-emerald-400 font-mono text-sm">3</span>
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Node.js 18+</h4>
+                  <p className="text-white/60 text-sm">최신 LTS 버전 권장</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Steps */}
+        <section className="space-y-8">
+          {/* Step 1 */}
+          <div className="glass rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                <Terminal className="h-5 w-5 text-blue-400" />
+              </div>
+              <div>
+                <span className="text-blue-400 text-sm font-mono">Step 1</span>
+                <h3 className="text-white font-semibold">패키지 설치</h3>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Quick Start Guide
-            </h1>
-            <p className="text-lg text-white/60">
-              Get x402 running on your documentation site in 5 minutes.
-            </p>
+            <CodeBlock code="npm install x402-next" language="bash" />
           </div>
 
-          {/* Content */}
-          <div className="space-y-12">
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Overview</h2>
-              <p className="text-white/60">
-                x402 for Open Source lets you monetize your documentation when AI
-                agents access it, while keeping it free for human developers. Here's
-                how to get started.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Prerequisites</h2>
-              <ul className="space-y-3 text-white/60">
-                <li className="flex gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                  A documentation site (Next.js, Docusaurus, or similar)
-                </li>
-                <li className="flex gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                  A crypto wallet address to receive payments (Base network)
-                </li>
-                <li className="flex gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                  Node.js 18+ installed
-                </li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Step 1: Install the package</h2>
-              <div className="glass rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <span className="text-sm text-white/40 ml-2 font-mono">terminal</span>
-                </div>
-                <pre className="p-6 text-sm overflow-x-auto bg-transparent border-0">
-                  <code className="text-emerald-400">npm install x402-middleware</code>
-                </pre>
+          {/* Step 2 */}
+          <div className="glass rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <FileCode className="h-5 w-5 text-purple-400" />
               </div>
-            </section>
+              <div>
+                <span className="text-purple-400 text-sm font-mono">Step 2</span>
+                <h3 className="text-white font-semibold">설정 파일 생성</h3>
+              </div>
+            </div>
+            <p className="text-white/60 text-sm mb-4">
+              프로젝트 루트에 <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">x402.config.ts</code> 생성:
+            </p>
+            <CodeBlock
+              code={`// x402.config.ts
+// x402 설정 파일 - 가격과 결제 정책을 정의합니다.
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Step 2: Create configuration file</h2>
-              <p className="text-white/60 mb-4">
-                Create <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">x402.config.ts</code> in your project root:
-              </p>
-              <div className="glass rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <span className="text-sm text-white/40 ml-2 font-mono">x402.config.ts</span>
-                </div>
-                <pre className="p-6 text-sm overflow-x-auto bg-transparent border-0">
-                  <code className="text-gray-300">{`// x402.config.ts
 export const x402Config = {
-  // Your wallet address (Base network)
+  // 결제를 받을 지갑 주소 (Base 네트워크)
   wallet: "0xYourWalletAddress",
 
-  // Humans are always free
+  // 사람(브라우저)은 무료 접근
   humanAccess: "free",
 
-  // AI pays per request
+  // AI 에이전트 가격 (경로별 USDC)
   aiPricing: {
-    "/docs/**": 0.01,           // $0.01 per request
-    "/api-reference/**": 0.02,  // $0.02 for API docs
+    "/docs/**": 0.01,          // 일반 문서: $0.01
+    "/api-reference/**": 0.02, // API 레퍼런스: $0.02
   },
-};`}</code>
-                </pre>
-              </div>
-            </section>
+};`}
+              language="typescript"
+            />
+          </div>
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Step 3: Add middleware</h2>
-              <p className="text-white/60 mb-4">
-                For Next.js, create <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">middleware.ts</code>:
-              </p>
-              <div className="glass rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <span className="text-sm text-white/40 ml-2 font-mono">middleware.ts</span>
-                </div>
-                <pre className="p-6 text-sm overflow-x-auto bg-transparent border-0">
-                  <code className="text-gray-300">{`// middleware.ts
-import { x402Middleware } from "x402-middleware/next";
+          {/* Step 3 */}
+          <div className="glass rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <FileCode className="h-5 w-5 text-amber-400" />
+              </div>
+              <div>
+                <span className="text-amber-400 text-sm font-mono">Step 3</span>
+                <h3 className="text-white font-semibold">미들웨어 추가</h3>
+              </div>
+            </div>
+            <p className="text-white/60 text-sm mb-4">
+              Next.js의 경우 <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">middleware.ts</code> 생성:
+            </p>
+            <CodeBlock
+              code={`// middleware.ts
+import { x402Middleware } from "x402-next";
 import { x402Config } from "./x402.config";
 
+// 미들웨어가 요청을 분석하여:
+// - 브라우저(사람) → 무료 통과
+// - AI 에이전트 → 402 응답 반환
 export const middleware = x402Middleware(x402Config);
 
 export const config = {
   matcher: ["/docs/:path*"],
-};`}</code>
-                </pre>
-              </div>
-            </section>
+};`}
+              language="typescript"
+            />
+          </div>
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Step 4: Deploy</h2>
-              <div className="glass rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
+          {/* Step 4 */}
+          <div className="glass rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <Rocket className="h-5 w-5 text-emerald-400" />
+              </div>
+              <div>
+                <span className="text-emerald-400 text-sm font-mono">Step 4</span>
+                <h3 className="text-white font-semibold">배포</h3>
+              </div>
+            </div>
+            <CodeBlock code="vercel deploy" language="bash" />
+          </div>
+        </section>
+
+        {/* Result */}
+        <section className="mt-12">
+          <div className="glass rounded-2xl p-8 border border-emerald-500/30">
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 shrink-0">
+                <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-4">설정 완료!</h3>
+                <p className="text-white/60 mb-6">
+                  이제 문서 사이트에 x402가 적용되었습니다. 접근 방식에 따라 다르게 동작합니다:
+                </p>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="bg-black/30 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-emerald-400 font-semibold">사람 (브라우저)</span>
+                    </div>
+                    <p className="text-white/60 text-sm">
+                      JavaScript 검증 통과 → 무료 접근
+                    </p>
                   </div>
-                  <span className="text-sm text-white/40 ml-2 font-mono">terminal</span>
+                  <div className="bg-black/30 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-amber-400 font-semibold">AI 에이전트</span>
+                    </div>
+                    <p className="text-white/60 text-sm">
+                      402 응답 → USDC 결제 → 콘텐츠 접근
+                    </p>
+                  </div>
                 </div>
-                <pre className="p-6 text-sm overflow-x-auto bg-transparent border-0">
-                  <code className="text-emerald-400">vercel deploy</code>
-                </pre>
               </div>
-            </section>
+            </div>
+          </div>
+        </section>
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-4">That's it!</h2>
-              <p className="text-white/60 mb-6">
-                Your documentation is now set up with x402. Human visitors will access
-                everything for free, while AI agents will pay the configured prices.
-              </p>
+        {/* Next Steps */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold text-white mb-6">다음 단계</h2>
+          <div className="grid gap-4">
+            <a
+              href="https://github.com/coinbase/x402"
+              target="_blank"
+              rel="noreferrer"
+              className="glass glass-hover rounded-xl p-6 flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-lg bg-white/10">
+                  <ExternalLink className="h-5 w-5 text-white/70" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold group-hover:text-emerald-400 transition-colors">
+                    공식 SDK 저장소
+                  </h3>
+                  <p className="text-white/50 text-sm">프레임워크별 설치 방법과 예제 코드</p>
+                </div>
+              </div>
+              <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
+            </a>
 
-              <div className="glass rounded-2xl p-6 border-emerald-500/20">
-                <div className="flex items-start gap-4">
-                  <div className="p-2 rounded-lg bg-emerald-500/20">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            <Link href="/docs/advanced/custom-pricing">
+              <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-lg bg-amber-500/20">
+                    <Zap className="h-5 w-5 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold mb-2">What happens next?</h3>
-                    <ul className="space-y-2 text-white/60 text-sm">
-                      <li className="flex gap-2">
-                        <span className="text-emerald-400">•</span>
-                        Human visitors: Verified via JS challenge → Free access
-                      </li>
-                      <li className="flex gap-2">
-                        <span className="text-emerald-400">•</span>
-                        AI agents: Receive 402 response → Pay → Access content
-                      </li>
-                      <li className="flex gap-2">
-                        <span className="text-emerald-400">•</span>
-                        Payments go directly to your wallet in USDC
-                      </li>
-                    </ul>
+                    <h3 className="text-white font-semibold group-hover:text-amber-400 transition-colors">
+                      커스텀 가격 전략
+                    </h3>
+                    <p className="text-white/50 text-sm">콘텐츠 유형에 따른 동적 가격 책정</p>
                   </div>
                 </div>
+                <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-amber-400 transition-colors" />
               </div>
-            </section>
+            </Link>
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-6">Next Steps</h2>
-              <div className="grid gap-4">
-                <Link href="/docs/installation">
-                  <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                        Detailed installation guide
-                      </h3>
-                      <p className="text-white/50 text-sm">For your specific framework</p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
+            <Link href="/demo">
+              <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-lg bg-emerald-500/20">
+                    <Rocket className="h-5 w-5 text-emerald-400" />
                   </div>
-                </Link>
-                <Link href="/docs/configuration">
-                  <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                        Configuration options
-                      </h3>
-                      <p className="text-white/50 text-sm">For advanced pricing rules</p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
+                  <div>
+                    <h3 className="text-white font-semibold group-hover:text-emerald-400 transition-colors">
+                      데모 체험
+                    </h3>
+                    <p className="text-white/50 text-sm">x402 결제 플로우 직접 확인</p>
                   </div>
-                </Link>
-                <Link href="/demo">
-                  <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                        Try the demo
-                      </h3>
-                      <p className="text-white/50 text-sm">See x402 in action</p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
-                  </div>
-                </Link>
+                </div>
+                <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
               </div>
-            </section>
+            </Link>
           </div>
+        </section>
+
+        {/* Navigation */}
+        <div className="flex justify-between items-center mt-12 pt-8 border-t border-white/10">
+          <Button variant="outline" className="border-white/20 text-white" asChild>
+            <Link href="/docs">
+              ← 문서 목록
+            </Link>
+          </Button>
+          <Button className="bg-emerald-500 hover:bg-emerald-400 text-black" asChild>
+            <Link href="/docs/advanced/custom-pricing">
+              커스텀 가격 전략 →
+            </Link>
+          </Button>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

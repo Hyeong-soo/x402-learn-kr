@@ -1,5 +1,24 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "x402 - AI 시대의 결제 프로토콜 | x402-learn-kr",
+  description:
+    "HTTP 402 상태 코드를 활용한 인터넷 네이티브 결제 표준. AI 에이전트가 자율적으로 결제할 수 있는 새로운 방식을 한국어로 배워보세요.",
+  keywords: ["x402", "HTTP 402", "AI 결제", "마이크로페이먼트", "USDC", "블록체인", "Coinbase"],
+  openGraph: {
+    title: "x402 - AI 시대의 결제 프로토콜",
+    description: "HTTP 402 상태 코드를 활용한 AI 에이전트 결제 프로토콜을 한국어로 배워보세요.",
+    type: "website",
+    url: "https://x402-learn-kr.vercel.app",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "x402 - AI 시대의 결제 프로토콜",
+    description: "HTTP 402 상태 코드를 활용한 AI 에이전트 결제 프로토콜을 한국어로 배워보세요.",
+  },
+};
 import {
   ArrowRight,
   Bot,

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   BookOpen,
@@ -13,6 +14,33 @@ import {
   Terminal,
   ExternalLink,
 } from "lucide-react";
+
+const BASE_URL = "https://x402-learn-kr.vercel.app";
+const PAGE_URL = `${BASE_URL}/docs`;
+
+export const metadata: Metadata = {
+  title: "개발 문서",
+  description:
+    "x402 프로토콜을 프로젝트에 통합하기 위한 가이드와 레퍼런스. Express, Next.js 미들웨어 설정부터 커스텀 가격 전략까지.",
+  keywords: ["x402 SDK", "x402 문서", "Express 미들웨어", "Next.js x402", "API 결제"],
+  alternates: {
+    canonical: PAGE_URL,
+  },
+  openGraph: {
+    title: "x402 개발 문서",
+    description: "x402 프로토콜을 프로젝트에 통합하기 위한 가이드와 레퍼런스.",
+    type: "website",
+    url: PAGE_URL,
+    images: [`${BASE_URL}/docs/opengraph-image`],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "x402 개발 문서",
+    description: "x402 프로토콜을 프로젝트에 통합하기 위한 가이드와 레퍼런스.",
+    images: [`${BASE_URL}/docs/opengraph-image`],
+  },
+};
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function DocsPage() {
   return (
@@ -65,7 +93,12 @@ export default function DocsPage() {
                 </div>
               </Link>
 
-              <Link href="/docs/installation">
+              <a
+                href="https://github.com/coinbase/x402"
+                target="_blank"
+                rel="noreferrer"
+                className="block"
+              >
                 <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
                   <div className="flex items-center gap-4">
                     <div className="p-3 rounded-lg bg-blue-500/20">
@@ -76,15 +109,20 @@ export default function DocsPage() {
                         설치 가이드
                       </h3>
                       <p className="text-white/50 text-sm">
-                        Next.js, Express, Python 등 프레임워크별 설치 방법
+                        공식 SDK GitHub에서 프레임워크별 설치 방법 확인
                       </p>
                     </div>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-blue-400 transition-colors" />
+                  <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-blue-400 transition-colors" />
                 </div>
-              </Link>
+              </a>
 
-              <Link href="/docs/configuration">
+              <a
+                href="https://docs.cdp.coinbase.com/x402/docs/configuration"
+                target="_blank"
+                rel="noreferrer"
+                className="block"
+              >
                 <div className="glass glass-hover rounded-xl p-6 flex items-center justify-between group">
                   <div className="flex items-center gap-4">
                     <div className="p-3 rounded-lg bg-purple-500/20">
@@ -95,13 +133,13 @@ export default function DocsPage() {
                         설정
                       </h3>
                       <p className="text-white/50 text-sm">
-                        가격, 지갑, 접근 규칙 설정 방법
+                        가격, 지갑, 접근 규칙 설정 방법 (공식 문서)
                       </p>
                     </div>
                   </div>
-                  <ArrowRight className="h-5 w-5 text-white/30 group-hover:text-purple-400 transition-colors" />
+                  <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-purple-400 transition-colors" />
                 </div>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -120,20 +158,20 @@ export default function DocsPage() {
                   <Server className="h-5 w-5 text-blue-400" />
                   <h3 className="text-white font-semibold">서버 (Express)</h3>
                 </div>
-                <div className="bg-black/40 rounded-lg p-4 font-mono text-xs overflow-x-auto">
-                  <pre className="text-emerald-400">
-{`import { paymentMiddleware } from '@x402/express';
+                <CodeBlock
+                  code={`import { paymentMiddleware } from "@x402/express";
 
-app.get('/api/premium',
-  paymentMiddleware({
-    amount: '0.01',
-    network: 'eip155:84532',
-    payTo: '0x...'
-  }),
-  (req, res) => res.json({ data: '...' })
-);`}
-                  </pre>
-                </div>
+// 경로별 결제 요구사항 정의
+app.use(paymentMiddleware({
+  "GET /api/premium": {
+    price: "$0.01",
+    network: "base-sepolia",
+    payTo: "0x...",
+    description: "Premium API endpoint"
+  }
+}));`}
+                  language="typescript"
+                />
               </div>
 
               <div className="glass rounded-xl p-6">
@@ -141,18 +179,19 @@ app.get('/api/premium',
                   <Terminal className="h-5 w-5 text-emerald-400" />
                   <h3 className="text-white font-semibold">클라이언트</h3>
                 </div>
-                <div className="bg-black/40 rounded-lg p-4 font-mono text-xs overflow-x-auto">
-                  <pre className="text-emerald-400">
-{`import { wrapFetchWithPayment } from '@x402/fetch';
+                <CodeBlock
+                  code={`import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
+import { registerExactEvmScheme } from "@x402/evm/exact/client";
 
-const client = createX402Client({
-  schemes: [new EVMSigner({ wallet })]
-});
+// 클라이언트 설정 및 EVM 체인 등록
+const client = new x402Client();
+registerExactEvmScheme(client, { signer: evmWallet });
 
+// fetch를 결제 기능으로 감싸기
 const payFetch = wrapFetchWithPayment(fetch, client);
-await payFetch('/api/premium');`}
-                  </pre>
-                </div>
+await payFetch("/api/premium");`}
+                  language="typescript"
+                />
               </div>
             </div>
           </div>

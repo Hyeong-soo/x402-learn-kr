@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Smartphone, Server, Building2, Layers, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function ComponentsPage() {
   return (
@@ -74,10 +75,11 @@ export default function ComponentsPage() {
               </div>
               <div className="bg-black/30 rounded-xl p-4">
                 <h3 className="text-white font-medium mb-2 text-sm">SDK</h3>
-                <pre className="text-xs text-emerald-400 font-mono overflow-x-auto">
-{`npm install @x402/fetch @x402/axios
+                <CodeBlock
+                  code={`npm install @x402/fetch @x402/axios
 pip install x402  # Python`}
-                </pre>
+                  language="bash"
+                />
               </div>
             </div>
           </div>
@@ -129,10 +131,11 @@ pip install x402  # Python`}
               </div>
               <div className="bg-black/30 rounded-xl p-4">
                 <h3 className="text-white font-medium mb-2 text-sm">SDK</h3>
-                <pre className="text-xs text-blue-400 font-mono overflow-x-auto">
-{`npm install @x402/express @x402/next @x402/hono
+                <CodeBlock
+                  code={`npm install @x402/express @x402/next @x402/hono
 pip install x402[fastapi]  # Python`}
-                </pre>
+                  language="bash"
+                />
               </div>
             </div>
           </div>
@@ -196,10 +199,11 @@ pip install x402[fastapi]  # Python`}
               </div>
               <div className="bg-black/30 rounded-xl p-4">
                 <h3 className="text-white font-medium mb-2 text-sm">API 엔드포인트</h3>
-                <pre className="text-xs text-purple-400 font-mono overflow-x-auto">
-{`POST /verify   - 서명 검증
+                <CodeBlock
+                  code={`POST /verify   - 서명 검증
 POST /settle   - 온체인 정산`}
-                </pre>
+                  language="http"
+                />
               </div>
             </div>
           </div>
@@ -280,9 +284,8 @@ POST /settle   - 온체인 정산`}
         {/* Architecture Diagram */}
         <div className="glass rounded-2xl p-8 mb-12">
           <h2 className="text-xl font-semibold text-white mb-6">전체 아키텍처</h2>
-          <div className="bg-black/30 rounded-xl p-6 font-mono text-sm overflow-x-auto">
-            <pre className="text-white/70">{`
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+          <CodeBlock
+            code={`┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │   클라이언트     │     │   리소스 서버    │     │   퍼실리테이터   │
 │   (AI Agent)    │     │   (API Server)  │     │   (검증/정산)    │
 └────────┬────────┘     └────────┬────────┘     └────────┬────────┘
@@ -308,9 +311,9 @@ POST /settle   - 온체인 정산`}
          │                       │<──────────────────────│
          │  7. 200 + 콘텐츠      │                       │
          │<──────────────────────│                       │
-         │                       │                       │
-`}</pre>
-          </div>
+         │                       │                       │`}
+            language="text"
+          />
         </div>
 
         {/* Navigation */}

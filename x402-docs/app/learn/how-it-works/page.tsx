@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Workflow, Server, Smartphone, Building2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function HowItWorksPage() {
   const steps = [
@@ -46,7 +47,7 @@ PAYMENT-REQUIRED: base64(...)
       code: `// EIP-712 Typed Data
 {
   "domain": {
-    "name": "USDC",
+    "name": "USD Coin",  // 주의: 토큰 심볼 "USDC"가 아닌 "USD Coin"
     "version": "2",
     "chainId": 84532,
     "verifyingContract": "0x036CbD53..."
@@ -209,9 +210,7 @@ PAYMENT-RESPONSE: base64({
               </div>
               <div className="p-4">
                 <p className="text-white/70 text-sm mb-4">{step.description}</p>
-                <pre className="bg-black/40 rounded-lg p-4 text-xs overflow-x-auto">
-                  <code className="text-emerald-400">{step.code}</code>
-                </pre>
+                <CodeBlock code={step.code} language="http" />
               </div>
             </div>
           ))}

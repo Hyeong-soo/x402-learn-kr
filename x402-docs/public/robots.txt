@@ -1,0 +1,15 @@
+# x402-learn-kr robots.txt
+# AI 에이전트 결제 프로토콜 학습 사이트
+
+User-agent: *
+Allow: /
+Allow: /docs/
+Allow: /learn/
+Allow: /demo/
+
+# 검증 페이지 및 API는 크롤링 불필요
+Disallow: /verify
+Disallow: /api/
+
+# Sitemap 위치
+Sitemap: https://x402-learn-kr.vercel.app/sitemap.xml

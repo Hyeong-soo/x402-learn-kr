@@ -1,4 +1,5 @@
 import { CheckCircle2, Bot, User, DollarSign, Zap } from "lucide-react";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export default function ProtectedContentPage() {
   return (
@@ -48,17 +49,8 @@ export default function ProtectedContentPage() {
 
             <section>
               <h3 className="text-xl font-bold text-white mb-4">Advanced Configuration</h3>
-              <div className="glass rounded-2xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <span className="text-sm text-white/40 ml-2 font-mono">config.json</span>
-                </div>
-                <pre className="p-6 text-sm overflow-x-auto bg-transparent border-0">
-                  <code className="text-gray-300">{`{
+              <CodeBlock
+                code={`{
   "secret_key": "this-is-premium-content",
   "api_endpoint": "https://api.example.com/v2",
   "features": {
@@ -66,9 +58,9 @@ export default function ProtectedContentPage() {
     "custom_webhooks": true,
     "priority_support": true
   }
-}`}</code>
-                </pre>
-              </div>
+}`}
+                language="json"
+              />
             </section>
 
             <section>
@@ -106,9 +98,8 @@ export default function ProtectedContentPage() {
                   What AI agents see instead:
                 </h3>
               </div>
-              <div className="glass rounded-xl overflow-hidden">
-                <pre className="p-6 text-sm overflow-x-auto">
-                  <code className="text-gray-300">{`HTTP/1.1 402 Payment Required
+              <CodeBlock
+                code={`HTTP/1.1 402 Payment Required
 X-PAYMENT-REQUIRED: base64-encoded-payment-details
 
 {
@@ -117,9 +108,9 @@ X-PAYMENT-REQUIRED: base64-encoded-payment-details
   "price": 0.01,
   "network": "Base",
   "token": "USDC"
-}`}</code>
-                </pre>
-              </div>
+}`}
+                language="http"
+              />
             </div>
 
             <section>

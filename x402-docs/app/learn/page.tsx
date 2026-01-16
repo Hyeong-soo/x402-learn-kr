@@ -34,8 +34,8 @@ export default function LearnPage() {
     {
       href: "/learn/usdc-transfer",
       icon: Coins,
-      title: "USDC와 transferWithAuthorization",
-      description: "EIP-3009 기반 가스리스 전송의 작동 방식",
+      title: "USDC 가스리스 전송",
+      description: "EIP-3009 transferWithAuthorization의 작동 방식",
       color: "amber",
     },
     {

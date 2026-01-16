@@ -4,6 +4,34 @@ import Link from "next/link";
 import { ArrowLeft, Globe, Building2, Code, Layers, ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Language Icons
+const TypeScriptIcon = () => (
+  <svg viewBox="0 0 128 128" className="w-5 h-5">
+    <path fill="#3178c6" d="M2 63.91v62.5h125v-125H2zm100.73-5a15.56 15.56 0 017.82 4.5 20.58 20.58 0 013 4c0 .16-5.4 3.81-8.69 5.85-.12.08-.6-.44-1.13-1.23a7.09 7.09 0 00-5.87-3.53c-3.79-.26-6.23 1.73-6.21 5a4.58 4.58 0 00.54 2.34c.83 1.73 2.38 2.76 7.24 4.86 8.95 3.85 12.78 6.39 15.16 10 2.66 4 3.25 10.46 1.45 15.24-2 5.2-6.9 8.73-13.83 9.9a38.32 38.32 0 01-9.52-.1A23 23 0 0180 109.19c-1.15-1.27-3.39-4.58-3.25-4.82a9.34 9.34 0 011.15-.73l4.6-2.64 3.59-2.08.75 1.11a16.78 16.78 0 004.74 4.54c4 2.1 9.46 1.81 12.16-.62a5.43 5.43 0 00.69-6.92c-1-1.39-3-2.56-8.59-5-6.45-2.78-9.23-4.5-11.77-7.24a16.48 16.48 0 01-3.43-6.25 25 25 0 01-.22-8c1.33-6.23 6-10.58 12.82-11.87a31.66 31.66 0 019.49.26zm-29.34 5.24v5.12H57.16v46.23H45.65V69.26H29.38v-5a49.19 49.19 0 01.14-5.16c.06-.08 10-.12 22-.1h21.81z"/>
+  </svg>
+);
+
+const PythonIcon = () => (
+  <svg viewBox="0 0 128 128" className="w-5 h-5">
+    <linearGradient id="python-a" x1="70.252" x2="170.659" y1="1237.476" y2="1151.089" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stopColor="#5A9FD4"/>
+      <stop offset="1" stopColor="#306998"/>
+    </linearGradient>
+    <linearGradient id="python-b" x1="209.474" x2="173.62" y1="1098.811" y2="1149.537" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stopColor="#FFD43B"/>
+      <stop offset="1" stopColor="#FFE873"/>
+    </linearGradient>
+    <path fill="url(#python-a)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z"/>
+    <path fill="url(#python-b)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z"/>
+  </svg>
+);
+
+const GoIcon = () => (
+  <svg viewBox="0 0 128 128" className="w-5 h-5">
+    <path fill="#00acd7" d="M18.8 51.5c-.2 0-.4-.2-.2-.4l1.3-1.7c.2-.2.5-.4.8-.4h21.6c.2 0 .4.2.2.4l-1 1.6c-.2.2-.5.5-.8.5l-21.9-.1zm-9.5 5.8c-.2 0-.4-.2-.2-.4l1.3-1.7c.2-.2.5-.4.8-.4h27.6c.2 0 .4.2.3.5l-.5 1.5c0 .3-.3.5-.6.5l-28.7.1zm15.3 5.8c-.2 0-.4-.2-.2-.5l.9-1.6c.2-.3.5-.5.8-.5h12.1c.2 0 .4.2.4.5l-.1 1.5c0 .3-.2.5-.5.5l-13.4.1zm63.4-11.4l-15.8 4c-.7.2-1 .5-1 1 0 .6.2 1.1.5 1.7.4.8.9 1.6 1.4 2.2.5.7 1.1 1.4 1.6 2.1.5.7.9 1.3 1.4 1.8.3.4.7.8 1.1 1.1.4.4.9.7 1.4 1 .5.3 1.1.5 1.7.6.6.2 1.2.3 1.8.3.6 0 1.3-.1 1.9-.2.6-.1 1.2-.3 1.8-.6.6-.3 1.1-.6 1.6-1 .5-.4.9-.8 1.3-1.3.4-.5.7-1 .9-1.5.2-.5.4-1.1.5-1.7.1-.6.2-1.2.2-1.8 0-.6-.1-1.2-.2-1.8-.1-.6-.4-1.2-.6-1.8-.3-.6-.6-1.1-.9-1.6-.4-.5-.8-1-1.2-1.4-.4-.4-.9-.8-1.4-1.1-.5-.3-1-.6-1.5-.8-.5-.2-1.1-.4-1.6-.5-.6-.1-1.1-.2-1.7-.2h-3.4zm2.3 12.7c-1.8-.3-2.9-1.7-2.4-3.4.4-1.4 1.5-2.1 3-2.1 1.6 0 2.8.8 3.1 2.2.3 1.7-.9 3.3-3.7 3.3zm26.3-16.5c-.6.2-1.1.4-1.7.6-1.6.7-3 1.7-4.1 3-.2.3-.4.5-.6.8-.2.3-.4.6-.5 1-.1.3-.3.7-.4 1-.1.3-.2.7-.2 1 0 .7.1 1.3.4 1.9.3.6.7 1.1 1.2 1.5.5.4 1.1.7 1.8.9.7.2 1.4.3 2.1.2.7-.1 1.4-.3 2-.6.6-.3 1.2-.7 1.6-1.2.5-.5.9-1.1 1.2-1.7.3-.6.5-1.3.6-2 .1-.7.1-1.4 0-2.1-.1-.7-.3-1.4-.6-2-.3-.6-.7-1.1-1.2-1.6-.5-.5-1-.8-1.6-1.1-.6-.3-1.2-.4-1.9-.5-.7-.1-1.4-.1-2.1 0z"/>
+  </svg>
+);
+
 export default function EcosystemPage() {
   return (
     <div className="min-h-screen py-20">
@@ -40,7 +68,7 @@ export default function EcosystemPage() {
             <div className="glass rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white font-medium flex items-center gap-2">
-                  <span className="text-xl">🟨</span> TypeScript / JavaScript
+                  <TypeScriptIcon /> TypeScript / JavaScript
                 </h3>
                 <a
                   href="https://github.com/coinbase/x402"
@@ -69,7 +97,7 @@ export default function EcosystemPage() {
             <div className="glass rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white font-medium flex items-center gap-2">
-                  <span className="text-xl">🐍</span> Python
+                  <PythonIcon /> Python
                 </h3>
                 <a
                   href="https://pypi.org/project/x402/"
@@ -94,7 +122,7 @@ export default function EcosystemPage() {
             <div className="glass rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white font-medium flex items-center gap-2">
-                  <span className="text-xl">🐹</span> Go
+                  <GoIcon /> Go
                 </h3>
                 <a
                   href="https://github.com/coinbase/x402/tree/main/go"
@@ -388,7 +416,7 @@ export default function EcosystemPage() {
           <Button variant="outline" className="border-white/20 text-white" asChild>
             <Link href="/learn/usdc-transfer">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              USDC transferWithAuthorization
+              USDC 가스리스 전송
             </Link>
           </Button>
           <Button variant="outline" className="border-white/20 text-white" asChild>

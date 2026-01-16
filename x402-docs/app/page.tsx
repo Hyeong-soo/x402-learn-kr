@@ -6,12 +6,13 @@ import {
   Code2,
   DollarSign,
   Shield,
-  User,
   Zap,
   Sparkles,
   Play,
   BookOpen,
-  Eye,
+  Server,
+  Building2,
+  Smartphone,
 } from "lucide-react";
 
 export default function Home() {
@@ -35,16 +36,16 @@ export default function Home() {
 
           {/* Main heading */}
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
-            <span className="text-white">사람은 무료.</span>
+            <span className="text-white">AI 시대의</span>
             <br />
-            <span className="gradient-text">AI는 결제.</span>
+            <span className="gradient-text">결제 프로토콜</span>
           </h1>
 
           {/* Subtitle */}
           <p className="max-w-2xl text-lg sm:text-xl text-white/60 mb-10 leading-relaxed">
-            AI 에이전트 시대의 새로운 결제 프로토콜, x402를 배워보세요.
+            HTTP 402 상태 코드를 활용한 인터넷 네이티브 결제 표준.
             <br />
-            인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.
+            AI 에이전트가 자율적으로 결제할 수 있는 새로운 방식을 배워보세요.
           </p>
 
           {/* CTA Buttons */}
@@ -54,8 +55,8 @@ export default function Home() {
               className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-8 btn-glow"
               asChild
             >
-              <Link href="/learn">
-                학습 시작하기
+              <Link href="/learn/what-is-x402">
+                x402 알아보기
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -79,12 +80,12 @@ export default function Home() {
               <div className="text-sm text-white/50">결제 완료</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">$0.0001</div>
-              <div className="text-sm text-white/50">가스비</div>
+              <div className="text-3xl font-bold text-white">$0.001~</div>
+              <div className="text-sm text-white/50">마이크로페이먼트</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-400">무료</div>
-              <div className="text-sm text-white/50">사람은 항상</div>
+              <div className="text-3xl font-bold text-emerald-400">HTTP</div>
+              <div className="text-sm text-white/50">네이티브</div>
             </div>
           </div>
         </div>
@@ -98,119 +99,124 @@ export default function Home() {
               x402란?
             </h2>
             <p className="text-lg text-white/50 max-w-2xl mx-auto">
-              HTTP 402 상태 코드를 활용한 인터넷 네이티브 결제 프로토콜
+              HTTP 402 "Payment Required" 상태 코드를 활용한 오픈 결제 프로토콜
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {/* Human Card */}
-            <div className="glass glass-hover rounded-2xl p-8 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 rounded-xl bg-emerald-500/20">
-                    <User className="h-8 w-8 text-emerald-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">사람 (브라우저)</h3>
-                    <span className="text-emerald-400 font-mono text-sm">무료 접근</span>
-                  </div>
-                </div>
-                <ol className="space-y-3 text-white/60">
+          <div className="max-w-4xl mx-auto glass rounded-2xl p-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-4">핵심 아이디어</h3>
+                <ul className="space-y-3 text-white/60">
                   <li className="flex gap-3">
-                    <span className="text-emerald-400 font-mono">01</span>
-                    웹페이지 방문
+                    <span className="text-emerald-400">•</span>
+                    서버가 402 응답으로 결제 정보 전달
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-emerald-400 font-mono">02</span>
-                    JavaScript 자동 실행
+                    <span className="text-emerald-400">•</span>
+                    클라이언트가 USDC로 서명 생성
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-emerald-400 font-mono">03</span>
-                    "사람 토큰" 발급
+                    <span className="text-emerald-400">•</span>
+                    퍼실리테이터가 서명 검증 및 정산
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-emerald-400 font-mono">04</span>
-                    24시간 무료 이용
+                    <span className="text-emerald-400">•</span>
+                    콘텐츠 즉시 제공
                   </li>
-                </ol>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-4">주요 특징</h3>
+                <ul className="space-y-3 text-white/60">
+                  <li className="flex gap-3">
+                    <span className="text-blue-400">•</span>
+                    계정/API 키 불필요
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-blue-400">•</span>
+                    EIP-712 표준 서명
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-blue-400">•</span>
+                    Base 체인 (L2) 저렴한 가스비
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-blue-400">•</span>
+                    AI 에이전트 자율 결제 가능
+                  </li>
+                </ul>
               </div>
             </div>
-
-            {/* AI Card */}
-            <div className="glass glass-hover rounded-2xl p-8 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 rounded-xl bg-amber-500/20">
-                    <Bot className="h-8 w-8 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">AI 에이전트</h3>
-                    <span className="text-amber-400 font-mono text-sm">USDC 결제</span>
-                  </div>
-                </div>
-                <ol className="space-y-3 text-white/60">
-                  <li className="flex gap-3">
-                    <span className="text-amber-400 font-mono">01</span>
-                    HTTP 요청 전송
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-amber-400 font-mono">02</span>
-                    JS 실행 불가 → 토큰 없음
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-amber-400 font-mono">03</span>
-                    <code className="text-amber-400">402 Payment Required</code> 응답
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-amber-400 font-mono">04</span>
-                    x402 결제 후 콘텐츠 수신
-                  </li>
-                </ol>
-              </div>
+            <div className="mt-8 pt-6 border-t border-white/10 text-center">
+              <Button
+                variant="outline"
+                className="border-white/20 bg-white/5 hover:bg-white/10 text-white"
+                asChild
+              >
+                <Link href="/learn/what-is-x402">
+                  자세히 알아보기
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Links */}
+      {/* Key Components */}
       <section className="py-32 relative">
         <div className="container px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              시작하기
+              핵심 구성 요소
             </h2>
+            <p className="text-lg text-white/50">
+              x402 프로토콜을 구성하는 세 가지 역할
+            </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <Link href="/learn" className="block">
-              <div className="glass glass-hover rounded-2xl p-8 h-full">
-                <BookOpen className="h-12 w-12 text-emerald-400 mb-6" />
-                <h3 className="text-xl font-semibold text-white mb-3">개념 학습</h3>
-                <p className="text-white/50">
-                  x402 프로토콜의 핵심 개념과 작동 원리를 한국어로 쉽게 배워보세요.
-                </p>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="glass glass-hover rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 flex items-center justify-center mx-auto mb-6">
+                <Smartphone className="h-8 w-8 text-emerald-400" />
               </div>
-            </Link>
-            <Link href="/demo/visualizer" className="block">
-              <div className="glass glass-hover rounded-2xl p-8 h-full">
-                <Eye className="h-12 w-12 text-blue-400 mb-6" />
-                <h3 className="text-xl font-semibold text-white mb-3">결제 플로우 시각화</h3>
-                <p className="text-white/50">
-                  실제 결제 과정을 애니메이션으로 보면서 각 단계별 데이터를 확인하세요.
-                </p>
+              <h3 className="text-xl font-semibold text-white mb-3">클라이언트</h3>
+              <p className="text-white/50 text-sm">
+                결제 요청을 보내고 EIP-712 서명을 생성하는 주체. AI 에이전트 또는 브라우저.
+              </p>
+            </div>
+            <div className="glass glass-hover rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mx-auto mb-6">
+                <Server className="h-8 w-8 text-blue-400" />
               </div>
-            </Link>
-            <Link href="/demo/paywall" className="block">
-              <div className="glass glass-hover rounded-2xl p-8 h-full">
-                <DollarSign className="h-12 w-12 text-amber-400 mb-6" />
-                <h3 className="text-xl font-semibold text-white mb-3">페이월 체험</h3>
-                <p className="text-white/50">
-                  실제 유료 페이지에 접근하며 사람과 AI의 차이를 직접 체험해보세요.
-                </p>
+              <h3 className="text-xl font-semibold text-white mb-3">리소스 서버</h3>
+              <p className="text-white/50 text-sm">
+                유료 콘텐츠를 제공하는 서버. 402 응답으로 결제 정보를 전달.
+              </p>
+            </div>
+            <div className="glass glass-hover rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center mx-auto mb-6">
+                <Building2 className="h-8 w-8 text-purple-400" />
               </div>
-            </Link>
+              <h3 className="text-xl font-semibold text-white mb-3">퍼실리테이터</h3>
+              <p className="text-white/50 text-sm">
+                서명을 검증하고 온체인 정산을 처리하는 중개자. Coinbase 등이 운영.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <Button
+              variant="outline"
+              className="border-white/20 bg-white/5 hover:bg-white/10 text-white"
+              asChild
+            >
+              <Link href="/learn/components">
+                구성 요소 자세히 보기
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -290,7 +296,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Why x402 */}
       <section className="py-32 relative">
         <div className="container px-4">
           <div className="text-center mb-16">
@@ -339,9 +345,62 @@ export default function Home() {
               <Sparkles className="h-12 w-12 text-cyan-400 mb-6" />
               <h3 className="text-xl font-semibold text-white mb-3">오픈 프로토콜</h3>
               <p className="text-white/50">
-                Coinbase, Google, Visa, AWS가 지원하는 개방형 표준입니다.
+                Coinbase가 주도하고, 다양한 기업이 지원하는 개방형 표준입니다.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Learning Path */}
+      <section className="py-32 relative">
+        <div className="container px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              학습 경로
+            </h2>
+            <p className="text-lg text-white/50">
+              단계별로 x402를 배워보세요
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <Link href="/learn/what-is-x402" className="block">
+              <div className="glass glass-hover rounded-2xl p-6 h-full border-l-4 border-emerald-500">
+                <div className="text-emerald-400 font-mono text-sm mb-2">Step 1</div>
+                <h3 className="text-lg font-semibold text-white mb-2">x402란?</h3>
+                <p className="text-white/50 text-sm">
+                  프로토콜 개요와 탄생 배경
+                </p>
+              </div>
+            </Link>
+            <Link href="/learn/how-it-works" className="block">
+              <div className="glass glass-hover rounded-2xl p-6 h-full border-l-4 border-blue-500">
+                <div className="text-blue-400 font-mono text-sm mb-2">Step 2</div>
+                <h3 className="text-lg font-semibold text-white mb-2">작동 원리</h3>
+                <p className="text-white/50 text-sm">
+                  결제 플로우 상세 설명
+                </p>
+              </div>
+            </Link>
+            <Link href="/learn/eip712" className="block">
+              <div className="glass glass-hover rounded-2xl p-6 h-full border-l-4 border-purple-500">
+                <div className="text-purple-400 font-mono text-sm mb-2">Step 3</div>
+                <h3 className="text-lg font-semibold text-white mb-2">EIP-712 서명</h3>
+                <p className="text-white/50 text-sm">
+                  타입 구조화 데이터 서명
+                </p>
+              </div>
+            </Link>
+            <Link href="/learn/ecosystem" className="block">
+              <div className="glass glass-hover rounded-2xl p-6 h-full border-l-4 border-amber-500">
+                <div className="text-amber-400 font-mono text-sm mb-2">Step 4</div>
+                <h3 className="text-lg font-semibold text-white mb-2">생태계</h3>
+                <p className="text-white/50 text-sm">
+                  지원 기업 및 활용 사례
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -352,13 +411,13 @@ export default function Home() {
         <div className="container px-4 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex p-4 rounded-2xl bg-emerald-500/10 mb-8">
-              <Zap className="h-12 w-12 text-emerald-400" />
+              <BookOpen className="h-12 w-12 text-emerald-400" />
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-              직접 체험해보세요
+              지금 시작하세요
             </h2>
             <p className="text-lg text-white/50 mb-10">
-              이론보다 실습! 데모를 통해 x402를 경험해보세요.
+              x402 프로토콜을 배우고, 데모를 통해 직접 체험해보세요.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -366,9 +425,9 @@ export default function Home() {
                 className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-8 btn-glow"
                 asChild
               >
-                <Link href="/demo/visualizer">
-                  <Play className="mr-2 h-4 w-4" />
-                  결제 시각화 보기
+                <Link href="/learn">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  학습 시작하기
                 </Link>
               </Button>
               <Button
@@ -377,9 +436,9 @@ export default function Home() {
                 className="border-white/20 bg-white/5 hover:bg-white/10 text-white px-8"
                 asChild
               >
-                <Link href="/learn">
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  학습 시작하기
+                <Link href="/demo">
+                  <Play className="mr-2 h-4 w-4" />
+                  데모 체험하기
                 </Link>
               </Button>
             </div>

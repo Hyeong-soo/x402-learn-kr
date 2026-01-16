@@ -49,7 +49,7 @@ export default function RootLayout({
                 </a>
               </p>
               <p className="text-center text-sm text-white/40 md:text-right">
-                사람: <span className="text-emerald-400">무료</span> | AI: <span className="text-amber-400">결제</span>
+                x402 프로토콜 한국어 학습 허브
               </p>
             </div>
           </footer>

@@ -64,6 +64,9 @@ const PRICING: Record<string, string> = {
   "/demo/protected-content": "10000", // $0.01
   "/docs/advanced": "10000",          // $0.01
   "/docs/enterprise": "50000",        // $0.05
+  "/api/content/demo/protected-content": "10000", // $0.01 (AI API)
+  "/api/content/docs/advanced": "10000",          // $0.01 (AI API)
+  "/api/content/docs/enterprise": "50000",        // $0.05 (AI API)
 };
 
 // Generate random flag for each deployment (changes on restart)
@@ -172,7 +175,7 @@ function getPriceForPath(pathname: string): string | null {
   return null;
 }
 
-function create402Response(pathname: string, price: string, isBrowser: boolean = false): NextResponse {
+function create402Response(pathname: string, price: string): NextResponse {
   const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
   const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
   const priceInDollars = (parseInt(price) / 1000000).toFixed(2);
@@ -206,62 +209,66 @@ function create402Response(pathname: string, price: string, isBrowser: boolean =
 
   const paymentRequiredHeader = btoa(JSON.stringify(paymentRequired));
 
-  // 브라우저 요청인 경우 HTML 반환 (JS로 /verify로 리다이렉트)
-  if (isBrowser) {
-    const htmlBody = `<!DOCTYPE html>
+  // 인라인 챌린지 HTML (리다이렉트 없음!)
+  // - 브라우저: JS 실행 → 토큰 발급 → reload → 콘텐츠
+  // - AI (x402): 402 헤더 → 결제 → 콘텐츠
+  // - AI (기타): 402 + placeholder (접근 불가)
+  const htmlBody = `<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>402 Payment Required</title>
-  <script>
-    // 브라우저는 자동으로 /verify 페이지로 이동하여 human 검증
-    window.location.href = '/verify?redirect=${encodeURIComponent(pathname)}';
-  </script>
+  <link rel="alternate" type="application/json" href="/api/content${pathname}" />
   <style>
-    body { font-family: system-ui; background: #0a0a0a; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    .container { text-align: center; }
-    h1 { color: #10b981; }
-    p { color: #9ca3af; }
-    a { color: #10b981; }
+    body { font-family: system-ui; background: #0a0a0a; color: #fff;
+           display: flex; justify-content: center; align-items: center;
+           height: 100vh; margin: 0; }
+    .container { text-align: center; max-width: 400px; padding: 20px; }
+    h1 { color: #10b981; margin-bottom: 16px; }
+    p { color: #9ca3af; margin: 8px 0; }
+    .loading { display: block; }
+    .error { display: none; color: #9ca3af; }
+    code { background: #1f2937; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    .price { color: #f59e0b; font-weight: bold; }
+    noscript .error { display: block; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>402 Payment Required</h1>
-    <p>AI 에이전트는 $${priceInDollars} USDC 결제가 필요합니다.</p>
-    <p>사람이신가요? <a href="/verify?redirect=${encodeURIComponent(pathname)}">여기를 클릭</a>하여 무료로 접근하세요.</p>
+    <p class="loading">브라우저 확인 중...</p>
+    <div class="error">
+      <p>AI 에이전트는 <span class="price">$${priceInDollars} USDC</span> 결제가 필요합니다.</p>
+      <p>API: <code>/api/content${pathname}</code></p>
+    </div>
+    <noscript>
+      <style>.loading { display: none !important; } .error { display: block !important; }</style>
+    </noscript>
   </div>
+  <script>
+    fetch('/api/verify-human', { method: 'POST', credentials: 'include' })
+      .then(r => r.json())
+      .then(d => {
+        if (d.success) location.reload();
+        else throw new Error('Verification failed');
+      })
+      .catch(() => {
+        document.querySelector('.loading').style.display = 'none';
+        document.querySelector('.error').style.display = 'block';
+      });
+  </script>
 </body>
 </html>`;
 
-    return new NextResponse(htmlBody, {
-      status: 402,
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "PAYMENT-REQUIRED": paymentRequiredHeader,
-        "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE, X-PAYMENT-REQUIRED, X-PAYMENT-RESPONSE",
-      },
-    });
-  }
-
-  // AI 에이전트용 JSON 응답
-  const body = JSON.stringify({
-    error: "Payment Required",
-    message: `AI agents must pay $${priceInDollars} USDC to access this content`,
-    price: parseFloat(priceInDollars),
-    network: network.chainId,
-    token: network.asset,
-    paymentDetails: paymentRequired,
-  });
-
-  return new NextResponse(body, {
+  return new NextResponse(htmlBody, {
     status: 402,
     headers: {
-      "Content-Type": "application/json",
-      // x402 SDK expects PAYMENT-REQUIRED (not X-PAYMENT-REQUIRED)
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
       "PAYMENT-REQUIRED": paymentRequiredHeader,
-      "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE, X-PAYMENT-REQUIRED, X-PAYMENT-RESPONSE",
+      "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE",
     },
   });
 }
@@ -311,10 +318,10 @@ export async function middleware(request: NextRequest) {
 
   if (!paymentHeader) {
     // No human token & no payment = 402 Payment Required
-    // 브라우저 요청인지 확인 (Accept: text/html 포함 여부)
-    const acceptHeader = request.headers.get("Accept") || "";
-    const isBrowserRequest = acceptHeader.includes("text/html");
-    return create402Response(pathname, price, isBrowserRequest);
+    // 모든 비인증 요청에 동일한 인라인 챌린지 HTML 반환
+    // - 브라우저: JS 실행으로 자동 검증
+    // - AI: 402 상태 코드 + PAYMENT-REQUIRED 헤더 수신
+    return create402Response(pathname, price);
   }
 
   // ---- Check 3: Verify & Settle Payment via API route ----
@@ -397,5 +404,6 @@ export const config = {
     "/demo/protected-content",
     "/docs/advanced/:path*",
     "/docs/enterprise/:path*",
+    "/api/content/:path*",
   ],
 };

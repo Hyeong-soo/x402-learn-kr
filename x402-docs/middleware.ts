@@ -179,19 +179,20 @@ function create402Response(pathname: string, price: string, request: NextRequest
   const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
   const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
   const priceInDollars = (parseInt(price) / 1000000).toFixed(2);
+  const resourceUrl = `${request.nextUrl.origin}${pathname}`;
 
   const paymentRequired = {
-    // Using v2 for consistent CAIP-2 network format (eip155:84532)
-    x402Version: 2,
+    // Using v1 for x402-fetch compatibility (uses short network names)
+    x402Version: 1,
     accepts: [
       {
         scheme: "exact",
-        // v2 uses CAIP-2 format
-        network: network.chainId,
+        // v1 uses short network names like "base-sepolia"
+        network: network.v1Network,
         // SDK uses 'amount' field
         amount: price,
         maxAmountRequired: price,
-        resource: pathname,
+        resource: resourceUrl,
         description: `Access to ${pathname}`,
         mimeType: "text/html",
         payTo: X402_CONFIG.wallet,

@@ -61,13 +61,32 @@ export default function DemoPage() {
     }
   };
 
-  const verifyFlag = () => {
-    const flagPattern = /^x402_SUCCESS_[A-Z0-9]{6,10}$/;
-    if (flagPattern.test(flagInput.trim())) {
-      setVerificationState("success");
-    } else {
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const verifyFlag = async () => {
+    if (!flagInput.trim() || isVerifying) return;
+
+    setIsVerifying(true);
+    try {
+      const response = await fetch("/api/verify-flag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ flag: flagInput.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setVerificationState("success");
+      } else {
+        setVerificationState("error");
+        setTimeout(() => setVerificationState("idle"), 3000);
+      }
+    } catch (error) {
       setVerificationState("error");
       setTimeout(() => setVerificationState("idle"), 3000);
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -652,10 +671,10 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
                 />
                 <button
                   onClick={verifyFlag}
-                  disabled={!flagInput.trim()}
+                  disabled={!flagInput.trim() || isVerifying}
                   className="px-6 py-3 rounded-xl bg-yellow-500 text-black font-semibold hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  검증하기
+                  {isVerifying ? "검증 중..." : "검증하기"}
                 </button>
               </div>
               {verificationState === "error" && (

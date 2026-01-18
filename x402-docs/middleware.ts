@@ -69,8 +69,22 @@ const PRICING: Record<string, string> = {
   "/api/content/docs/enterprise": "50000",        // $0.05 (AI API)
 };
 
-// Generate random flag for each deployment (changes on restart)
-const SUCCESS_FLAG = `x402_SUCCESS_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+// Generate consistent flag from environment secret
+// This ensures the same flag is used across all serverless instances
+function generateSuccessFlag(): string {
+  const secret = process.env.X402_FLAG_SECRET || "default-flag-secret-change-me";
+  // Simple hash to generate consistent flag from secret
+  let hash = 0;
+  for (let i = 0; i < secret.length; i++) {
+    const char = secret.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  const flagSuffix = Math.abs(hash).toString(36).toUpperCase().substring(0, 8);
+  return `x402_SUCCESS_${flagSuffix}`;
+}
+
+const SUCCESS_FLAG = generateSuccessFlag();
 
 // Log the flag for testing (remove in production)
 console.log(`[x402] Current success flag: ${SUCCESS_FLAG}`);

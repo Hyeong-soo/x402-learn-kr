@@ -172,7 +172,7 @@ function getPriceForPath(pathname: string): string | null {
   return null;
 }
 
-function create402Response(pathname: string, price: string): NextResponse {
+function create402Response(pathname: string, price: string, isBrowser: boolean = false): NextResponse {
   const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
   const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
   const priceInDollars = (parseInt(price) / 1000000).toFixed(2);
@@ -204,6 +204,48 @@ function create402Response(pathname: string, price: string): NextResponse {
     ],
   };
 
+  const paymentRequiredHeader = btoa(JSON.stringify(paymentRequired));
+
+  // 브라우저 요청인 경우 HTML 반환 (JS로 /verify로 리다이렉트)
+  if (isBrowser) {
+    const htmlBody = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>402 Payment Required</title>
+  <script>
+    // 브라우저는 자동으로 /verify 페이지로 이동하여 human 검증
+    window.location.href = '/verify?redirect=${encodeURIComponent(pathname)}';
+  </script>
+  <style>
+    body { font-family: system-ui; background: #0a0a0a; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .container { text-align: center; }
+    h1 { color: #10b981; }
+    p { color: #9ca3af; }
+    a { color: #10b981; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>402 Payment Required</h1>
+    <p>AI 에이전트는 $${priceInDollars} USDC 결제가 필요합니다.</p>
+    <p>사람이신가요? <a href="/verify?redirect=${encodeURIComponent(pathname)}">여기를 클릭</a>하여 무료로 접근하세요.</p>
+  </div>
+</body>
+</html>`;
+
+    return new NextResponse(htmlBody, {
+      status: 402,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "PAYMENT-REQUIRED": paymentRequiredHeader,
+        "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE, X-PAYMENT-REQUIRED, X-PAYMENT-RESPONSE",
+      },
+    });
+  }
+
+  // AI 에이전트용 JSON 응답
   const body = JSON.stringify({
     error: "Payment Required",
     message: `AI agents must pay $${priceInDollars} USDC to access this content`,
@@ -218,7 +260,7 @@ function create402Response(pathname: string, price: string): NextResponse {
     headers: {
       "Content-Type": "application/json",
       // x402 SDK expects PAYMENT-REQUIRED (not X-PAYMENT-REQUIRED)
-      "PAYMENT-REQUIRED": btoa(JSON.stringify(paymentRequired)),
+      "PAYMENT-REQUIRED": paymentRequiredHeader,
       "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE, X-PAYMENT-REQUIRED, X-PAYMENT-RESPONSE",
     },
   });
@@ -263,26 +305,16 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // ---- Check 2: Is this a browser request without token? ----
-  // Browsers send Accept: text/html, AI agents typically send application/json or omit it
-  const acceptHeader = request.headers.get("Accept") || "";
-  const isBrowserRequest = acceptHeader.includes("text/html");
-
-  if (isBrowserRequest && !humanToken) {
-    // Browser without token - redirect to verification page
-    // After verification, they'll be redirected back here
-    const verifyUrl = new URL("/verify", request.url);
-    verifyUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(verifyUrl);
-  }
-
-  // ---- Check 3: Payment Header ----
+  // ---- Check 2: Payment Header ----
   // x402 SDK sends PAYMENT-SIGNATURE header
   const paymentHeader = request.headers.get("PAYMENT-SIGNATURE") || request.headers.get("X-PAYMENT");
 
   if (!paymentHeader) {
     // No human token & no payment = 402 Payment Required
-    return create402Response(pathname, price);
+    // 브라우저 요청인지 확인 (Accept: text/html 포함 여부)
+    const acceptHeader = request.headers.get("Accept") || "";
+    const isBrowserRequest = acceptHeader.includes("text/html");
+    return create402Response(pathname, price, isBrowserRequest);
   }
 
   // ---- Check 3: Verify & Settle Payment via API route ----

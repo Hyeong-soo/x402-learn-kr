@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 import {
   Wallet,
   Settings,
@@ -15,15 +16,52 @@ import {
   PartyPopper,
   Trophy,
   Sparkles,
+  Key,
+  Copy,
+  Check,
+  AlertTriangle,
 } from "lucide-react";
 import { ConfigBlock, CopyableCodeBlock } from "@/components/ConfigBlock";
+import {
+  WalletConnectButton,
+  WalletInfo,
+  WalletPathSelector,
+  QuickStartWallet,
+  WalletPath,
+} from "@/components/wallet";
+import { useWalletSetup } from "@/hooks/useWalletSetup";
+
+interface GeneratedWallet {
+  privateKey: string;
+  address: string;
+}
 
 export default function DemoPage() {
   const [flagInput, setFlagInput] = useState("");
   const [verificationState, setVerificationState] = useState<"idle" | "success" | "error">("idle");
+  const [copied, setCopied] = useState(false);
+  const [walletPath, setWalletPath] = useState<WalletPath>("quick-start");
+  const [generatedWallet, setGeneratedWallet] = useState<GeneratedWallet | null>(null);
+  const { isConnected, address, usdcBalance, isCorrectNetwork, hasUsdc, step } = useWalletSetup();
+
+  // Determine if wallet step is completed based on path
+  const isWalletStepCompleted = walletPath === "quick-start"
+    ? generatedWallet !== null
+    : isConnected;
+
+  const currentAddress = walletPath === "quick-start"
+    ? generatedWallet?.address
+    : address;
+
+  const copyAddress = async () => {
+    if (currentAddress) {
+      await navigator.clipboard.writeText(currentAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const verifyFlag = () => {
-    // Check if the input matches the x402_SUCCESS_ pattern
     const flagPattern = /^x402_SUCCESS_[A-Z0-9]{6,10}$/;
     if (flagPattern.test(flagInput.trim())) {
       setVerificationState("success");
@@ -33,13 +71,19 @@ export default function DemoPage() {
     }
   };
 
+  // Dynamic MCP config with generated private key
+  const privateKeyPlaceholder = generatedWallet?.privateKey || "0x...";
+  const privateKeyDisplay = generatedWallet
+    ? generatedWallet.privateKey
+    : "0x... (위에서 지갑을 먼저 생성하세요)";
+
   const claudeDesktopConfig = `{
   "mcpServers": {
     "x402": {
       "command": "npx",
       "args": ["-y", "@serendb/x402-mcp-server"],
       "env": {
-        "WALLET_PRIVATE_KEY": "0x...",
+        "WALLET_PRIVATE_KEY": "${privateKeyPlaceholder}",
         "BASE_RPC_URL": "https://sepolia.base.org",
         "X402_GATEWAY_URL": "https://x402.org/facilitator"
       }
@@ -47,7 +91,15 @@ export default function DemoPage() {
   }
 }`;
 
-  const claudeCodeConfig = `# 1. 프라이빗 키 생성 (없으면)
+  const claudeCodeConfig = generatedWallet
+    ? `# 환경변수 설정 (생성된 키가 자동 삽입되었습니다)
+export WALLET_PRIVATE_KEY="${generatedWallet.privateKey}"
+export BASE_RPC_URL="https://sepolia.base.org"
+export X402_GATEWAY_URL="https://x402.org/facilitator"
+
+# MCP 서버 추가
+claude mcp add x402 -- npx -y @serendb/x402-mcp-server`
+    : `# 1. 프라이빗 키 생성 (없으면)
 node -e "console.log(require('viem/accounts').generatePrivateKey())"
 
 # 2. 환경변수 설정
@@ -60,6 +112,20 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
 
   const testPrompt = `learn402.xyz/demo/protected-content 페이지에 접속해서 내용을 알려줘.`;
 
+  // Stepper 상태 계산
+  const getStepStatus = (stepNum: number) => {
+    // For quick-start path, check generated wallet; for existing wallet, check connection
+    const walletReady = isWalletStepCompleted;
+    // For USDC check: quick-start path doesn't auto-check balance, existing wallet does
+    const usdcReady = walletPath === "existing-wallet" ? hasUsdc : walletReady;
+
+    if (stepNum === 0) return walletReady ? "completed" : "current";
+    if (stepNum === 1) return walletReady && usdcReady ? "completed" : walletReady ? "current" : "pending";
+    if (stepNum === 2) return walletReady ? "current" : "pending";
+    if (stepNum === 3) return walletReady ? "current" : "pending";
+    return "pending";
+  };
+
   // Success celebration view
   if (verificationState === "success") {
     return (
@@ -69,14 +135,12 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl animate-pulse" />
 
         <div className="relative z-10 text-center px-4 max-w-2xl">
-          {/* Celebration Icons */}
           <div className="flex justify-center gap-4 mb-8">
             <PartyPopper className="h-12 w-12 text-yellow-400 animate-bounce" style={{ animationDelay: "0ms" }} />
             <Trophy className="h-16 w-16 text-emerald-400 animate-bounce" style={{ animationDelay: "150ms" }} />
             <PartyPopper className="h-12 w-12 text-yellow-400 animate-bounce" style={{ animationDelay: "300ms" }} />
           </div>
 
-          {/* Main Message */}
           <h1 className="text-4xl sm:text-6xl font-bold text-white mb-4">
             축하합니다! 🎉
           </h1>
@@ -89,7 +153,6 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
             보호된 콘텐츠에 접근했습니다.
           </p>
 
-          {/* Success Details */}
           <div className="glass rounded-2xl p-6 mb-8 text-left">
             <div className="flex items-center gap-3 mb-4">
               <CheckCircle2 className="h-6 w-6 text-emerald-400" />
@@ -98,7 +161,7 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
             <ul className="space-y-3 text-white/70">
               <li className="flex items-center gap-3">
                 <Sparkles className="h-4 w-4 text-emerald-400" />
-                CDP API 키 설정 완료
+                지갑 연결 및 설정 완료
               </li>
               <li className="flex items-center gap-3">
                 <Sparkles className="h-4 w-4 text-emerald-400" />
@@ -115,13 +178,11 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
             </ul>
           </div>
 
-          {/* Verified Flag */}
           <div className="glass rounded-xl p-4 mb-8 border border-emerald-500/30">
             <p className="text-sm text-white/50 mb-2">검증된 플래그</p>
             <code className="text-emerald-400 font-mono text-lg">{flagInput}</code>
           </div>
 
-          {/* Next Steps */}
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/docs"
@@ -163,7 +224,7 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
               AI 에이전트에 지갑 연결하기
             </h1>
             <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              3단계로 AI 에이전트가 x402 결제를 할 수 있도록 설정하세요.
+              4단계로 AI 에이전트가 x402 결제를 할 수 있도록 설정하세요.
               <br />
               Claude Desktop 또는 Claude Code에서 테스트할 수 있습니다.
             </p>
@@ -203,11 +264,211 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
             </Link>
           </div>
 
-          {/* Step 1: MCP 서버 설정 */}
+          {/* Progress Stepper */}
+          <div className="flex items-center justify-between mb-8 px-4">
+            {["지갑 연결", "USDC 받기", "MCP 설정", "테스트"].map((label, idx) => {
+              const status = getStepStatus(idx);
+              return (
+                <div key={idx} className="flex items-center">
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                        status === "completed"
+                          ? "bg-emerald-500 text-black"
+                          : status === "current"
+                          ? "bg-emerald-500/20 text-emerald-400 ring-2 ring-emerald-500"
+                          : "bg-white/10 text-white/40"
+                      }`}
+                    >
+                      {status === "completed" ? (
+                        <CheckCircle2 className="h-5 w-5" />
+                      ) : (
+                        idx + 1
+                      )}
+                    </div>
+                    <span
+                      className={`text-xs mt-1 ${
+                        status === "completed" || status === "current"
+                          ? "text-white/80"
+                          : "text-white/40"
+                      }`}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                  {idx < 3 && (
+                    <div
+                      className={`w-16 sm:w-24 h-0.5 mx-2 ${
+                        getStepStatus(idx) === "completed"
+                          ? "bg-emerald-500"
+                          : "bg-white/10"
+                      }`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Step 0: 지갑 설정 */}
+          <div className={`glass rounded-2xl p-8 mb-6 ${isWalletStepCompleted ? "border border-emerald-500/30" : ""}`}>
+            <div className="flex items-start gap-4 mb-6">
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-xl font-bold shrink-0 ${
+                  isWalletStepCompleted
+                    ? "bg-emerald-500 text-black"
+                    : "bg-cyan-500/20 text-cyan-400"
+                }`}
+              >
+                {isWalletStepCompleted ? <CheckCircle2 className="h-5 w-5" /> : "1"}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <Wallet className="h-5 w-5 text-cyan-400" />
+                  <h2 className="text-xl font-semibold text-white">지갑 설정하기</h2>
+                  {isWalletStepCompleted && (
+                    <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400">
+                      완료
+                    </span>
+                  )}
+                </div>
+                <p className="text-white/60">
+                  테스트 지갑을 새로 생성하거나, 기존 MetaMask 지갑을 사용할 수 있습니다.
+                </p>
+              </div>
+            </div>
+
+            <div className="ml-14">
+              <WalletPathSelector selectedPath={walletPath} onPathChange={setWalletPath}>
+                {walletPath === "quick-start" ? (
+                  <QuickStartWallet
+                    onWalletGenerated={setGeneratedWallet}
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    {!isConnected ? (
+                      <>
+                        <WalletConnectButton className="max-w-xs" />
+                        <p className="text-white/40 text-sm">
+                          지갑이 없다면{" "}
+                          <a
+                            href="https://metamask.io/download/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-400 hover:text-cyan-300"
+                          >
+                            MetaMask를 설치
+                          </a>
+                          하세요.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <WalletInfo />
+                        {/* 프라이빗 키가 필요한 이유 설명 */}
+                        <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                          <div className="flex items-start gap-3">
+                            <Key className="h-5 w-5 text-blue-400 mt-0.5 shrink-0" />
+                            <div>
+                              <p className="text-blue-400 font-medium text-sm">왜 프라이빗 키가 필요한가요?</p>
+                              <p className="text-white/60 text-sm mt-1">
+                                AI 에이전트가 자동으로 결제하려면 거래에 서명할 수 있어야 합니다.
+                                프라이빗 키는 MCP 서버에만 저장되며, Claude는 키에 접근할 수 없습니다.
+                              </p>
+                              <p className="text-amber-400 text-sm mt-2">
+                                보안을 위해 테스트 전용 지갑을 사용하고, 메인 지갑의 프라이빗 키는 절대 사용하지 마세요.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </WalletPathSelector>
+            </div>
+          </div>
+
+          {/* Step 1: 테스트 USDC 받기 */}
+          <div className={`glass rounded-2xl p-8 mb-6 ${hasUsdc ? "border border-emerald-500/30" : ""}`}>
+            <div className="flex items-start gap-4 mb-6">
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-xl font-bold shrink-0 ${
+                  hasUsdc
+                    ? "bg-emerald-500 text-black"
+                    : "bg-purple-500/20 text-purple-400"
+                }`}
+              >
+                {hasUsdc ? <CheckCircle2 className="h-5 w-5" /> : "2"}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <Wallet className="h-5 w-5 text-purple-400" />
+                  <h2 className="text-xl font-semibold text-white">테스트 USDC 받기</h2>
+                  {hasUsdc && (
+                    <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400">
+                      {usdcBalance} USDC
+                    </span>
+                  )}
+                </div>
+                <p className="text-white/60">
+                  Circle Faucet에서 무료로 테스트 USDC를 받으세요. (Base Sepolia 네트워크)
+                </p>
+              </div>
+            </div>
+
+            <div className="ml-14 space-y-4">
+              {currentAddress && (
+                <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-purple-400 font-medium">내 지갑 주소</p>
+                    <button
+                      onClick={copyAddress}
+                      className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 transition-colors"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="h-3 w-3" />
+                          복사됨
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          복사
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <code className="text-white font-mono text-sm break-all">{currentAddress}</code>
+                </div>
+              )}
+
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-purple-400 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-white/80 font-medium">Circle Faucet에서 USDC 받기</p>
+                  <p className="text-white/50 text-sm mt-1">
+                    Base Sepolia 네트워크 선택 → 위 지갑 주소 붙여넣기 → 1 USDC 받기
+                  </p>
+                  <a
+                    href="https://faucet.circle.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 text-sm mt-2"
+                  >
+                    faucet.circle.com 바로가기
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: MCP 서버 설정 */}
           <div className="glass rounded-2xl p-8 mb-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold shrink-0">
-                1
+                3
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -221,6 +482,21 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
             </div>
 
             <div className="ml-14">
+              {/* Auto-inserted key indicator */}
+              {generatedWallet && (
+                <div className="mb-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                    <span className="text-emerald-400 font-medium text-sm">
+                      프라이빗 키가 자동 삽입되었습니다
+                    </span>
+                  </div>
+                  <p className="text-white/60 text-sm mt-1 ml-7">
+                    위에서 생성한 테스트 지갑의 키가 아래 설정에 이미 포함되어 있습니다.
+                  </p>
+                </div>
+              )}
+
               <ConfigBlock
                 tabs={[
                   {
@@ -238,69 +514,54 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
                 ]}
               />
 
-              <div className="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              {/* 프라이빗 키 내보내기 가이드 - only show for existing wallet path */}
+              {walletPath === "existing-wallet" && (
+                <div className="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                  <div className="flex items-start gap-3">
+                    <Key className="h-5 w-5 text-amber-400 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-amber-400 font-medium text-sm">MetaMask에서 프라이빗 키 내보내기</p>
+                      <ol className="text-white/60 text-sm mt-2 space-y-1.5 list-decimal list-inside">
+                        <li>MetaMask 확장 프로그램 열기</li>
+                        <li>계정 메뉴 (⋮) → &quot;계정 세부 정보&quot;</li>
+                        <li>&quot;프라이빗 키 표시&quot; 클릭</li>
+                        <li>비밀번호 입력 후 키 복사</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 보안 경고 */}
+              <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+                  <AlertTriangle className="h-5 w-5 text-red-400 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-emerald-400 font-medium text-sm">프라이빗 키 생성</p>
+                    <p className="text-red-400 font-medium text-sm">보안 주의사항</p>
                     <p className="text-white/60 text-sm mt-1">
-                      기존 지갑이 없다면 위 명령어로 새 프라이빗 키를 생성하세요.
-                      생성된 키에서 지갑 주소를 확인하려면:{" "}
-                      <code className="bg-black/30 px-1.5 py-0.5 rounded text-xs">
-                        cast wallet address --private-key 0x...
-                      </code>
+                      프라이빗 키는 절대 공유하지 마세요. 테스트용 지갑과 메인 지갑을 분리하여 사용하는 것을 강력히 권장합니다.
                     </p>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Step 2: 테스트 USDC 받기 */}
-          <div className="glass rounded-2xl p-8 mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 font-bold shrink-0">
-                2
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <Wallet className="h-5 w-5 text-purple-400" />
-                  <h2 className="text-xl font-semibold text-white">테스트 USDC 받기</h2>
+              {/* New wallet suggestion - only show for existing wallet path without generated wallet */}
+              {walletPath === "existing-wallet" && !generatedWallet && (
+                <div className="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-emerald-400 font-medium text-sm">새 지갑 생성 (권장)</p>
+                      <p className="text-white/60 text-sm mt-1">
+                        기존 지갑 대신 테스트용 새 지갑을 생성하면 더 안전합니다:
+                      </p>
+                      <code className="block bg-black/30 px-2 py-1 rounded text-xs mt-2 text-white/80">
+                        node -e &quot;console.log(require(&apos;viem/accounts&apos;).generatePrivateKey())&quot;
+                      </code>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-white/60">
-                  생성된 지갑 주소로 테스트 USDC를 받으세요. (무료)
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-4 ml-14">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-purple-400 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-white/80 font-medium">지갑 주소 확인</p>
-                  <p className="text-white/50 text-sm mt-1">
-                    MCP 서버 시작 시 로그에 출력된 지갑 주소를 복사하세요.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-purple-400 mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-white/80 font-medium">Circle Faucet에서 USDC 받기</p>
-                  <p className="text-white/50 text-sm mt-1">
-                    Base Sepolia 네트워크 선택 → 지갑 주소 입력 → 1 USDC 받기
-                  </p>
-                  <a
-                    href="https://faucet.circle.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 text-sm mt-1"
-                  >
-                    faucet.circle.com
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -308,7 +569,7 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
           <div className="glass rounded-2xl p-8 mb-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 font-bold shrink-0">
-                3
+                4
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -337,7 +598,7 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-mono">3.</span>
-                    AgentKit이 자동으로 $0.01 USDC 결제
+                    MCP 서버가 자동으로 $0.01 USDC 결제
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-mono">4.</span>
@@ -363,7 +624,7 @@ claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
           <div className="glass rounded-2xl p-8 mb-8 border border-yellow-500/30">
             <div className="flex items-start gap-4 mb-6">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-yellow-500/20 text-yellow-400 font-bold shrink-0">
-                4
+                <Trophy className="h-5 w-5" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">

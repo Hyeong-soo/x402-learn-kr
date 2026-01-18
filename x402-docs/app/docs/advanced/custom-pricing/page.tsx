@@ -3,6 +3,9 @@ import { ArrowRight, DollarSign, Clock, TrendingUp, Layers, Lightbulb, CheckCirc
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 
+// 미들웨어가 항상 실행되도록 동적 렌더링 강제
+export const dynamic = "force-dynamic";
+
 export default function CustomPricingPage() {
   return (
     <div className="min-h-screen py-20">

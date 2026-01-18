@@ -1,6 +1,9 @@
 import { CheckCircle2, Bot, User, DollarSign, Zap } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 
+// 미들웨어가 항상 실행되도록 동적 렌더링 강제
+export const dynamic = "force-dynamic";
+
 export default function ProtectedContentPage() {
   return (
     <div className="min-h-screen">

@@ -100,11 +100,9 @@ export default function DemoPage() {
   "mcpServers": {
     "x402": {
       "command": "npx",
-      "args": ["-y", "@serendb/x402-mcp-server"],
+      "args": ["-y", "x402-fetch-mcp"],
       "env": {
-        "WALLET_PRIVATE_KEY": "${privateKeyPlaceholder}",
-        "BASE_RPC_URL": "https://sepolia.base.org",
-        "X402_GATEWAY_URL": "https://x402.org/facilitator"
+        "PRIVATE_KEY": "${privateKeyPlaceholder}"
       }
     }
   }
@@ -112,22 +110,15 @@ export default function DemoPage() {
 
   const claudeCodeConfig = generatedWallet
     ? `# 환경변수 설정 (생성된 키가 자동 삽입되었습니다)
-export WALLET_PRIVATE_KEY="${generatedWallet.privateKey}"
-export BASE_RPC_URL="https://sepolia.base.org"
-export X402_GATEWAY_URL="https://x402.org/facilitator"
+export PRIVATE_KEY="${generatedWallet.privateKey}"
 
 # MCP 서버 추가
-claude mcp add x402 -- npx -y @serendb/x402-mcp-server`
-    : `# 1. 프라이빗 키 생성 (없으면)
-node -e "console.log(require('viem/accounts').generatePrivateKey())"
+claude mcp add x402 -- npx -y x402-fetch-mcp`
+    : `# 1. 환경변수 설정 (프라이빗 키 입력)
+export PRIVATE_KEY="0x..."
 
-# 2. 환경변수 설정
-export WALLET_PRIVATE_KEY="0x..."
-export BASE_RPC_URL="https://sepolia.base.org"
-export X402_GATEWAY_URL="https://x402.org/facilitator"
-
-# 3. MCP 서버 추가
-claude mcp add x402 -- npx -y @serendb/x402-mcp-server`;
+# 2. MCP 서버 추가
+claude mcp add x402 -- npx -y x402-fetch-mcp`;
 
   const testPrompt = `learn402.xyz/demo/protected-content 페이지에 접속해서 내용을 알려줘.`;
 

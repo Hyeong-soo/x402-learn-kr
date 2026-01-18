@@ -175,7 +175,7 @@ function getPriceForPath(pathname: string): string | null {
   return null;
 }
 
-function create402Response(pathname: string, price: string): NextResponse {
+function create402Response(pathname: string, price: string, request: NextRequest): NextResponse {
   const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
   const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
   const priceInDollars = (parseInt(price) / 1000000).toFixed(2);
@@ -209,10 +209,25 @@ function create402Response(pathname: string, price: string): NextResponse {
 
   const paymentRequiredHeader = btoa(JSON.stringify(paymentRequired));
 
-  // 인라인 챌린지 HTML (리다이렉트 없음!)
-  // - 브라우저: JS 실행 → 토큰 발급 → reload → 콘텐츠
-  // - AI (x402): 402 헤더 → 결제 → 콘텐츠
-  // - AI (기타): 402 + placeholder (접근 불가)
+  // Check Accept header - browsers send text/html, x402-fetch sends nothing or application/json
+  const acceptHeader = request.headers.get("Accept") || "";
+  const wantsHtml = acceptHeader.includes("text/html");
+
+  // AI agents (x402-fetch): JSON body for x402 protocol compliance
+  if (!wantsHtml) {
+    return new NextResponse(JSON.stringify(paymentRequired), {
+      status: 402,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+        "PAYMENT-REQUIRED": paymentRequiredHeader,
+        "Access-Control-Expose-Headers": "PAYMENT-REQUIRED, PAYMENT-RESPONSE",
+      },
+    });
+  }
+
+  // 브라우저: 인라인 챌린지 HTML
+  // - JS 실행 → 토큰 발급 → reload → 콘텐츠
   const htmlBody = `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -321,7 +336,7 @@ export async function middleware(request: NextRequest) {
     // 모든 비인증 요청에 동일한 인라인 챌린지 HTML 반환
     // - 브라우저: JS 실행으로 자동 검증
     // - AI: 402 상태 코드 + PAYMENT-REQUIRED 헤더 수신
-    return create402Response(pathname, price);
+    return create402Response(pathname, price, request);
   }
 
   // ---- Check 3: Verify & Settle Payment via API route ----
@@ -348,7 +363,7 @@ export async function middleware(request: NextRequest) {
 
     if (!checkResult.success) {
       console.error("[x402] Payment check failed:", checkResult);
-      return create402Response(pathname, price);
+      return create402Response(pathname, price, request);
     }
 
     console.log("[x402] Payment verified and settled:", checkResult.txHash);
@@ -391,7 +406,7 @@ export async function middleware(request: NextRequest) {
 
   } catch (error) {
     console.error("[x402] Payment processing error:", error);
-    return create402Response(pathname, price);
+    return create402Response(pathname, price, request);
   }
 }
 

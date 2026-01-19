@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
 import {
   Wallet,
   Settings,
@@ -12,24 +11,18 @@ import {
   Eye,
   Lock,
   CheckCircle2,
-  AlertCircle,
   PartyPopper,
   Trophy,
   Sparkles,
-  Key,
   Copy,
   Check,
   AlertTriangle,
+  Coins,
+  TrendingDown,
+  Zap,
 } from "lucide-react";
 import { ConfigBlock, CopyableCodeBlock } from "@/components/ConfigBlock";
-import {
-  WalletConnectButton,
-  WalletInfo,
-  WalletPathSelector,
-  QuickStartWallet,
-  WalletPath,
-} from "@/components/wallet";
-import { useWalletSetup } from "@/hooks/useWalletSetup";
+import { QuickStartWallet } from "@/components/wallet";
 
 interface GeneratedWallet {
   privateKey: string;
@@ -40,18 +33,11 @@ export default function DemoPage() {
   const [flagInput, setFlagInput] = useState("");
   const [verificationState, setVerificationState] = useState<"idle" | "success" | "error">("idle");
   const [copied, setCopied] = useState(false);
-  const [walletPath, setWalletPath] = useState<WalletPath>("quick-start");
   const [generatedWallet, setGeneratedWallet] = useState<GeneratedWallet | null>(null);
-  const { isConnected, address, usdcBalance, isCorrectNetwork, hasUsdc, step } = useWalletSetup();
 
-  // Determine if wallet step is completed based on path
-  const isWalletStepCompleted = walletPath === "quick-start"
-    ? generatedWallet !== null
-    : isConnected;
-
-  const currentAddress = walletPath === "quick-start"
-    ? generatedWallet?.address
-    : address;
+  // Determine if wallet step is completed
+  const isWalletStepCompleted = generatedWallet !== null;
+  const currentAddress = generatedWallet?.address;
 
   const copyAddress = async () => {
     if (currentAddress) {
@@ -90,17 +76,9 @@ export default function DemoPage() {
     }
   };
 
-  // Dynamic MCP config with generated private key
-  const privateKeyPlaceholder = generatedWallet?.privateKey || "0x...";
-  const privateKeyDisplay = generatedWallet
-    ? generatedWallet.privateKey
-    : "0x... (위에서 지갑을 먼저 생성하세요)";
-
-  const claudeDesktopConfigPath = process.platform === 'darwin'
-    ? '~/Library/Application Support/Claude/claude_desktop_config.json'
-    : '%APPDATA%\\Claude\\claude_desktop_config.json';
-
-  const claudeDesktopConfig = `// 설정 파일 위치: ${claudeDesktopConfigPath}
+  const claudeDesktopConfig = `// 설정 파일 위치:
+// Mac: ~/Library/Application Support/Claude/claude_desktop_config.json
+// Windows: %APPDATA%\\Claude\\claude_desktop_config.json
 {
   "mcpServers": {
     "x402": {
@@ -138,17 +116,14 @@ claude mcp add x402 -- npx x402-fetch-mcp
 claude mcp list
 # 출력: x402 - ✓ Connected`;
 
-  const testPrompt = `learn402.xyz/demo/protected-content 페이지에 접속해서 내용을 알려줘.`;
+  const testPrompt = `https://learn402.xyz/demo/protected-content 를 fetch 도구로 가져와줘`;
 
   // Stepper 상태 계산
   const getStepStatus = (stepNum: number) => {
-    // For quick-start path, check generated wallet; for existing wallet, check connection
     const walletReady = isWalletStepCompleted;
-    // For USDC check: quick-start path doesn't auto-check balance, existing wallet does
-    const usdcReady = walletPath === "existing-wallet" ? hasUsdc : walletReady;
 
     if (stepNum === 0) return walletReady ? "completed" : "current";
-    if (stepNum === 1) return walletReady && usdcReady ? "completed" : walletReady ? "current" : "pending";
+    if (stepNum === 1) return walletReady ? "current" : "pending";
     if (stepNum === 2) return walletReady ? "current" : "pending";
     if (stepNum === 3) return walletReady ? "current" : "pending";
     return "pending";
@@ -181,7 +156,93 @@ claude mcp list
             보호된 콘텐츠에 접근했습니다.
           </p>
 
-          <div className="glass rounded-2xl p-6 mb-8 text-left">
+          {/* Token Savings Card */}
+          <div className="glass rounded-2xl p-6 mb-6 border border-cyan-500/30">
+            <div className="flex items-center gap-3 mb-4">
+              <TrendingDown className="h-6 w-6 text-cyan-400" />
+              <span className="text-white font-semibold">컨텍스트 윈도우 절약</span>
+              <span className="text-xs text-white/40">(실측)</span>
+            </div>
+
+            {/* Comparison Table */}
+            <div className="space-y-3 mb-4">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-emerald-400" />
+                  <span className="text-sm text-emerald-400">x402 Markdown</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-lg font-bold text-emerald-400">~290</span>
+                  <span className="text-xs text-white/50 ml-1">tokens</span>
+                  <span className="text-xs text-white/30 ml-1">(1.2KB)</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4 text-red-400" />
+                  <span className="text-sm text-red-400">HTML 크롤링 시</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-lg font-bold text-red-400">~5,555</span>
+                  <span className="text-xs text-white/50 ml-1">tokens</span>
+                  <span className="text-xs text-white/30 ml-1">(22KB)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* API Cost Comparison - Opus 4.5 */}
+            <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 mb-4">
+              <p className="text-xs text-purple-400 mb-3 font-medium">Claude Opus 4.5 기준 ($15/1M tokens)</p>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-white/60">HTML 크롤링 시 API 비용</span>
+                  <span className="text-red-400 font-mono">$0.0833</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/60">x402 사용 시 API 비용</span>
+                  <span className="text-emerald-400 font-mono">$0.0043</span>
+                </div>
+                <div className="flex justify-between border-t border-white/10 pt-2">
+                  <span className="text-white/60">API 비용 절약</span>
+                  <span className="text-cyan-400 font-mono">$0.0790</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/60">x402 콘텐츠 비용</span>
+                  <span className="text-amber-400 font-mono">-$0.0100</span>
+                </div>
+                <div className="flex justify-between border-t border-white/10 pt-2">
+                  <span className="text-white font-medium">순이익</span>
+                  <span className="text-emerald-400 font-bold font-mono">+$0.0690</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="p-3 rounded-lg bg-cyan-500/10 text-center">
+                <p className="text-2xl font-bold text-cyan-400">95%</p>
+                <p className="text-xs text-white/50">토큰 절약</p>
+              </div>
+              <div className="p-3 rounded-lg bg-emerald-500/10 text-center">
+                <p className="text-2xl font-bold text-emerald-400">7x</p>
+                <p className="text-xs text-white/50">비용 대비 이득</p>
+              </div>
+              <div className="p-3 rounded-lg bg-purple-500/10 text-center">
+                <p className="text-2xl font-bold text-purple-400">690%</p>
+                <p className="text-xs text-white/50">ROI</p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+              <p className="text-sm text-yellow-400">
+                💡 x402에 <strong className="text-yellow-300">$0.01 지불하면 API 비용 $0.079 절약</strong> →
+                콘텐츠 제공자도, AI 사용자도 이득입니다.
+              </p>
+            </div>
+          </div>
+
+          <div className="glass rounded-2xl p-6 mb-6 text-left">
             <div className="flex items-center gap-3 mb-4">
               <CheckCircle2 className="h-6 w-6 text-emerald-400" />
               <span className="text-white font-semibold">완료된 항목</span>
@@ -361,83 +422,28 @@ claude mcp list
                   )}
                 </div>
                 <p className="text-white/60">
-                  테스트 지갑을 새로 생성하거나, 기존 MetaMask 지갑을 사용할 수 있습니다.
+                  테스트 전용 지갑을 생성합니다.
                 </p>
               </div>
             </div>
 
             <div className="ml-14">
-              <WalletPathSelector selectedPath={walletPath} onPathChange={setWalletPath}>
-                {walletPath === "quick-start" ? (
-                  <QuickStartWallet
-                    onWalletGenerated={setGeneratedWallet}
-                  />
-                ) : (
-                  <div className="space-y-4">
-                    {!isConnected ? (
-                      <>
-                        <WalletConnectButton className="max-w-xs" />
-                        <p className="text-white/40 text-sm">
-                          지갑이 없다면{" "}
-                          <a
-                            href="https://metamask.io/download/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-cyan-400 hover:text-cyan-300"
-                          >
-                            MetaMask를 설치
-                          </a>
-                          하세요.
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <WalletInfo />
-                        {/* 프라이빗 키가 필요한 이유 설명 */}
-                        <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                          <div className="flex items-start gap-3">
-                            <Key className="h-5 w-5 text-blue-400 mt-0.5 shrink-0" />
-                            <div>
-                              <p className="text-blue-400 font-medium text-sm">왜 프라이빗 키가 필요한가요?</p>
-                              <p className="text-white/60 text-sm mt-1">
-                                AI 에이전트가 자동으로 결제하려면 거래에 서명할 수 있어야 합니다.
-                                프라이빗 키는 ~/.x402/config.json에 저장되며, Claude는 env 명령으로 키에 접근할 수 없습니다.
-                              </p>
-                              <p className="text-amber-400 text-sm mt-2">
-                                보안을 위해 테스트 전용 지갑을 사용하고, 메인 지갑의 프라이빗 키는 절대 사용하지 마세요.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </WalletPathSelector>
+              <QuickStartWallet
+                onWalletGenerated={setGeneratedWallet}
+              />
             </div>
           </div>
 
           {/* Step 1: 테스트 USDC 받기 */}
-          <div className={`glass rounded-2xl p-8 mb-6 ${hasUsdc ? "border border-emerald-500/30" : ""}`}>
+          <div className="glass rounded-2xl p-8 mb-6">
             <div className="flex items-start gap-4 mb-6">
-              <div
-                className={`flex items-center justify-center w-10 h-10 rounded-xl font-bold shrink-0 ${
-                  hasUsdc
-                    ? "bg-emerald-500 text-black"
-                    : "bg-purple-500/20 text-purple-400"
-                }`}
-              >
-                {hasUsdc ? <CheckCircle2 className="h-5 w-5" /> : "2"}
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl font-bold shrink-0 bg-purple-500/20 text-purple-400">
+                2
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <Wallet className="h-5 w-5 text-purple-400" />
                   <h2 className="text-xl font-semibold text-white">테스트 USDC 받기</h2>
-                  {hasUsdc && (
-                    <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400">
-                      {usdcBalance} USDC
-                    </span>
-                  )}
                 </div>
                 <p className="text-white/60">
                   Circle Faucet에서 무료로 테스트 USDC를 받으세요. (Base Sepolia 네트워크)
@@ -513,7 +519,7 @@ claude mcp list
                 </div>
                 <p className="text-white/60">
                   <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">x402-fetch-mcp</code> 패키지를 설치하세요.
-                  <strong className="text-emerald-400 ml-1">CDP 가입 불필요</strong>, 프라이빗 키만 있으면 됩니다.
+                  프라이빗 키만 있으면 됩니다.
                 </p>
               </div>
             </div>
@@ -551,24 +557,6 @@ claude mcp list
                 ]}
               />
 
-              {/* 프라이빗 키 내보내기 가이드 - only show for existing wallet path */}
-              {walletPath === "existing-wallet" && (
-                <div className="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                  <div className="flex items-start gap-3">
-                    <Key className="h-5 w-5 text-amber-400 mt-0.5 shrink-0" />
-                    <div>
-                      <p className="text-amber-400 font-medium text-sm">MetaMask에서 프라이빗 키 내보내기</p>
-                      <ol className="text-white/60 text-sm mt-2 space-y-1.5 list-decimal list-inside">
-                        <li>MetaMask 확장 프로그램 열기</li>
-                        <li>계정 메뉴 (⋮) → &quot;계정 세부 정보&quot;</li>
-                        <li>&quot;프라이빗 키 표시&quot; 클릭</li>
-                        <li>비밀번호 입력 후 키 복사</li>
-                      </ol>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* 보안 경고 */}
               <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
                 <div className="flex items-start gap-3">
@@ -582,23 +570,6 @@ claude mcp list
                 </div>
               </div>
 
-              {/* New wallet suggestion - only show for existing wallet path without generated wallet */}
-              {walletPath === "existing-wallet" && !generatedWallet && (
-                <div className="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
-                    <div>
-                      <p className="text-emerald-400 font-medium text-sm">새 지갑 생성 (권장)</p>
-                      <p className="text-white/60 text-sm mt-1">
-                        기존 지갑 대신 테스트용 새 지갑을 생성하면 더 안전합니다:
-                      </p>
-                      <code className="block bg-black/30 px-2 py-1 rounded text-xs mt-2 text-white/80">
-                        node -e &quot;console.log(require(&apos;viem/accounts&apos;).generatePrivateKey())&quot;
-                      </code>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 

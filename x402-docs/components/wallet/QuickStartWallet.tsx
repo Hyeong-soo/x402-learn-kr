@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { createPublicClient, http, formatUnits } from "viem";
+import { baseSepolia } from "viem/chains";
 import {
   Wallet,
   Copy,
@@ -12,7 +14,25 @@ import {
   Sparkles,
   ExternalLink,
   RefreshCw,
+  Coins,
 } from "lucide-react";
+
+// USDC contract on Base Sepolia
+const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
+const USDC_ABI = [
+  {
+    inputs: [{ name: "account", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;
+
+const publicClient = createPublicClient({
+  chain: baseSepolia,
+  transport: http(),
+});
 
 interface GeneratedWallet {
   privateKey: string;
@@ -33,6 +53,8 @@ export function QuickStartWallet({
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [copiedKey, setCopiedKey] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [usdcBalance, setUsdcBalance] = useState<string | null>(null);
+  const [isCheckingBalance, setIsCheckingBalance] = useState(false);
 
   const generateWallet = useCallback(() => {
     setIsGenerating(true);
@@ -72,6 +94,28 @@ export function QuickStartWallet({
   const maskPrivateKey = (key: string) => {
     return key.slice(0, 10) + "•".repeat(50) + key.slice(-6);
   };
+
+  const checkBalance = useCallback(async () => {
+    if (!wallet) return;
+
+    setIsCheckingBalance(true);
+    try {
+      const balance = await publicClient.readContract({
+        address: USDC_ADDRESS,
+        abi: USDC_ABI,
+        functionName: "balanceOf",
+        args: [wallet.address as `0x${string}`],
+      });
+      // USDC has 6 decimals
+      const formattedBalance = formatUnits(balance, 6);
+      setUsdcBalance(formattedBalance);
+    } catch (error) {
+      console.error("Failed to check balance:", error);
+      setUsdcBalance(null);
+    } finally {
+      setIsCheckingBalance(false);
+    }
+  }, [wallet]);
 
   // Before wallet generation
   if (!wallet) {
@@ -204,14 +248,58 @@ export function QuickStartWallet({
         </div>
       </div>
 
+      {/* USDC Balance */}
+      <div className={`p-4 rounded-xl ${usdcBalance && parseFloat(usdcBalance) > 0 ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-blue-500/10 border border-blue-500/20"}`}>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Coins className={`h-5 w-5 ${usdcBalance && parseFloat(usdcBalance) > 0 ? "text-emerald-400" : "text-blue-400"}`} />
+            <span className={`font-medium text-sm ${usdcBalance && parseFloat(usdcBalance) > 0 ? "text-emerald-400" : "text-blue-400"}`}>
+              USDC 잔액 (Base Sepolia)
+            </span>
+          </div>
+          <button
+            onClick={checkBalance}
+            disabled={isCheckingBalance}
+            className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3 w-3 ${isCheckingBalance ? "animate-spin" : ""}`} />
+            {isCheckingBalance ? "확인 중..." : "잔액 확인"}
+          </button>
+        </div>
+        {usdcBalance !== null ? (
+          <div className="flex items-baseline gap-2">
+            <span className={`text-2xl font-bold ${parseFloat(usdcBalance) > 0 ? "text-emerald-400" : "text-white/60"}`}>
+              {parseFloat(usdcBalance).toFixed(2)}
+            </span>
+            <span className="text-white/60 text-sm">USDC</span>
+            {parseFloat(usdcBalance) > 0 && (
+              <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">
+                테스트 준비 완료!
+              </span>
+            )}
+          </div>
+        ) : (
+          <p className="text-white/50 text-sm">
+            잔액 확인 버튼을 클릭하여 USDC 잔액을 확인하세요.
+          </p>
+        )}
+        {usdcBalance !== null && parseFloat(usdcBalance) === 0 && (
+          <p className="text-amber-400 text-sm mt-2">
+            아직 USDC가 없습니다. 아래 Faucet에서 테스트 USDC를 받으세요.
+          </p>
+        )}
+      </div>
+
       {/* Next Step: Faucet */}
-      <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
+      <div className={`p-4 rounded-xl ${usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "bg-amber-500/10 border-2 border-amber-500/40" : "bg-purple-500/10 border border-purple-500/20"}`}>
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-purple-500/20">
-            <ExternalLink className="h-4 w-4 text-purple-400" />
+          <div className={`p-2 rounded-lg ${usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "bg-amber-500/20" : "bg-purple-500/20"}`}>
+            <ExternalLink className={`h-4 w-4 ${usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "text-amber-400" : "text-purple-400"}`} />
           </div>
           <div className="flex-1">
-            <p className="text-purple-400 font-medium text-sm">다음 단계: Faucet에서 USDC 받기</p>
+            <p className={`font-medium text-sm ${usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "text-amber-400" : "text-purple-400"}`}>
+              {usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "⚠️ Faucet에서 USDC 받기 (필수)" : "다음 단계: Faucet에서 USDC 받기"}
+            </p>
             <p className="text-white/60 text-sm mt-1">
               위 지갑 주소를 복사하여 Circle Faucet에서 테스트 USDC를 받으세요.
             </p>
@@ -219,7 +307,7 @@ export function QuickStartWallet({
               href="https://faucet.circle.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 text-sm mt-2"
+              className={`inline-flex items-center gap-1 text-sm mt-2 ${usdcBalance !== null && parseFloat(usdcBalance) === 0 ? "text-amber-400 hover:text-amber-300" : "text-purple-400 hover:text-purple-300"}`}
             >
               faucet.circle.com 바로가기
               <ExternalLink className="h-3 w-3" />

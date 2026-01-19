@@ -6,7 +6,7 @@
 
 learn402 is an educational platform designed to help developers understand and experiment with the [x402 payment protocol](https://www.x402.org/). Through hands-on demos and comprehensive guides, you can learn how HTTP 402-based micropayments work in practice.
 
-**Live Demo**: https://laern402.xyz
+**Live Demo**: https://learn402.xyz
 
 ## Project Structure
 

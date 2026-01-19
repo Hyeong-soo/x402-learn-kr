@@ -1,6 +1,6 @@
 {
   "name": "x402-fetch-mcp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MCP server for x402 payment protocol - enables AI agents to access paywalled content automatically",
   "type": "module",
   "main": "index.js",

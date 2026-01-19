@@ -1,4 +1,4 @@
-import { CheckCircle2, Bot, User, DollarSign, Zap } from "lucide-react";
+import { CheckCircle2, Bot, User, DollarSign } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 
 // 미들웨어가 항상 실행되도록 동적 렌더링 강제
@@ -19,9 +19,9 @@ export default function ProtectedContentPage() {
                 <CheckCircle2 className="h-5 w-5 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-emerald-400 font-semibold mb-1">Access Granted!</h3>
+                <h3 className="text-emerald-400 font-semibold mb-1">접근 허용됨!</h3>
                 <p className="text-white/60 text-sm">
-                  You're viewing this as a verified human. This content is free for you.
+                  브라우저 검증을 통과하여 이 콘텐츠를 무료로 보고 있습니다.
                 </p>
               </div>
             </div>
@@ -30,11 +30,11 @@ export default function ProtectedContentPage() {
           {/* Header */}
           <div className="mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Protected Documentation
+              보호된 문서
             </h1>
             <p className="text-lg text-white/60">
-              This page demonstrates x402 protection. You're seeing it because you're
-              a human (verified via JavaScript).
+              이 페이지는 x402 보호가 적용되어 있습니다.
+              JavaScript 검증을 통과한 사람이기 때문에 무료로 보고 있습니다.
             </p>
           </div>
 
@@ -43,15 +43,15 @@ export default function ProtectedContentPage() {
           {/* Content */}
           <div className="space-y-12">
             <section>
-              <h2 className="text-2xl font-bold text-white mb-4">Secret API Documentation</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">비밀 API 문서</h2>
               <p className="text-white/60 mb-6">
-                This is premium content that AI agents would need to pay $0.01 to
-                access. As a human, you see it for free!
+                이것은 AI 에이전트가 $0.01를 지불해야 접근할 수 있는 프리미엄 콘텐츠입니다.
+                사람은 무료로 볼 수 있습니다!
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-bold text-white mb-4">Advanced Configuration</h3>
+              <h3 className="text-xl font-bold text-white mb-4">고급 설정</h3>
               <CodeBlock
                 code={`{
   "secret_key": "this-is-premium-content",
@@ -67,26 +67,26 @@ export default function ProtectedContentPage() {
             </section>
 
             <section>
-              <h3 className="text-xl font-bold text-white mb-4">Enterprise Integration Guide</h3>
+              <h3 className="text-xl font-bold text-white mb-4">엔터프라이즈 통합 가이드</h3>
               <p className="text-white/60 mb-4">
-                To integrate with enterprise systems, follow these steps:
+                엔터프라이즈 시스템과 통합하려면 다음 단계를 따르세요:
               </p>
               <ol className="space-y-3 text-white/60">
                 <li className="flex gap-3">
                   <span className="text-emerald-400 font-mono">01</span>
-                  Configure your SSO provider
+                  SSO 프로바이더 설정
                 </li>
                 <li className="flex gap-3">
                   <span className="text-emerald-400 font-mono">02</span>
-                  Set up the webhook endpoints
+                  웹훅 엔드포인트 구성
                 </li>
                 <li className="flex gap-3">
                   <span className="text-emerald-400 font-mono">03</span>
-                  Enable audit logging
+                  감사 로깅 활성화
                 </li>
                 <li className="flex gap-3">
                   <span className="text-emerald-400 font-mono">04</span>
-                  Configure rate limiting policies
+                  요청 제한 정책 설정
                 </li>
               </ol>
             </section>
@@ -98,7 +98,7 @@ export default function ProtectedContentPage() {
                   <Bot className="h-5 w-5 text-amber-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-amber-400">
-                  What AI agents see instead:
+                  AI 에이전트가 보는 화면:
                 </h3>
               </div>
               <CodeBlock
@@ -117,36 +117,36 @@ X-PAYMENT-REQUIRED: base64-encoded-payment-details
             </div>
 
             <section>
-              <h3 className="text-xl font-bold text-white mb-6">Conclusion</h3>
+              <h3 className="text-xl font-bold text-white mb-6">요약</h3>
               <p className="text-white/60 mb-6">
-                This demonstrates how x402 for Open Source works:
+                x402 for Open Source가 작동하는 방식:
               </p>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="glass rounded-xl p-6">
                   <div className="p-3 rounded-lg bg-emerald-500/20 w-fit mb-4">
                     <User className="h-6 w-6 text-emerald-400" />
                   </div>
-                  <h4 className="text-white font-semibold mb-2">Humans</h4>
+                  <h4 className="text-white font-semibold mb-2">사람</h4>
                   <p className="text-white/50 text-sm">
-                    Free access, verified via JavaScript
+                    JavaScript 검증으로 무료 접근
                   </p>
                 </div>
                 <div className="glass rounded-xl p-6">
                   <div className="p-3 rounded-lg bg-amber-500/20 w-fit mb-4">
                     <Bot className="h-6 w-6 text-amber-400" />
                   </div>
-                  <h4 className="text-white font-semibold mb-2">AI Agents</h4>
+                  <h4 className="text-white font-semibold mb-2">AI 에이전트</h4>
                   <p className="text-white/50 text-sm">
-                    Must pay via x402 protocol
+                    x402 프로토콜로 결제 필요
                   </p>
                 </div>
                 <div className="glass rounded-xl p-6">
                   <div className="p-3 rounded-lg bg-emerald-500/20 w-fit mb-4">
                     <DollarSign className="h-6 w-6 text-emerald-400" />
                   </div>
-                  <h4 className="text-white font-semibold mb-2">Maintainers</h4>
+                  <h4 className="text-white font-semibold mb-2">메인테이너</h4>
                   <p className="text-white/50 text-sm">
-                    Earn revenue from AI usage
+                    AI 사용량에서 수익 창출
                   </p>
                 </div>
               </div>

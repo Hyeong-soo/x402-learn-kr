@@ -112,7 +112,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <meta name="theme-color" content="#0a0a0a" />
-        <meta name="base:app_id" content="696e1287c0ab25addaaaf5a6" />
         <GoogleAnalytics />
       </head>
       <body

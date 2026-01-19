@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     title: "x402 - AI 시대의 결제 프로토콜",
     description: "HTTP 402 상태 코드를 활용한 AI 에이전트 결제 프로토콜을 한국어로 배워보세요.",
   },
+  other: {
+    "base:app_id": "696e1287c0ab25addaaaf5a6",
+  },
 };
 import {
   ArrowRight,

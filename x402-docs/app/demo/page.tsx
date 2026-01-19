@@ -100,24 +100,25 @@ export default function DemoPage() {
   "mcpServers": {
     "x402": {
       "command": "npx",
-      "args": ["-y", "x402-fetch-mcp"],
-      "env": {
-        "PRIVATE_KEY": "${privateKeyPlaceholder}"
-      }
+      "args": ["-y", "x402-fetch-mcp"]
     }
   }
 }`;
 
   const claudeCodeConfig = generatedWallet
-    ? `# 환경변수 설정 (생성된 키가 자동 삽입되었습니다)
-export PRIVATE_KEY="${generatedWallet.privateKey}"
+    ? `# 1. 프라이빗 키 설정 (보안: ~/.x402/config.json에 저장됨)
+npx -y x402-fetch-mcp setup
+# > Enter your private key: ${generatedWallet.privateKey}
+# > Network [baseSepolia]: (Enter)
 
-# MCP 서버 추가
+# 2. MCP 서버 추가 (환경변수 불필요!)
 claude mcp add x402 -- npx -y x402-fetch-mcp`
-    : `# 1. 환경변수 설정 (프라이빗 키 입력)
-export PRIVATE_KEY="0x..."
+    : `# 1. 프라이빗 키 설정 (보안: ~/.x402/config.json에 저장됨)
+npx -y x402-fetch-mcp setup
+# > Enter your private key: 0x...
+# > Network [baseSepolia]: (Enter)
 
-# 2. MCP 서버 추가
+# 2. MCP 서버 추가 (환경변수 불필요!)
 claude mcp add x402 -- npx -y x402-fetch-mcp`;
 
   const testPrompt = `learn402.xyz/demo/protected-content 페이지에 접속해서 내용을 알려줘.`;
@@ -383,7 +384,7 @@ claude mcp add x402 -- npx -y x402-fetch-mcp`;
                               <p className="text-blue-400 font-medium text-sm">왜 프라이빗 키가 필요한가요?</p>
                               <p className="text-white/60 text-sm mt-1">
                                 AI 에이전트가 자동으로 결제하려면 거래에 서명할 수 있어야 합니다.
-                                프라이빗 키는 MCP 서버에만 저장되며, Claude는 키에 접근할 수 없습니다.
+                                프라이빗 키는 ~/.x402/config.json에 저장되며, Claude는 env 명령으로 키에 접근할 수 없습니다.
                               </p>
                               <p className="text-amber-400 text-sm mt-2">
                                 보안을 위해 테스트 전용 지갑을 사용하고, 메인 지갑의 프라이빗 키는 절대 사용하지 마세요.

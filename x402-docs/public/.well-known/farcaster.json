@@ -8,18 +8,18 @@
     "version": "1",
     "name": "Learn402",
     "homeUrl": "https://learn402.xyz",
-    "iconUrl": "https://learn402.xyz/icon-1024",
-    "splashImageUrl": "https://learn402.xyz/splash-200",
+    "iconUrl": "https://learn402.xyz/icon-1024.png",
+    "splashImageUrl": "https://learn402.xyz/splash-200.png",
     "splashBackgroundColor": "#0a0a0a",
     "subtitle": "x402 결제 프로토콜 학습",
     "description": "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
     "tagline": "AI 결제의 미래를 배우다",
     "primaryCategory": "developer-tools",
     "tags": ["x402", "ai", "payments", "crypto", "education"],
-    "heroImageUrl": "https://learn402.xyz/hero-1200x630",
+    "heroImageUrl": "https://learn402.xyz/hero-1200x630.png",
     "screenshotUrls": [
-      "https://learn402.xyz/screenshot-1",
-      "https://learn402.xyz/screenshot-2"
+      "https://learn402.xyz/screenshot-1.png",
+      "https://learn402.xyz/screenshot-2.png"
     ],
     "noindex": false
   }

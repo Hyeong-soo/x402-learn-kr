@@ -96,30 +96,47 @@ export default function DemoPage() {
     ? generatedWallet.privateKey
     : "0x... (위에서 지갑을 먼저 생성하세요)";
 
-  const claudeDesktopConfig = `{
+  const claudeDesktopConfigPath = process.platform === 'darwin'
+    ? '~/Library/Application Support/Claude/claude_desktop_config.json'
+    : '%APPDATA%\\Claude\\claude_desktop_config.json';
+
+  const claudeDesktopConfig = `// 설정 파일 위치: ${claudeDesktopConfigPath}
+{
   "mcpServers": {
     "x402": {
       "command": "npx",
       "args": ["-y", "x402-fetch-mcp"]
     }
   }
-}`;
+}
+
+// 설정 후 Claude Desktop 재시작 필요`;
 
   const claudeCodeConfig = generatedWallet
-    ? `# 1. 프라이빗 키 설정 (보안: ~/.x402/config.json에 저장됨)
-npx -y x402-fetch-mcp setup
-# > Enter your private key: ${generatedWallet.privateKey}
-# > Network [baseSepolia]: (Enter)
+    ? `# Step 1: 프라이빗 키 설정
+# 키는 ~/.x402/config.json에 안전하게 저장됩니다
+npx x402-fetch-mcp setup
+# Enter your private key: ${generatedWallet.privateKey}
+# Network [baseSepolia]: (엔터)
 
-# 2. MCP 서버 추가 (환경변수 불필요!)
-claude mcp add x402 -- npx -y x402-fetch-mcp`
-    : `# 1. 프라이빗 키 설정 (보안: ~/.x402/config.json에 저장됨)
-npx -y x402-fetch-mcp setup
-# > Enter your private key: 0x...
-# > Network [baseSepolia]: (Enter)
+# Step 2: MCP 서버 등록
+claude mcp add x402 -- npx x402-fetch-mcp
 
-# 2. MCP 서버 추가 (환경변수 불필요!)
-claude mcp add x402 -- npx -y x402-fetch-mcp`;
+# Step 3: 설치 확인
+claude mcp list
+# 출력: x402 - ✓ Connected`
+    : `# Step 1: 프라이빗 키 설정
+# 키는 ~/.x402/config.json에 안전하게 저장됩니다
+npx x402-fetch-mcp setup
+# Enter your private key: 0x...
+# Network [baseSepolia]: (엔터)
+
+# Step 2: MCP 서버 등록
+claude mcp add x402 -- npx x402-fetch-mcp
+
+# Step 3: 설치 확인
+claude mcp list
+# 출력: x402 - ✓ Connected`;
 
   const testPrompt = `learn402.xyz/demo/protected-content 페이지에 접속해서 내용을 알려줘.`;
 
@@ -485,9 +502,18 @@ claude mcp add x402 -- npx -y x402-fetch-mcp`;
                 <div className="flex items-center gap-3 mb-2">
                   <Settings className="h-5 w-5 text-emerald-400" />
                   <h2 className="text-xl font-semibold text-white">MCP 서버 설정</h2>
+                  <a
+                    href="https://www.npmjs.com/package/x402-fetch-mcp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                  >
+                    npm
+                  </a>
                 </div>
                 <p className="text-white/60">
-                  x402 MCP 서버를 추가하세요. <strong className="text-emerald-400">CDP 가입 불필요</strong>, 프라이빗 키만 있으면 됩니다.
+                  <code className="text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">x402-fetch-mcp</code> 패키지를 설치하세요.
+                  <strong className="text-emerald-400 ml-1">CDP 가입 불필요</strong>, 프라이빗 키만 있으면 됩니다.
                 </p>
               </div>
             </div>
@@ -685,13 +711,13 @@ claude mcp add x402 -- npx -y x402-fetch-mcp`;
             <h3 className="text-lg font-semibold text-white mb-4">추가 리소스</h3>
             <div className="grid sm:grid-cols-2 gap-4">
               <a
-                href="https://docs.cdp.coinbase.com/agentkit/docs/welcome"
+                href="https://www.npmjs.com/package/x402-fetch-mcp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/20"
               >
-                <div className="text-white/80">AgentKit 문서</div>
-                <ExternalLink className="h-4 w-4 text-white/40 ml-auto" />
+                <div className="text-red-400 font-medium">x402-fetch-mcp (npm)</div>
+                <ExternalLink className="h-4 w-4 text-red-400/60 ml-auto" />
               </a>
               <a
                 href="https://github.com/coinbase/x402"
@@ -699,16 +725,18 @@ claude mcp add x402 -- npx -y x402-fetch-mcp`;
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
               >
-                <div className="text-white/80">x402 GitHub</div>
+                <div className="text-white/80">x402 Protocol GitHub</div>
                 <ExternalLink className="h-4 w-4 text-white/40 ml-auto" />
               </a>
-              <Link
-                href="/learn/how-it-works"
+              <a
+                href="https://faucet.circle.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
               >
-                <div className="text-white/80">작동 원리 배우기</div>
-                <ArrowRight className="h-4 w-4 text-white/40 ml-auto" />
-              </Link>
+                <div className="text-white/80">Circle USDC Faucet</div>
+                <ExternalLink className="h-4 w-4 text-white/40 ml-auto" />
+              </a>
               <Link
                 href="/docs"
                 className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"

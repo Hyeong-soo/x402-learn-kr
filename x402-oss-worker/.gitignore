@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Cloudflare
+.wrangler/
+
+# Environment variables
+.env
+.dev.vars
+
+# OS
+.DS_Store

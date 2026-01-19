@@ -1,0 +1,25 @@
+name = "x402-oss-gateway"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+# x402 Facilitator URL (Coinbase CDP or x402.org)
+FACILITATOR_URL = "https://x402.org/facilitator"
+# Base Sepolia testnet
+DEFAULT_NETWORK = "eip155:84532"
+# USDC contract on Base Sepolia
+USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+
+# KV namespace for caching .x402.yml configs
+# To create your KV namespace, run:
+#   npx wrangler kv:namespace create CONFIG_CACHE
+#   npx wrangler kv:namespace create CONFIG_CACHE --preview
+# Then replace the placeholder IDs below with your actual namespace IDs
+[[kv_namespaces]]
+binding = "CONFIG_CACHE"
+id = "<your-kv-namespace-id>"
+preview_id = "<your-kv-preview-namespace-id>"
+
+[dev]
+port = 8787
+local_protocol = "http"

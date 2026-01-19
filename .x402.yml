@@ -1,0 +1,18 @@
+# x402 for Open Source - Test Configuration
+# This file demonstrates how maintainers can monetize their content
+
+version: 1
+wallet: "0x1234567890abcdef1234567890abcdef12345678"
+
+pricing:
+  # Default: free access
+  default: 0
+
+  # Premium paths require payment
+  paths:
+    "specs/**": 0.01         # $0.01 for spec documents
+    "docs/advanced/**": 0.02 # $0.02 for advanced docs
+
+metadata:
+  name: "x402 for Open Source"
+  description: "Enabling fair compensation for open source maintainers"

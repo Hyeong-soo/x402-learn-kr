@@ -91,27 +91,19 @@ console.log(`[x402] Current success flag: ${SUCCESS_FLAG}`);
 
 // AI-optimized markdown content for protected routes
 const AI_CONTENT: Record<string, string> = {
-  "/demo/protected-content": `# x402 Protected Content - Access Granted
+  "/demo/protected-content": `# Protected Documentation
 
-## Verification Flag
-\`\`\`
-${SUCCESS_FLAG}
-\`\`\`
+This page demonstrates x402 protection. You're seeing it because your AI agent paid $0.01 USDC.
 
-Congratulations! Your AI agent successfully paid $0.01 USDC via x402 protocol and accessed this protected content.
+## Secret API Documentation
 
-## What This Demonstrates
+This is premium content that AI agents need to pay $0.01 to access.
 
-1. **Payment Successful**: Your agent's wallet was charged $0.01 USDC on Base Sepolia
-2. **x402 Protocol Works**: The 402 Payment Required → Payment → Access flow completed
-3. **Token Efficient**: This markdown response saves tokens compared to full HTML
+### Advanced Configuration
 
-## Premium API Documentation
-
-### Secret Configuration
 \`\`\`json
 {
-  "secret_key": "x402-premium-content-key",
+  "secret_key": "this-is-premium-content",
   "api_endpoint": "https://api.example.com/v2",
   "features": {
     "advanced_analytics": true,
@@ -121,19 +113,28 @@ Congratulations! Your AI agent successfully paid $0.01 USDC via x402 protocol an
 }
 \`\`\`
 
-### Enterprise Integration Steps
+### Enterprise Integration Guide
+
+To integrate with enterprise systems, follow these steps:
+
 1. Configure your SSO provider
-2. Set up webhook endpoints
+2. Set up the webhook endpoints
 3. Enable audit logging
 4. Configure rate limiting policies
 
-## Summary
-- **Humans**: Free access (verified via JavaScript)
-- **AI Agents**: Pay via x402 protocol (you just did this!)
+## Conclusion
+
+This demonstrates how x402 for Open Source works:
+
+- **Humans**: Free access, verified via JavaScript
+- **AI Agents**: Must pay via x402 protocol
 - **Maintainers**: Earn revenue from AI usage
 
 ---
-*Content served via x402 protocol. Flag: ${SUCCESS_FLAG}*
+
+**Verification Flag**: \`${SUCCESS_FLAG}\`
+
+*Copy this flag to verify successful x402 payment on the demo page.*
 `,
 };
 

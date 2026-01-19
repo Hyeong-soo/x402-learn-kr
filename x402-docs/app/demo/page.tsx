@@ -172,9 +172,9 @@ claude mcp list
                   <span className="text-sm text-emerald-400">x402 Markdown</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-emerald-400">~290</span>
+                  <span className="text-lg font-bold text-emerald-400">~254</span>
                   <span className="text-xs text-white/50 ml-1">tokens</span>
-                  <span className="text-xs text-white/30 ml-1">(1.2KB)</span>
+                  <span className="text-xs text-white/30 ml-1">(1KB)</span>
                 </div>
               </div>
 
@@ -201,11 +201,11 @@ claude mcp list
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/60">x402 사용 시 API 비용</span>
-                  <span className="text-emerald-400 font-mono">$0.0043</span>
+                  <span className="text-emerald-400 font-mono">$0.0038</span>
                 </div>
                 <div className="flex justify-between border-t border-white/10 pt-2">
                   <span className="text-white/60">API 비용 절약</span>
-                  <span className="text-cyan-400 font-mono">$0.0790</span>
+                  <span className="text-cyan-400 font-mono">$0.0795</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/60">x402 콘텐츠 비용</span>
@@ -213,7 +213,7 @@ claude mcp list
                 </div>
                 <div className="flex justify-between border-t border-white/10 pt-2">
                   <span className="text-white font-medium">순이익</span>
-                  <span className="text-emerald-400 font-bold font-mono">+$0.0690</span>
+                  <span className="text-emerald-400 font-bold font-mono">+$0.0695</span>
                 </div>
               </div>
             </div>
@@ -225,18 +225,18 @@ claude mcp list
                 <p className="text-xs text-white/50">토큰 절약</p>
               </div>
               <div className="p-3 rounded-lg bg-emerald-500/10 text-center">
-                <p className="text-2xl font-bold text-emerald-400">7x</p>
+                <p className="text-2xl font-bold text-emerald-400">8x</p>
                 <p className="text-xs text-white/50">비용 대비 이득</p>
               </div>
               <div className="p-3 rounded-lg bg-purple-500/10 text-center">
-                <p className="text-2xl font-bold text-purple-400">690%</p>
+                <p className="text-2xl font-bold text-purple-400">695%</p>
                 <p className="text-xs text-white/50">ROI</p>
               </div>
             </div>
 
             <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
               <p className="text-sm text-yellow-400">
-                💡 x402에 <strong className="text-yellow-300">$0.01 지불하면 API 비용 $0.079 절약</strong> →
+                💡 x402에 <strong className="text-yellow-300">$0.01 지불하면 API 비용 $0.08 절약</strong> →
                 콘텐츠 제공자도, AI 사용자도 이득입니다.
               </p>
             </div>

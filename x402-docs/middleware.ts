@@ -196,13 +196,13 @@ function create402Response(pathname: string, price: string, request: NextRequest
   const resourceUrl = `${request.nextUrl.origin}${pathname}`;
 
   const paymentRequired = {
-    // Using v1 for x402-fetch compatibility (uses short network names)
-    x402Version: 1,
+    // Using v2 with CAIP-2 network format
+    x402Version: 2,
     accepts: [
       {
         scheme: "exact",
-        // v1 uses short network names like "base-sepolia"
-        network: network.v1Network,
+        // v2 uses CAIP-2 format like "eip155:84532"
+        network: network.chainId,
         // SDK uses 'amount' field
         amount: price,
         maxAmountRequired: price,
@@ -343,8 +343,16 @@ export async function middleware(request: NextRequest) {
   }
 
   // ---- Check 2: Payment Header ----
-  // x402 SDK sends PAYMENT-SIGNATURE header
-  const paymentHeader = request.headers.get("PAYMENT-SIGNATURE") || request.headers.get("X-PAYMENT");
+  // x402 SDK sends payment-signature header (lowercase in HTTP/2)
+  // DEBUG: Log all headers to understand what we're receiving
+  const allHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => {
+    allHeaders[key] = value.substring(0, 50);
+  });
+  console.log("[x402] Request headers:", JSON.stringify(allHeaders));
+
+  const paymentHeader = request.headers.get("payment-signature") || request.headers.get("x-payment");
+  console.log("[x402] Payment header found:", !!paymentHeader);
 
   if (!paymentHeader) {
     // No human token & no payment = 402 Payment Required

@@ -13,7 +13,6 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { baseSepolia, base } from 'viem/chains';
 import { wrapFetchWithPayment, x402Client } from '@x402/fetch';
 import { ExactEvmScheme } from '@x402/evm';
-import { ExactEvmSchemeV1 } from '@x402/evm/exact/v1/client';
 
 const CONFIG_PATH = join(homedir(), '.x402', 'config.json');
 
@@ -49,20 +48,18 @@ const config = getConfig();
 const PRIVATE_KEY = config.privateKey;
 const NETWORK = config.network;
 
-// Network configurations
+// Network configurations (v2 uses CAIP-2 format)
 const NETWORK_CONFIG = {
   baseSepolia: {
     chain: baseSepolia,
     chainId: 84532,
     caip2: 'eip155:84532',
-    v1Network: 'base-sepolia',
     usdcAddress: '0x036CbD53842c5426634e7929541eC2318f3dCF7e'
   },
   base: {
     chain: base,
     chainId: 8453,
     caip2: 'eip155:8453',
-    v1Network: 'base',
     usdcAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
   }
 };
@@ -81,19 +78,16 @@ const walletClient = createWalletClient({
   transport: http(),
 });
 
-// Create x402 client with EVM scheme
+// Create x402 client with EVM scheme (v2)
 const evmSigner = {
   ...walletClient,
   address: account.address,
 };
-const evmSchemeV1 = new ExactEvmSchemeV1(evmSigner);
-const evmSchemeV2 = new ExactEvmScheme(evmSigner);
+const evmScheme = new ExactEvmScheme(evmSigner);
 
 const client = x402Client.fromConfig({
   schemes: [
-    // Support both v1 (short network names) and v2 (CAIP-2)
-    { network: networkConfig.v1Network, client: evmSchemeV1, x402Version: 1 },
-    { network: networkConfig.caip2, client: evmSchemeV2, x402Version: 2 },
+    { network: networkConfig.caip2, client: evmScheme, x402Version: 2 },
   ],
 });
 

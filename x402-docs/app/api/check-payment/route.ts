@@ -40,11 +40,15 @@ export async function POST(request: Request) {
     const networkKey = X402_CONFIG.network as keyof typeof NETWORKS;
     const network = NETWORKS[networkKey] || NETWORKS["base-sepolia"];
 
+    // v2 uses CAIP-2 network format
+    const payloadNetwork = paymentPayload?.accepted?.network || network.chainId;
+
+    // Build payment requirements in v2 format (matching what SDK expects)
     const paymentRequirements = {
       scheme: "exact",
-      // Facilitator expects network name (v1 format), not CAIP-2
-      network: network.v1Network,
+      network: payloadNetwork,  // Keep CAIP-2 format (eip155:84532)
       maxAmountRequired: price,
+      amount: price,  // v2 SDK uses 'amount' field
       resource: resourceUrl,
       description: `Access to ${resource}`,
       mimeType: "text/html",
@@ -58,17 +62,21 @@ export async function POST(request: Request) {
       },
     };
 
-    console.log("[x402] Payment requirements:", JSON.stringify(paymentRequirements, null, 2));
+    // Keep v2 payload as-is (don't transform to v1)
+    const v2PaymentPayload = paymentPayload;
+
+    console.log("[x402] Payment payload (v2):", JSON.stringify(v2PaymentPayload, null, 2));
+    console.log("[x402] Payment requirements (v2):", JSON.stringify(paymentRequirements, null, 2));
 
     console.log("[x402] Verifying payment...");
 
-    // Verify payment with facilitator
-    // SDK expects x402Version: 1
+    // Verify payment with facilitator (v2 format)
     const verifyResponse = await fetch(`${X402_CONFIG.facilitatorUrl}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        paymentPayload,
+        x402Version: 2,
+        paymentPayload: v2PaymentPayload,
         paymentRequirements,
       }),
     });
@@ -100,7 +108,8 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        paymentPayload,
+        x402Version: 2,
+        paymentPayload: v2PaymentPayload,
         paymentRequirements,
       }),
     });

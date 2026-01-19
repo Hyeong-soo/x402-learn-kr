@@ -30,12 +30,12 @@ export function ArticleSchema({
     image: imageUrl || `${BASE_URL}/learn/opengraph-image`,
     author: {
       "@type": "Organization",
-      name: "x402-learn-kr",
+      name: "Learn402",
       url: BASE_URL,
     },
     publisher: {
       "@type": "Organization",
-      name: "x402-learn-kr",
+      name: "Learn402",
       logo: {
         "@type": "ImageObject",
         url: `${BASE_URL}/opengraph-image`,
@@ -68,7 +68,7 @@ interface CourseSchemaProps {
 export function CourseSchema({
   name,
   description,
-  provider = "x402-learn-kr",
+  provider = "Learn402",
   courseCode,
   url,
 }: CourseSchemaProps) {

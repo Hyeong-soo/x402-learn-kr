@@ -1,4 +1,4 @@
-# x402-learn-kr robots.txt
+# Learn402 robots.txt
 # AI 에이전트 결제 프로토콜 학습 사이트
 
 User-agent: *

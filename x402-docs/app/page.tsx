@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "x402 - AI 시대의 결제 프로토콜 | x402-learn-kr",
+  title: "x402 - AI 시대의 결제 프로토콜 | Learn402",
   description:
     "HTTP 402 상태 코드를 활용한 인터넷 네이티브 결제 표준. AI 에이전트가 자율적으로 결제할 수 있는 새로운 방식을 한국어로 배워보세요.",
   keywords: ["x402", "HTTP 402", "AI 결제", "마이크로페이먼트", "USDC", "블록체인", "Coinbase"],
@@ -50,7 +50,7 @@ export default function Home() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8">
             <Sparkles className="h-4 w-4 text-emerald-400" />
-            <span className="text-sm text-white/80">x402-learn-kr</span>
+            <span className="text-sm text-white/80">Learn402</span>
           </div>
 
           {/* Main heading */}

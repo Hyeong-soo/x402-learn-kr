@@ -116,7 +116,7 @@ export default async function Image() {
           }}
         >
           <span style={{ color: "rgba(255, 255, 255, 0.4)", fontSize: "18px" }}>
-            x402-learn-kr
+            Learn402
           </span>
         </div>
       </div>

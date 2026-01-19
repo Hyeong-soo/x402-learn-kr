@@ -14,35 +14,35 @@ const BASE_URL = "https://x402-learn-kr.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "x402-learn-kr - AI 에이전트 결제 프로토콜 학습",
-    template: "%s | x402-learn-kr",
+    default: "Learn402 - AI 에이전트 결제 프로토콜 학습",
+    template: "%s | Learn402",
   },
   description:
     "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
   keywords: ["x402", "HTTP 402", "AI 결제", "마이크로페이먼트", "USDC", "블록체인", "AI 에이전트", "결제 프로토콜"],
-  authors: [{ name: "x402-learn-kr" }],
+  authors: [{ name: "Learn402" }],
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
-    title: "x402-learn-kr - AI 에이전트 결제 프로토콜 학습",
+    title: "Learn402 - AI 에이전트 결제 프로토콜 학습",
     description: "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
     type: "website",
     locale: "ko_KR",
     url: BASE_URL,
-    siteName: "x402-learn-kr",
+    siteName: "Learn402",
     images: [
       {
         url: `${BASE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "x402-learn-kr - AI 에이전트 결제 프로토콜",
+        alt: "Learn402 - AI 에이전트 결제 프로토콜",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "x402-learn-kr - AI 에이전트 결제 프로토콜 학습",
+    title: "Learn402 - AI 에이전트 결제 프로토콜 학습",
     description: "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
     images: [`${BASE_URL}/opengraph-image`],
   },
@@ -69,14 +69,14 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${BASE_URL}/#website`,
       url: BASE_URL,
-      name: "x402-learn-kr",
+      name: "Learn402",
       description: "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요",
       inLanguage: "ko-KR",
     },
     {
       "@type": "Organization",
       "@id": `${BASE_URL}/#organization`,
-      name: "x402-learn-kr",
+      name: "Learn402",
       url: BASE_URL,
       logo: {
         "@type": "ImageObject",
@@ -90,7 +90,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": `${BASE_URL}/#webpage`,
       url: BASE_URL,
-      name: "x402-learn-kr - AI 에이전트 결제 프로토콜 학습",
+      name: "Learn402 - AI 에이전트 결제 프로토콜 학습",
       isPartOf: { "@id": `${BASE_URL}/#website` },
       about: { "@id": `${BASE_URL}/#organization` },
       description: "AI 에이전트 결제 프로토콜 x402를 한국어로 배워보세요. 인터랙티브 데모와 시각화로 쉽게 이해할 수 있습니다.",
@@ -139,7 +139,7 @@ export default function RootLayout({
                   </a>
                 </p>
                 <p className="text-center text-sm text-white/40 md:text-right">
-                  x402-learn-kr
+                  Learn402
                 </p>
               </div>
             </footer>

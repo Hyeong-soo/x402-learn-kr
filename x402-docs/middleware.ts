@@ -91,50 +91,96 @@ console.log(`[x402] Current success flag: ${SUCCESS_FLAG}`);
 
 // AI-optimized markdown content for protected routes
 const AI_CONTENT: Record<string, string> = {
-  "/demo/protected-content": `# Protected Documentation
+  "/demo/protected-content": `# x402 통합 가이드
 
-This page demonstrates x402 protection. You're seeing it because your AI agent paid $0.01 USDC.
+Next.js 미들웨어에 x402 결제 보호를 추가하는 방법입니다.
 
-## Secret API Documentation
+## 1. 환경 변수 설정
 
-This is premium content that AI agents need to pay $0.01 to access.
+\`\`\`bash
+# .env.local
+X402_WALLET_ADDRESS=0x742d35Cc6634C0532925a3b844Bc9e7595f...
+X402_NETWORK=base-sepolia  # 또는 base (메인넷)
+X402_SECRET_KEY=your-secret-key-for-human-verification
+\`\`\`
 
-### Advanced Configuration
+## 2. 미들웨어 핵심 로직
 
-\`\`\`json
-{
-  "secret_key": "this-is-premium-content",
-  "api_endpoint": "https://api.example.com/v2",
-  "features": {
-    "advanced_analytics": true,
-    "custom_webhooks": true,
-    "priority_support": true
+\`\`\`typescript
+// middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+// 보호할 경로와 가격 설정 (USDC 6 decimals)
+const PRICING: Record<string, string> = {
+  "/api/premium": "10000",     // $0.01
+  "/docs/advanced": "50000",   // $0.05
+};
+
+export async function middleware(request: NextRequest) {
+  const price = PRICING[request.nextUrl.pathname];
+  if (!price) return NextResponse.next();
+
+  // 1. 사람 검증 (쿠키 확인)
+  const humanToken = request.cookies.get("x402_human_token");
+  if (humanToken && await verifyHumanToken(humanToken.value)) {
+    return NextResponse.next(); // 무료 통과
   }
+
+  // 2. 결제 헤더 확인
+  const paymentHeader = request.headers.get("x-payment");
+  if (!paymentHeader) {
+    return create402Response(price, request);
+  }
+
+  // 3. 결제 검증 후 콘텐츠 제공
+  const isValid = await verifyPayment(paymentHeader, price);
+  if (isValid) {
+    return NextResponse.next();
+  }
+
+  return create402Response(price, request);
 }
 \`\`\`
 
-### Enterprise Integration Guide
+## 3. 402 응답 생성
 
-To integrate with enterprise systems, follow these steps:
+\`\`\`typescript
+function create402Response(price: string, request: NextRequest) {
+  const paymentRequired = {
+    x402Version: 2,
+    accepts: [{
+      scheme: "exact",
+      network: "eip155:84532",  // Base Sepolia (CAIP-2)
+      amount: price,
+      resource: request.nextUrl.href,
+      payTo: process.env.X402_WALLET_ADDRESS,
+      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", // USDC
+      extra: { name: "USDC", version: "2" }
+    }]
+  };
 
-1. Configure your SSO provider
-2. Set up the webhook endpoints
-3. Enable audit logging
-4. Configure rate limiting policies
+  return new NextResponse(JSON.stringify(paymentRequired), {
+    status: 402,
+    headers: {
+      "Content-Type": "application/json",
+      "X-PAYMENT-REQUIRED": btoa(JSON.stringify(paymentRequired))
+    }
+  });
+}
+\`\`\`
 
-## Conclusion
+## 요약
 
-This demonstrates how x402 for Open Source works:
-
-- **Humans**: Free access, verified via JavaScript
-- **AI Agents**: Must pay via x402 protocol
-- **Maintainers**: Earn revenue from AI usage
+- **사람**: JavaScript 검증으로 무료 접근
+- **AI 에이전트**: x402 프로토콜로 결제 필요
+- **메인테이너**: AI 사용량에서 수익 창출
 
 ---
 
-**Verification Flag**: \`${SUCCESS_FLAG}\`
+**검증 플래그**: \`${SUCCESS_FLAG}\`
 
-*Copy this flag to verify successful x402 payment on the demo page.*
+*이 플래그를 데모 페이지에 입력하여 x402 결제 성공을 확인하세요.*
 `,
 };
 

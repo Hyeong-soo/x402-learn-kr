@@ -172,9 +172,9 @@ claude mcp list
                   <span className="text-sm text-emerald-400">x402 Markdown</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-emerald-400">~254</span>
+                  <span className="text-lg font-bold text-emerald-400">~606</span>
                   <span className="text-xs text-white/50 ml-1">tokens</span>
-                  <span className="text-xs text-white/30 ml-1">(1KB)</span>
+                  <span className="text-xs text-white/30 ml-1">(2.4KB)</span>
                 </div>
               </div>
 
@@ -184,9 +184,9 @@ claude mcp list
                   <span className="text-sm text-red-400">HTML 크롤링 시</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-red-400">~5,555</span>
+                  <span className="text-lg font-bold text-red-400">~5,900</span>
                   <span className="text-xs text-white/50 ml-1">tokens</span>
-                  <span className="text-xs text-white/30 ml-1">(22KB)</span>
+                  <span className="text-xs text-white/30 ml-1">(24KB)</span>
                 </div>
               </div>
             </div>
@@ -197,15 +197,15 @@ claude mcp list
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-white/60">HTML 크롤링 시 API 비용</span>
-                  <span className="text-red-400 font-mono">$0.0833</span>
+                  <span className="text-red-400 font-mono">$0.0885</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/60">x402 사용 시 API 비용</span>
-                  <span className="text-emerald-400 font-mono">$0.0038</span>
+                  <span className="text-emerald-400 font-mono">$0.0091</span>
                 </div>
                 <div className="flex justify-between border-t border-white/10 pt-2">
                   <span className="text-white/60">API 비용 절약</span>
-                  <span className="text-cyan-400 font-mono">$0.0795</span>
+                  <span className="text-cyan-400 font-mono">$0.0794</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/60">x402 콘텐츠 비용</span>
@@ -213,7 +213,7 @@ claude mcp list
                 </div>
                 <div className="flex justify-between border-t border-white/10 pt-2">
                   <span className="text-white font-medium">순이익</span>
-                  <span className="text-emerald-400 font-bold font-mono">+$0.0695</span>
+                  <span className="text-emerald-400 font-bold font-mono">+$0.0694</span>
                 </div>
               </div>
             </div>
@@ -221,7 +221,7 @@ claude mcp list
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 mb-4">
               <div className="p-3 rounded-lg bg-cyan-500/10 text-center">
-                <p className="text-2xl font-bold text-cyan-400">95%</p>
+                <p className="text-2xl font-bold text-cyan-400">90%</p>
                 <p className="text-xs text-white/50">토큰 절약</p>
               </div>
               <div className="p-3 rounded-lg bg-emerald-500/10 text-center">
@@ -229,7 +229,7 @@ claude mcp list
                 <p className="text-xs text-white/50">비용 대비 이득</p>
               </div>
               <div className="p-3 rounded-lg bg-purple-500/10 text-center">
-                <p className="text-2xl font-bold text-purple-400">695%</p>
+                <p className="text-2xl font-bold text-purple-400">694%</p>
                 <p className="text-xs text-white/50">ROI</p>
               </div>
             </div>

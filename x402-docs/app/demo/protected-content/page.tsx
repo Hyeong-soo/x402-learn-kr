@@ -30,11 +30,10 @@ export default function ProtectedContentPage() {
           {/* Header */}
           <div className="mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              보호된 문서
+              x402 통합 가이드
             </h1>
             <p className="text-lg text-white/60">
-              이 페이지는 x402 보호가 적용되어 있습니다.
-              JavaScript 검증을 통과한 사람이기 때문에 무료로 보고 있습니다.
+              Next.js 미들웨어에 x402 결제 보호를 추가하는 방법을 알아봅니다.
             </p>
           </div>
 
@@ -43,52 +42,93 @@ export default function ProtectedContentPage() {
           {/* Content */}
           <div className="space-y-12">
             <section>
-              <h2 className="text-2xl font-bold text-white mb-4">비밀 API 문서</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">1. 환경 변수 설정</h2>
               <p className="text-white/60 mb-6">
-                이것은 AI 에이전트가 $0.01를 지불해야 접근할 수 있는 프리미엄 콘텐츠입니다.
-                사람은 무료로 볼 수 있습니다!
+                x402 결제를 받으려면 지갑 주소와 네트워크를 설정해야 합니다.
               </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-bold text-white mb-4">고급 설정</h3>
               <CodeBlock
-                code={`{
-  "secret_key": "this-is-premium-content",
-  "api_endpoint": "https://api.example.com/v2",
-  "features": {
-    "advanced_analytics": true,
-    "custom_webhooks": true,
-    "priority_support": true
-  }
-}`}
-                language="json"
+                code={`# .env.local
+X402_WALLET_ADDRESS=0x742d35Cc6634C0532925a3b844Bc9e7595f...
+X402_NETWORK=base-sepolia  # 또는 base (메인넷)
+X402_SECRET_KEY=your-secret-key-for-human-verification`}
+                language="bash"
               />
             </section>
 
             <section>
-              <h3 className="text-xl font-bold text-white mb-4">엔터프라이즈 통합 가이드</h3>
-              <p className="text-white/60 mb-4">
-                엔터프라이즈 시스템과 통합하려면 다음 단계를 따르세요:
+              <h2 className="text-2xl font-bold text-white mb-4">2. 미들웨어 핵심 로직</h2>
+              <p className="text-white/60 mb-6">
+                402 응답을 생성하는 핵심 함수입니다.
               </p>
-              <ol className="space-y-3 text-white/60">
-                <li className="flex gap-3">
-                  <span className="text-emerald-400 font-mono">01</span>
-                  SSO 프로바이더 설정
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-emerald-400 font-mono">02</span>
-                  웹훅 엔드포인트 구성
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-emerald-400 font-mono">03</span>
-                  감사 로깅 활성화
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-emerald-400 font-mono">04</span>
-                  요청 제한 정책 설정
-                </li>
-              </ol>
+              <CodeBlock
+                code={`// middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+// 보호할 경로와 가격 설정 (USDC 6 decimals)
+const PRICING: Record<string, string> = {
+  "/api/premium": "10000",     // $0.01
+  "/docs/advanced": "50000",   // $0.05
+};
+
+export async function middleware(request: NextRequest) {
+  const price = PRICING[request.nextUrl.pathname];
+  if (!price) return NextResponse.next();
+
+  // 1. 사람 검증 (쿠키 확인)
+  const humanToken = request.cookies.get("x402_human_token");
+  if (humanToken && await verifyHumanToken(humanToken.value)) {
+    return NextResponse.next(); // 무료 통과
+  }
+
+  // 2. 결제 헤더 확인
+  const paymentHeader = request.headers.get("x-payment");
+  if (!paymentHeader) {
+    return create402Response(price, request);
+  }
+
+  // 3. 결제 검증 후 콘텐츠 제공
+  const isValid = await verifyPayment(paymentHeader, price);
+  if (isValid) {
+    return NextResponse.next();
+  }
+
+  return create402Response(price, request);
+}`}
+                language="typescript"
+              />
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-4">3. 402 응답 생성</h2>
+              <p className="text-white/60 mb-6">
+                x402 프로토콜 v2 형식의 결제 요청 응답입니다.
+              </p>
+              <CodeBlock
+                code={`function create402Response(price: string, request: NextRequest) {
+  const paymentRequired = {
+    x402Version: 2,
+    accepts: [{
+      scheme: "exact",
+      network: "eip155:84532",  // Base Sepolia (CAIP-2)
+      amount: price,
+      resource: request.nextUrl.href,
+      payTo: process.env.X402_WALLET_ADDRESS,
+      asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", // USDC
+      extra: { name: "USDC", version: "2" }
+    }]
+  };
+
+  return new NextResponse(JSON.stringify(paymentRequired), {
+    status: 402,
+    headers: {
+      "Content-Type": "application/json",
+      "X-PAYMENT-REQUIRED": btoa(JSON.stringify(paymentRequired))
+    }
+  });
+}`}
+                language="typescript"
+              />
             </section>
 
             {/* What AI sees */}
@@ -98,19 +138,23 @@ export default function ProtectedContentPage() {
                   <Bot className="h-5 w-5 text-amber-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-amber-400">
-                  AI 에이전트가 보는 화면:
+                  AI 에이전트가 받는 응답:
                 </h3>
               </div>
               <CodeBlock
                 code={`HTTP/1.1 402 Payment Required
-X-PAYMENT-REQUIRED: base64-encoded-payment-details
+Content-Type: application/json
+X-PAYMENT-REQUIRED: eyJ4NDAyVmVyc2lvbiI6Mn0...
 
 {
-  "error": "Payment Required",
-  "message": "AI agents must pay $0.01 USDC",
-  "price": 0.01,
-  "network": "Base",
-  "token": "USDC"
+  "x402Version": 2,
+  "accepts": [{
+    "scheme": "exact",
+    "network": "eip155:84532",
+    "amount": "10000",
+    "payTo": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
+    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+  }]
 }`}
                 language="http"
               />
@@ -118,9 +162,6 @@ X-PAYMENT-REQUIRED: base64-encoded-payment-details
 
             <section>
               <h3 className="text-xl font-bold text-white mb-6">요약</h3>
-              <p className="text-white/60 mb-6">
-                x402 for Open Source가 작동하는 방식:
-              </p>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="glass rounded-xl p-6">
                   <div className="p-3 rounded-lg bg-emerald-500/20 w-fit mb-4">

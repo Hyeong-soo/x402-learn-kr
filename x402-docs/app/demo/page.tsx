@@ -309,13 +309,13 @@ claude mcp list
               <Rocket className="h-4 w-4 text-emerald-400" />
               <span className="text-sm text-white/80">시작 가이드</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+            <h1 className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 break-keep">
               AI 에이전트에 지갑 연결하기
             </h1>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-white/60 max-w-2xl mx-auto">
               4단계로 AI 에이전트가 x402 결제를 할 수 있도록 설정하세요.
-              <br />
-              Claude Desktop 또는 Claude Code에서 테스트할 수 있습니다.
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>Claude Desktop 또는 Claude Code에서 테스트할 수 있습니다.
             </p>
           </div>
 

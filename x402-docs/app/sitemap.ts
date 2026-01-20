@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-const BASE_URL = "https://x402-learn-kr.vercel.app";
+const BASE_URL = "https://learn402.xyz";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

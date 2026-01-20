@@ -61,124 +61,124 @@ export default function PaywallDemoPage() {
   };
 
   return (
-    <div className="min-h-screen py-20">
+    <div className="min-h-screen py-12 sm:py-20">
       <div className="container px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
             페이월 체험
           </h1>
-          <p className="text-white/50 max-w-2xl mx-auto">
+          <p className="text-white/50 max-w-2xl mx-auto text-sm sm:text-base">
             같은 페이지에 사람과 AI 에이전트가 접근할 때 어떤 차이가 있는지 직접 확인해보세요.
           </p>
         </div>
 
         {/* Status Cards */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto mb-8 sm:mb-12">
           {/* Human Access Card */}
-          <div className="glass rounded-2xl p-6 border border-emerald-500/30">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 rounded-xl bg-emerald-500/20">
-                <User className="h-8 w-8 text-emerald-400" />
+          <div className="glass rounded-2xl p-4 sm:p-6 border border-emerald-500/30">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="p-2 sm:p-3 rounded-xl bg-emerald-500/20">
+                <User className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">사람 (브라우저)</h2>
-                <p className="text-emerald-400 text-sm">무료 접근</p>
+                <h2 className="text-lg sm:text-xl font-semibold text-white">사람 (브라우저)</h2>
+                <p className="text-emerald-400 text-xs sm:text-sm">무료 접근</p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-white/70">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
                 {humanVerified ? (
-                  <Check className="h-5 w-5 text-emerald-400" />
+                  <Check className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-400 shrink-0" />
                 ) : (
-                  <div className="h-5 w-5 rounded-full border-2 border-white/30" />
+                  <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-white/30 shrink-0" />
                 )}
                 <span>JavaScript 실행 가능</span>
               </div>
-              <div className="flex items-center gap-3 text-white/70">
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
                 {humanVerified ? (
-                  <Check className="h-5 w-5 text-emerald-400" />
+                  <Check className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-400 shrink-0" />
                 ) : (
-                  <div className="h-5 w-5 rounded-full border-2 border-white/30" />
+                  <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-white/30 shrink-0" />
                 )}
                 <span>Human Token 보유</span>
               </div>
-              <div className="flex items-center gap-3 text-white/70">
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
                 {humanVerified ? (
-                  <Unlock className="h-5 w-5 text-emerald-400" />
+                  <Unlock className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-400 shrink-0" />
                 ) : (
-                  <Lock className="h-5 w-5 text-white/40" />
+                  <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-white/40 shrink-0" />
                 )}
                 <span>프리미엄 콘텐츠 접근</span>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/10">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10">
               {humanVerified ? (
-                <div className="flex items-center gap-2 text-emerald-400">
-                  <Check className="h-5 w-5" />
+                <div className="flex items-center gap-2 text-emerald-400 text-sm sm:text-base">
+                  <Check className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="font-medium">인증 완료 - 무료 접근 가능</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-amber-400">
-                  <div className="animate-spin h-5 w-5 border-2 border-amber-400 border-t-transparent rounded-full" />
+                <div className="flex items-center gap-2 text-amber-400 text-sm sm:text-base">
+                  <div className="animate-spin h-4 w-4 sm:h-5 sm:w-5 border-2 border-amber-400 border-t-transparent rounded-full" />
                   <span className="font-medium">인증 확인 중...</span>
                 </div>
               )}
             </div>
 
             <Button
-              className="w-full mt-4 bg-emerald-500 hover:bg-emerald-400 text-black"
+              className="w-full mt-3 sm:mt-4 bg-emerald-500 hover:bg-emerald-400 text-black text-sm sm:text-base h-9 sm:h-10"
               asChild
             >
               <Link href="/demo/protected-content">
                 프리미엄 콘텐츠 보기 (무료)
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Link>
             </Button>
           </div>
 
           {/* AI Access Card */}
-          <div className="glass rounded-2xl p-6 border border-amber-500/30">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 rounded-xl bg-amber-500/20">
-                <Bot className="h-8 w-8 text-amber-400" />
+          <div className="glass rounded-2xl p-4 sm:p-6 border border-amber-500/30">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="p-2 sm:p-3 rounded-xl bg-amber-500/20">
+                <Bot className="h-6 w-6 sm:h-8 sm:w-8 text-amber-400" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-white">AI 에이전트</h2>
-                <p className="text-amber-400 text-sm">$0.01 USDC 결제 필요</p>
+                <h2 className="text-lg sm:text-xl font-semibold text-white">AI 에이전트</h2>
+                <p className="text-amber-400 text-xs sm:text-sm">$0.01 USDC 결제 필요</p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-white/70">
-                <X className="h-5 w-5 text-red-400" />
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
+                <X className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 shrink-0" />
                 <span>JavaScript 실행 불가</span>
               </div>
-              <div className="flex items-center gap-3 text-white/70">
-                <X className="h-5 w-5 text-red-400" />
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
+                <X className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 shrink-0" />
                 <span>Human Token 없음</span>
               </div>
-              <div className="flex items-center gap-3 text-white/70">
-                <Lock className="h-5 w-5 text-amber-400" />
+              <div className="flex items-center gap-2 sm:gap-3 text-white/70 text-sm sm:text-base">
+                <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-400 shrink-0" />
                 <span>402 Payment Required</span>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <div className="flex items-center gap-2 text-amber-400">
-                <Lock className="h-5 w-5" />
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10">
+              <div className="flex items-center gap-2 text-amber-400 text-sm sm:text-base">
+                <Lock className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="font-medium">결제 후 접근 가능</span>
               </div>
             </div>
 
             <Button
               variant="outline"
-              className="w-full mt-4 border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+              className="w-full mt-3 sm:mt-4 border-amber-500/50 text-amber-400 hover:bg-amber-500/10 text-sm sm:text-base h-9 sm:h-10"
               onClick={() => setShowCurlExample(!showCurlExample)}
             >
-              <Terminal className="mr-2 h-4 w-4" />
+              <Terminal className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
               AI 에이전트 시뮬레이션
             </Button>
           </div>
@@ -186,39 +186,43 @@ export default function PaywallDemoPage() {
 
         {/* Curl Example */}
         {showCurlExample && (
-          <div className="max-w-4xl mx-auto mb-12">
-            <div className="glass rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">
+          <div className="max-w-4xl mx-auto mb-8 sm:mb-12">
+            <div className="glass rounded-2xl p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                 AI 에이전트처럼 요청 보내기
               </h3>
-              <p className="text-white/50 mb-4">
+              <p className="text-white/50 mb-3 sm:mb-4 text-sm sm:text-base">
                 터미널에서 아래 명령어를 실행하면 AI 에이전트와 같은 응답을 받습니다.
                 (브라우저가 아니므로 Human Token이 없어 402 응답)
               </p>
               <div className="relative">
-                <CodeBlock code={curlCommand} language="bash" />
+                <div className="overflow-x-auto">
+                  <CodeBlock code={curlCommand} language="bash" />
+                </div>
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="absolute top-2 right-2 text-white/50 hover:text-white"
+                  className="absolute top-2 right-2 text-white/50 hover:text-white h-7 w-7 sm:h-8 sm:w-8 p-0"
                   onClick={() => copyToClipboard(curlCommand)}
                 >
-                  <Copy className="h-4 w-4" />
+                  <Copy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Button>
               </div>
 
-              <div className="mt-4 p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
-                <h4 className="text-amber-400 font-medium mb-2">예상 응답:</h4>
-                <CodeBlock
-                  code={`{
+              <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
+                <h4 className="text-amber-400 font-medium mb-2 text-sm sm:text-base">예상 응답:</h4>
+                <div className="overflow-x-auto text-sm">
+                  <CodeBlock
+                    code={`{
   "error": "Payment Required",
   "message": "AI agents must pay $0.01 USDC",
   "price": 0.01,
   "network": "eip155:84532",
   "paymentDetails": { ... }
 }`}
-                  language="json"
-                />
+                    language="json"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -226,64 +230,64 @@ export default function PaywallDemoPage() {
 
         {/* Explanation */}
         <div className="max-w-4xl mx-auto">
-          <div className="glass rounded-2xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6">
+          <div className="glass rounded-2xl p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
               어떻게 구분하나요?
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-emerald-400 font-medium">사람 (브라우저)</h3>
-                <ol className="space-y-3 text-white/70 text-sm">
-                  <li className="flex gap-3">
+            <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-3 sm:space-y-4">
+                <h3 className="text-emerald-400 font-medium text-sm sm:text-base">사람 (브라우저)</h3>
+                <ol className="space-y-2 sm:space-y-3 text-white/70 text-xs sm:text-sm">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-emerald-400 font-mono shrink-0">1.</span>
                     <span>페이지 첫 방문 시 <code className="text-emerald-400">/verify</code> 페이지로 리다이렉트</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-emerald-400 font-mono shrink-0">2.</span>
                     <span>JavaScript가 자동 실행되어 서버에 검증 요청</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-emerald-400 font-mono shrink-0">3.</span>
                     <span>서버가 HMAC-SHA256 서명된 토큰을 쿠키로 발급</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-emerald-400 font-mono shrink-0">4.</span>
                     <span>24시간 동안 모든 보호된 페이지 무료 접근</span>
                   </li>
                 </ol>
               </div>
 
-              <div className="space-y-4">
-                <h3 className="text-amber-400 font-medium">AI 에이전트</h3>
-                <ol className="space-y-3 text-white/70 text-sm">
-                  <li className="flex gap-3">
+              <div className="space-y-3 sm:space-y-4">
+                <h3 className="text-amber-400 font-medium text-sm sm:text-base">AI 에이전트</h3>
+                <ol className="space-y-2 sm:space-y-3 text-white/70 text-xs sm:text-sm">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-amber-400 font-mono shrink-0">1.</span>
                     <span>HTTP 요청만 가능, JavaScript 실행 불가</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-amber-400 font-mono shrink-0">2.</span>
-                    <span><code className="text-amber-400">Accept: text/html</code> 헤더 없음</span>
+                    <span><code className="text-amber-400 text-[10px] sm:text-xs">Accept: text/html</code> 헤더 없음</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-amber-400 font-mono shrink-0">3.</span>
                     <span>Human Token 쿠키 없음</span>
                   </li>
-                  <li className="flex gap-3">
+                  <li className="flex gap-2 sm:gap-3">
                     <span className="text-amber-400 font-mono shrink-0">4.</span>
-                    <span><code className="text-amber-400">402 Payment Required</code> 응답 수신</span>
+                    <span><code className="text-amber-400 text-[10px] sm:text-xs">402 Payment Required</code> 응답 수신</span>
                   </li>
                 </ol>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/10 flex justify-center">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10 flex justify-center">
               <Link
                 href="/learn/how-it-works"
-                className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300"
+                className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm sm:text-base"
               >
                 자세한 작동 원리 보기
-                <ExternalLink className="h-4 w-4" />
+                <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Link>
             </div>
           </div>

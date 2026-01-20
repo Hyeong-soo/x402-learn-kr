@@ -165,24 +165,24 @@ export default function VisualizerPage() {
   const activeStep = steps[currentStep];
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container max-w-5xl px-4">
+    <div className="min-h-screen py-6 sm:py-8">
+      <div className="container max-w-5xl px-3 sm:px-4">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+        <div className="text-center mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">
             x402 결제 플로우
           </h1>
-          <p className="text-white/50 text-sm">
+          <p className="text-white/50 text-xs sm:text-sm">
             AI 에이전트가 유료 API에 접근하는 전체 과정
           </p>
         </div>
 
         {/* Main Visualizer */}
-        <div className="glass rounded-2xl p-6 mb-6">
+        <div className="glass rounded-2xl p-3 sm:p-6 mb-4 sm:mb-6">
           {/* Entity Row + Line in same relative container */}
-          <div className="relative px-8">
+          <div className="relative px-2 sm:px-8">
             {/* Entity Icons */}
-            <div className="relative h-24 mb-4">
+            <div className="relative h-20 sm:h-24 mb-3 sm:mb-4">
               {entities.map((entity, idx) => {
                 const Icon = entity.icon;
                 const isActive = activeStep && (activeStep.from === idx || activeStep.to === idx);
@@ -193,32 +193,32 @@ export default function VisualizerPage() {
                     style={{ left: `${POSITIONS[idx]}%` }}
                   >
                     <div
-                      className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                      className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 ${
                         isActive
                           ? "bg-emerald-500/30 text-emerald-400 scale-110"
                           : "bg-white/10 text-white/50"
                       }`}
                     >
                       {Icon ? (
-                        <Icon className="h-7 w-7" />
+                        <Icon className="h-5 w-5 sm:h-7 sm:w-7" />
                       ) : (
-                        <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg className="h-5 w-5 sm:h-7 sm:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M12 2L2 7l10 5 10-5-10-5z" />
                           <path d="M2 17l10 5 10-5" />
                           <path d="M2 12l10 5 10-5" />
                         </svg>
                       )}
                     </div>
-                    <span className="text-xs text-white/60 mt-2 text-center whitespace-nowrap">{entity.label}</span>
+                    <span className="text-[9px] sm:text-xs text-white/60 mt-1 sm:mt-2 text-center whitespace-nowrap">{entity.label}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* Connection Line & Packet */}
-            <div className="relative h-12">
+            <div className="relative h-10 sm:h-12">
               {/* Connection Line */}
-              <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 rounded-full -translate-y-1/2">
+              <div className="absolute top-1/2 left-0 right-0 h-0.5 sm:h-1 bg-white/10 rounded-full -translate-y-1/2">
                 {/* Nodes */}
                 {POSITIONS.map((pos, idx) => {
                   const isMainActive = activeStep && (activeStep.from === idx || activeStep.to === idx);
@@ -226,7 +226,7 @@ export default function VisualizerPage() {
                   return (
                     <div
                       key={idx}
-                      className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full transition-colors duration-300 ${
+                      className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors duration-300 ${
                         isMainActive || isParallelActive
                           ? "bg-emerald-400"
                           : "bg-white/30"
@@ -244,7 +244,7 @@ export default function VisualizerPage() {
                   style={{ left: `${getPacketX()}%` }}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-lg ${
+                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold shadow-lg ${
                       activeStep?.color === "amber"
                         ? "bg-amber-500 text-black shadow-amber-500/50"
                         : activeStep?.color === "purple"
@@ -265,7 +265,7 @@ export default function VisualizerPage() {
                   className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-opacity duration-200"
                   style={{ left: `${getParallelPacketX()}%` }}
                 >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-lg bg-emerald-500 text-black shadow-emerald-500/50">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold shadow-lg bg-emerald-500 text-black shadow-emerald-500/50">
                     {activeStep.parallel.label}
                   </div>
                 </div>
@@ -274,51 +274,52 @@ export default function VisualizerPage() {
           </div>
 
           {/* Current Step Info */}
-          <div className="text-center h-16 flex items-center justify-center">
+          <div className="text-center h-12 sm:h-16 flex items-center justify-center">
             {activeStep ? (
               <div className="animate-fadeIn">
-                <div className="text-lg font-semibold text-white">
+                <div className="text-base sm:text-lg font-semibold text-white">
                   {activeStep.id}. {activeStep.title}
                 </div>
-                <div className="text-sm text-white/50">{activeStep.subtitle}</div>
+                <div className="text-xs sm:text-sm text-white/50">{activeStep.subtitle}</div>
               </div>
             ) : currentStep >= steps.length ? (
-              <div className="text-emerald-400 font-semibold flex items-center gap-2">
-                <Check className="h-5 w-5" />
+              <div className="text-emerald-400 font-semibold flex items-center gap-2 text-sm sm:text-base">
+                <Check className="h-4 w-4 sm:h-5 sm:w-5" />
                 결제 완료! 콘텐츠 접근 성공
               </div>
             ) : (
-              <div className="text-white/40">시작 버튼을 눌러주세요</div>
+              <div className="text-white/40 text-sm sm:text-base">시작 버튼을 눌러주세요</div>
             )}
           </div>
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-3 mt-4">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
             <Button
               variant="outline"
               size="sm"
               onClick={handleReset}
-              className="border-white/20 bg-white/5 hover:bg-white/10 text-white"
+              className="border-white/20 bg-white/5 hover:bg-white/10 text-white h-8 w-8 sm:h-9 sm:w-9 p-0"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </Button>
             <Button
               onClick={handlePlayPause}
-              className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-8"
+              className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 sm:px-8 h-8 sm:h-9 text-sm sm:text-base"
             >
               {isPlaying ? (
                 <>
-                  <Pause className="h-4 w-4 mr-2" />
-                  일시정지
+                  <Pause className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
+                  <span className="hidden xs:inline">일시정지</span>
+                  <span className="xs:hidden">정지</span>
                 </>
               ) : currentStep >= steps.length ? (
                 <>
-                  <RotateCcw className="h-4 w-4 mr-2" />
+                  <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                   다시 보기
                 </>
               ) : (
                 <>
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                   {currentStep === -1 ? "시작" : "계속"}
                 </>
               )}
@@ -327,34 +328,34 @@ export default function VisualizerPage() {
               value={String(speed)}
               onValueChange={(value) => setSpeed(Number(value))}
             >
-              <SelectTrigger className="w-20 bg-white/5 border-white/20 text-white hover:bg-white/10">
+              <SelectTrigger className="w-16 sm:w-20 bg-white/5 border-white/20 text-white hover:bg-white/10 h-8 sm:h-9 text-xs sm:text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-white/20">
-                <SelectItem value="0.5" className="text-white focus:bg-white/10 focus:text-white">0.5x</SelectItem>
-                <SelectItem value="1" className="text-white focus:bg-white/10 focus:text-white">1x</SelectItem>
-                <SelectItem value="2" className="text-white focus:bg-white/10 focus:text-white">2x</SelectItem>
+                <SelectItem value="0.5" className="text-white focus:bg-white/10 focus:text-white text-xs sm:text-sm">0.5x</SelectItem>
+                <SelectItem value="1" className="text-white focus:bg-white/10 focus:text-white text-xs sm:text-sm">1x</SelectItem>
+                <SelectItem value="2" className="text-white focus:bg-white/10 focus:text-white text-xs sm:text-sm">2x</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
         {/* Step Timeline */}
-        <div className="glass rounded-2xl p-6">
-          <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+        <div className="glass rounded-2xl p-3 sm:p-6">
+          <h3 className="text-white font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400" />
             단계별 진행
           </h3>
 
           {/* Progress Bar */}
-          <div className="relative mb-6">
-            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div className="relative mb-4 sm:mb-6">
+            <div className="h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-500 ease-out"
                 style={{ width: `${currentStep >= 0 ? (currentStep / (steps.length - 1)) * 100 : 0}%` }}
               />
             </div>
-            <div className="absolute -top-1 left-0 right-0 flex justify-between">
+            <div className="absolute -top-0.5 sm:-top-1 left-0 right-0 flex justify-between">
               {steps.map((step, idx) => {
                 const isComplete = idx < currentStep;
                 const isActive = idx === currentStep;
@@ -366,11 +367,11 @@ export default function VisualizerPage() {
                       setCurrentStep(idx);
                       setPacketPos({ from: step.from, to: step.to, progress: 0.5 });
                     }}
-                    className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
+                    className={`w-2.5 h-2.5 sm:w-4 sm:h-4 rounded-full transition-all duration-300 hover:scale-125 ${
                       isComplete
                         ? "bg-emerald-500 shadow-lg shadow-emerald-500/50"
                         : isActive
-                        ? "bg-emerald-400 ring-4 ring-emerald-400/30 scale-125"
+                        ? "bg-emerald-400 ring-2 sm:ring-4 ring-emerald-400/30 scale-125"
                         : "bg-white/30 hover:bg-white/50"
                     }`}
                     title={`${step.id}. ${step.title}`}
@@ -381,7 +382,7 @@ export default function VisualizerPage() {
           </div>
 
           {/* Step Cards Grid */}
-          <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+          <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5 sm:gap-2">
             {steps.map((step, idx) => {
               const isComplete = idx < currentStep;
               const isActive = idx === currentStep;
@@ -408,7 +409,7 @@ export default function VisualizerPage() {
                     setCurrentStep(idx);
                     setPacketPos({ from: step.from, to: step.to, progress: 0.5 });
                   }}
-                  className={`relative p-3 rounded-xl transition-all duration-300 border ${
+                  className={`relative p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 border ${
                     isActive
                       ? `${colorClass} scale-105 shadow-lg`
                       : isComplete
@@ -417,14 +418,14 @@ export default function VisualizerPage() {
                   }`}
                 >
                   {isComplete && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
-                      <Check className="h-2.5 w-2.5 text-black" />
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                      <Check className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-black" />
                     </div>
                   )}
-                  <div className={`text-lg font-bold mb-1 ${isActive ? textColor : isComplete ? "text-white" : "text-white/40"}`}>
+                  <div className={`text-sm sm:text-lg font-bold mb-0.5 sm:mb-1 ${isActive ? textColor : isComplete ? "text-white" : "text-white/40"}`}>
                     {step.id}
                   </div>
-                  <div className={`text-xs font-medium ${isActive ? textColor : isComplete ? "text-white/80" : "text-white/40"}`}>
+                  <div className={`text-[9px] sm:text-xs font-medium ${isActive ? textColor : isComplete ? "text-white/80" : "text-white/40"}`}>
                     {step.title}
                   </div>
                 </button>
@@ -434,37 +435,37 @@ export default function VisualizerPage() {
         </div>
 
         {/* Detailed Flow Explanation */}
-        <div className="mt-6 space-y-4">
-          <h3 className="text-white font-semibold flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+          <h3 className="text-white font-semibold flex items-center gap-2 text-sm sm:text-base">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400" />
             플로우 상세 설명
           </h3>
 
           {/* Phase 1: Request & Response */}
-          <div className="glass rounded-2xl p-5 border border-amber-500/20">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <Server className="h-6 w-6 text-amber-400" />
+          <div className="glass rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-amber-500/20">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <Server className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-semibold">Phase 1</span>
-                  <h4 className="text-white font-semibold">요청 & 402 응답</h4>
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-[10px] sm:text-xs font-semibold">Phase 1</span>
+                  <h4 className="text-white font-semibold text-sm sm:text-base">요청 & 402 응답</h4>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500 text-black text-xs font-bold flex items-center justify-center">1</div>
-                      <span className="text-white/80 text-sm font-medium">API 요청</span>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500 text-black text-[10px] sm:text-xs font-bold flex items-center justify-center">1</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">API 요청</span>
                     </div>
-                    <code className="text-emerald-400 text-xs">GET /api/premium-data</code>
+                    <code className="text-emerald-400 text-[10px] sm:text-xs">GET /api/data</code>
                   </div>
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-amber-500 text-black text-xs font-bold flex items-center justify-center">2</div>
-                      <span className="text-white/80 text-sm font-medium">결제 요구</span>
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-amber-500 text-black text-[10px] sm:text-xs font-bold flex items-center justify-center">2</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">결제 요구</span>
                     </div>
-                    <code className="text-amber-400 text-xs">402 Payment Required</code>
+                    <code className="text-amber-400 text-[10px] sm:text-xs">402 Required</code>
                   </div>
                 </div>
               </div>
@@ -472,47 +473,49 @@ export default function VisualizerPage() {
           </div>
 
           {/* Phase 2: Signing & Verification */}
-          <div className="glass rounded-2xl p-5 border border-blue-500/20">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="glass rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-blue-500/20">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-blue-500/20 flex items-center justify-center">
+                <svg className="h-5 w-5 sm:h-6 sm:w-6 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                   <path d="M9 12l2 2 4-4" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold">Phase 2</span>
-                  <h4 className="text-white font-semibold">서명 & 검증</h4>
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[10px] sm:text-xs font-semibold">Phase 2</span>
+                  <h4 className="text-white font-semibold text-sm sm:text-base">서명 & 검증</h4>
                 </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">3</div>
-                      <span className="text-white/80 text-sm font-medium">서명 생성</span>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-blue-500 text-white text-[10px] sm:text-xs font-bold flex items-center justify-center">3</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">서명 생성</span>
                     </div>
-                    <code className="text-blue-400 text-xs">EIP-712 Sign</code>
+                    <code className="text-blue-400 text-[10px] sm:text-xs">EIP-712</code>
                   </div>
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-emerald-500 text-black text-xs font-bold flex items-center justify-center">4</div>
-                      <span className="text-white/80 text-sm font-medium">재요청</span>
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500 text-black text-[10px] sm:text-xs font-bold flex items-center justify-center">4</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">재요청</span>
                     </div>
-                    <code className="text-emerald-400 text-xs">+ X-402-Sig</code>
+                    <code className="text-emerald-400 text-[10px] sm:text-xs">+ X-402-Sig</code>
                   </div>
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center">5</div>
-                      <span className="text-white/80 text-sm font-medium">검증 요청</span>
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-purple-500 text-white text-[10px] sm:text-xs font-bold flex items-center justify-center">5</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">검증 요청</span>
                     </div>
-                    <code className="text-purple-400 text-xs">서버 → 퍼실리테이터</code>
+                    <code className="text-purple-400 text-[10px] sm:text-xs hidden sm:block">서버 → 퍼실</code>
+                    <code className="text-purple-400 text-[10px] sm:hidden">검증</code>
                   </div>
-                  <div className="bg-black/30 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-5 h-5 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center">6</div>
-                      <span className="text-white/80 text-sm font-medium">검증 완료</span>
+                  <div className="bg-black/30 rounded-lg p-2 sm:p-3">
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-purple-500 text-white text-[10px] sm:text-xs font-bold flex items-center justify-center">6</div>
+                      <span className="text-white/80 text-xs sm:text-sm font-medium">검증 완료</span>
                     </div>
-                    <code className="text-purple-400 text-xs">퍼실리테이터 → 서버</code>
+                    <code className="text-purple-400 text-[10px] sm:text-xs hidden sm:block">퍼실 → 서버</code>
+                    <code className="text-purple-400 text-[10px] sm:hidden">OK</code>
                   </div>
                 </div>
               </div>
@@ -520,36 +523,36 @@ export default function VisualizerPage() {
           </div>
 
           {/* Phase 3: Settlement & Success (Parallel) */}
-          <div className="glass rounded-2xl p-5 border border-emerald-500/20">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <Check className="h-6 w-6 text-emerald-400" />
+          <div className="glass rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-emerald-500/20">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <Check className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold">Phase 3</span>
-                  <h4 className="text-white font-semibold">정산 & 응답</h4>
-                  <span className="px-2 py-0.5 rounded-full bg-white/10 text-white/60 text-xs">동시 처리</span>
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] sm:text-xs font-semibold">Phase 3</span>
+                  <h4 className="text-white font-semibold text-sm sm:text-base">정산 & 응답</h4>
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white/10 text-white/60 text-[10px] sm:text-xs">동시 처리</span>
                 </div>
                 <div className="relative">
                   {/* Parallel indicator */}
                   <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent hidden sm:block" />
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div className="bg-black/30 rounded-lg p-3 border border-amber-500/20">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-5 h-5 rounded-full bg-amber-500 text-black text-xs font-bold flex items-center justify-center">$</div>
-                        <span className="text-white/80 text-sm font-medium">USDC 전송</span>
-                        <span className="text-amber-400/60 text-xs">(비동기)</span>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                    <div className="bg-black/30 rounded-lg p-2 sm:p-3 border border-amber-500/20">
+                      <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-amber-500 text-black text-[10px] sm:text-xs font-bold flex items-center justify-center">$</div>
+                        <span className="text-white/80 text-xs sm:text-sm font-medium">USDC 전송</span>
                       </div>
-                      <code className="text-amber-400 text-xs">퍼실리테이터 → 블록체인</code>
+                      <code className="text-amber-400 text-[10px] sm:text-xs hidden sm:block">퍼실 → 체인</code>
+                      <code className="text-amber-400 text-[10px] sm:hidden">비동기</code>
                     </div>
-                    <div className="bg-black/30 rounded-lg p-3 border border-emerald-500/20">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-5 h-5 rounded-full bg-emerald-500 text-black text-xs font-bold flex items-center justify-center">✓</div>
-                        <span className="text-white/80 text-sm font-medium">성공 응답</span>
-                        <span className="text-emerald-400/60 text-xs">(즉시)</span>
+                    <div className="bg-black/30 rounded-lg p-2 sm:p-3 border border-emerald-500/20">
+                      <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500 text-black text-[10px] sm:text-xs font-bold flex items-center justify-center">✓</div>
+                        <span className="text-white/80 text-xs sm:text-sm font-medium">성공 응답</span>
                       </div>
-                      <code className="text-emerald-400 text-xs">서버 → 클라이언트</code>
+                      <code className="text-emerald-400 text-[10px] sm:text-xs hidden sm:block">서버 → 클라이언트</code>
+                      <code className="text-emerald-400 text-[10px] sm:hidden">즉시</code>
                     </div>
                   </div>
                 </div>

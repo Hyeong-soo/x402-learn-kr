@@ -12,4 +12,4 @@ Disallow: /verify
 Disallow: /api/
 
 # Sitemap 위치
-Sitemap: https://x402-learn-kr.vercel.app/sitemap.xml
+Sitemap: https://learn402.xyz/sitemap.xml

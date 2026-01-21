@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const BASE_URL = "https://x402-learn-kr.vercel.app";
+const BASE_URL = "https://learn402.xyz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

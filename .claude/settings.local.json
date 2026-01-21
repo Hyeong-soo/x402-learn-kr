@@ -39,7 +39,12 @@
       "Bash(/Users/hyeong-soo/.nvm/versions/node/v22.17.1/bin/npm pack @serendb/x402-mcp-server --dry-run)",
       "Bash(/Users/hyeong-soo/.nvm/versions/node/v22.17.1/bin/npm view x402-fetch)",
       "Bash(/Users/hyeong-soo/.nvm/versions/node/v22.17.1/bin/npm install x402-fetch @modelcontextprotocol/sdk viem)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(git -C /Users/henry/ClaudeWorkplace/x402-for-opensource status --short)",
+      "Bash(git -C /Users/henry/ClaudeWorkplace/x402-for-opensource log --oneline --max-count=20)",
+      "Bash(git -C /Users/henry/ClaudeWorkplace/x402-for-opensource log --oneline)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

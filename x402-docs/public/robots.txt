@@ -7,8 +7,11 @@ Allow: /docs/
 Allow: /learn/
 Allow: /demo/
 
-# 검증 페이지 및 API는 크롤링 불필요
+# 검증 페이지는 크롤링 불필요
 Disallow: /verify
+
+# API는 기본적으로 차단하되, 필요한 경로는 허용
+Allow: /api/verify-human
 Disallow: /api/
 
 # Sitemap 위치

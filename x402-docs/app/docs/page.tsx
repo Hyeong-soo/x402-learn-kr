@@ -13,9 +13,13 @@ import {
   Server,
   Terminal,
   ExternalLink,
+  Globe,
+  Package,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 
-const BASE_URL = "https://x402-learn-kr.vercel.app";
+const BASE_URL = "https://learn402.xyz";
 const PAGE_URL = `${BASE_URL}/docs`;
 
 export const metadata: Metadata = {
@@ -196,6 +200,51 @@ await payFetch("/api/premium");`}
             </div>
           </div>
 
+          {/* V2 SDK Packages */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-mono">
+                V2
+              </span>
+              <h2 className="text-2xl font-bold text-white">SDK 패키지</h2>
+            </div>
+
+            <div className="glass rounded-xl p-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Package className="h-5 w-5 text-purple-400" />
+                    <h4 className="text-white font-medium">코어 패키지</h4>
+                  </div>
+                  <div className="space-y-2">
+                    <code className="block text-emerald-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/core</code>
+                    <code className="block text-blue-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/evm</code>
+                    <code className="block text-purple-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/svm</code>
+                    <code className="block text-amber-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/paywall</code>
+                  </div>
+                  <p className="text-white/40 text-xs mt-3">
+                    EVM 체인, Solana, 세션 기반 접근 지원
+                  </p>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Server className="h-5 w-5 text-blue-400" />
+                    <h4 className="text-white font-medium">프레임워크 통합</h4>
+                  </div>
+                  <div className="space-y-2">
+                    <code className="block text-emerald-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/express</code>
+                    <code className="block text-blue-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/next</code>
+                    <code className="block text-purple-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/hono</code>
+                    <code className="block text-amber-400 bg-black/30 px-3 py-2 rounded text-sm font-mono">@x402/fetch · @x402/axios</code>
+                  </div>
+                  <p className="text-white/40 text-xs mt-3">
+                    Express, Next.js, Hono 미들웨어 및 클라이언트 래퍼
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Advanced Section */}
           <div className="mb-16">
             <div className="flex items-center gap-3 mb-8">
@@ -257,6 +306,26 @@ await payFetch("/api/premium");`}
             <h2 className="text-2xl font-bold text-white mb-6">외부 리소스</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <a
+                href="https://x402.org"
+                target="_blank"
+                rel="noreferrer"
+                className="glass glass-hover rounded-xl p-6 flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-lg bg-emerald-500/20">
+                    <Globe className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                      x402.org
+                    </h3>
+                    <p className="text-white/50 text-sm">공식 프로토콜 포털</p>
+                  </div>
+                </div>
+                <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-emerald-400" />
+              </a>
+
+              <a
                 href="https://docs.cdp.coinbase.com/x402/welcome"
                 target="_blank"
                 rel="noreferrer"
@@ -268,12 +337,32 @@ await payFetch("/api/premium");`}
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
-                      공식 문서 (영문)
+                      Coinbase 공식 문서
                     </h3>
-                    <p className="text-white/50 text-sm">Coinbase x402 SDK 문서</p>
+                    <p className="text-white/50 text-sm">x402 SDK 문서 (영문)</p>
                   </div>
                 </div>
                 <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-blue-400" />
+              </a>
+
+              <a
+                href="https://x402.gitbook.io/x402"
+                target="_blank"
+                rel="noreferrer"
+                className="glass glass-hover rounded-xl p-6 flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-lg bg-purple-500/20">
+                    <BookOpen className="h-6 w-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors">
+                      GitBook 문서
+                    </h3>
+                    <p className="text-white/50 text-sm">상세 기술 문서 및 스펙</p>
+                  </div>
+                </div>
+                <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-purple-400" />
               </a>
 
               <a
@@ -295,6 +384,60 @@ await payFetch("/api/premium");`}
                 </div>
                 <ExternalLink className="h-5 w-5 text-white/30 group-hover:text-white/70" />
               </a>
+            </div>
+          </div>
+
+          {/* Common Misconceptions */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-6">자주 묻는 오해</h2>
+            <div className="grid gap-4">
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-white font-medium mb-2">&quot;x402는 암호화폐 토큰이다&quot;</h4>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <p className="text-white/60 text-sm">
+                        x402는 <span className="text-emerald-400">오픈 프로토콜</span>입니다.
+                        자체 토큰 없이 USDC 같은 기존 스테이블코인을 결제 수단으로 사용합니다.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-white font-medium mb-2">&quot;복잡한 블록체인 인프라가 필요하다&quot;</h4>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <p className="text-white/60 text-sm">
+                        x402는 <span className="text-emerald-400">HTTP 미들웨어</span>로 작동합니다.
+                        퍼실리테이터가 블록체인 복잡성을 처리하므로 개발자는 npm 패키지 설치만으로 시작할 수 있습니다.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-white font-medium mb-2">&quot;모든 결제마다 온체인 트랜잭션이 발생한다&quot;</h4>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <p className="text-white/60 text-sm">
+                        x402는 <span className="text-emerald-400">메타 트랜잭션</span>을 사용합니다.
+                        클라이언트는 서명만 전달하고, 실제 온체인 정산은 퍼실리테이터가 배치 처리할 수 있습니다.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

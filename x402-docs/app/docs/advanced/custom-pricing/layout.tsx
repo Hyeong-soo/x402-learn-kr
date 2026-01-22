@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { BreadcrumbSchema } from "@/components/BreadcrumbSchema";
 
-const BASE_URL = "https://x402-learn-kr.vercel.app";
+const BASE_URL = "https://learn402.xyz";
 const PAGE_URL = `${BASE_URL}/docs/advanced/custom-pricing`;
 
 export const metadata: Metadata = {

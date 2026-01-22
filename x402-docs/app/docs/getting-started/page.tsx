@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Zap, Terminal, FileCode, Rocket, ExternalLink } from "lucide-react";
+import { CheckCircle2, ArrowRight, Zap, Terminal, FileCode, Rocket, ExternalLink, Shield, AlertTriangle, Cog } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 
@@ -28,15 +28,18 @@ export default function GettingStartedPage() {
           </p>
         </div>
 
-        {/* Notice */}
-        <div className="glass rounded-xl p-6 mb-12 border border-purple-500/30">
+        {/* SDK Notice */}
+        <div className="glass rounded-xl p-6 mb-12 border border-blue-500/30">
           <p className="text-white/80">
-            <strong className="text-purple-400">참고:</strong> 이 가이드의 코드는 개념적 구현 예시입니다.
-            실제 프로젝트에서는{" "}
+            <strong className="text-blue-400">공식 SDK:</strong> 이 가이드는{" "}
             <a href="https://github.com/coinbase/x402" target="_blank" rel="noreferrer" className="text-emerald-400 underline hover:text-emerald-300">
-              공식 SDK
+              @x402 공식 패키지
             </a>
-            를 사용하세요.
+            를 사용합니다. 자세한 API 레퍼런스는{" "}
+            <a href="https://docs.cdp.coinbase.com/x402/welcome" target="_blank" rel="noreferrer" className="text-emerald-400 underline hover:text-emerald-300">
+              Coinbase 공식 문서
+            </a>
+            를 참조하세요.
           </p>
         </div>
 
@@ -53,8 +56,8 @@ export default function GettingStartedPage() {
                   <span className="text-emerald-400 font-mono text-sm">1</span>
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">문서 사이트</h4>
-                  <p className="text-white/60 text-sm">Next.js, Docusaurus, 또는 유사한 프레임워크로 만든 사이트</p>
+                  <h4 className="text-white font-medium">웹 애플리케이션</h4>
+                  <p className="text-white/60 text-sm">Next.js, Express, Hono 등 Node.js 기반 프레임워크</p>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -92,71 +95,147 @@ export default function GettingStartedPage() {
                 <h3 className="text-white font-semibold">패키지 설치</h3>
               </div>
             </div>
-            <CodeBlock code="npm install x402-next" language="bash" />
+            <p className="text-white/60 text-sm mb-4">
+              사용하는 프레임워크에 맞는 패키지를 설치하세요:
+            </p>
+            <CodeBlock
+              code={`# Next.js 프로젝트
+npm install @x402/next
+
+# Express 프로젝트
+npm install @x402/express
+
+# Hono 프로젝트
+npm install @x402/hono
+
+# 클라이언트 (AI 에이전트 개발 시)
+npm install @x402/fetch`}
+              language="bash"
+            />
           </div>
 
-          {/* Step 2 */}
+          {/* Step 2 - Environment Variables */}
+          <div className="glass rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                <FileCode className="h-5 w-5 text-emerald-400" />
+              </div>
+              <div>
+                <span className="text-emerald-400 text-sm font-mono">Step 2</span>
+                <h3 className="text-white font-semibold">환경 변수 설정</h3>
+              </div>
+            </div>
+            <p className="text-white/60 text-sm mb-4">
+              <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">.env.local</code> 파일에 필수 환경 변수를 설정하세요:
+            </p>
+            <CodeBlock
+              code={`# .env.local
+
+# 네트워크 설정
+# 테스트넷 (개발용): base-sepolia
+# 메인넷 (프로덕션): base
+NETWORK=base-sepolia
+
+# 결제를 받을 지갑 주소
+RECEIVING_WALLET_ADDRESS=0xYourWalletAddress
+
+# 퍼실리테이터 URL (선택사항)
+# Coinbase CDP 사용 시 별도 설정 불필요
+FACILITATOR_URL=https://x402.org/facilitator`}
+              language="bash"
+            />
+            <div className="mt-4 p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
+              <p className="text-amber-400 text-sm">
+                <strong>테스트넷 먼저:</strong> 개발 시에는 <code className="bg-black/30 px-1 rounded">base-sepolia</code>를 사용하세요.
+                프로덕션 배포 시 <code className="bg-black/30 px-1 rounded">base</code>로 변경합니다.
+              </p>
+            </div>
+          </div>
+
+          {/* Step 3 - Middleware */}
           <div className="glass rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
                 <FileCode className="h-5 w-5 text-purple-400" />
               </div>
               <div>
-                <span className="text-purple-400 text-sm font-mono">Step 2</span>
-                <h3 className="text-white font-semibold">설정 파일 생성</h3>
+                <span className="text-purple-400 text-sm font-mono">Step 3</span>
+                <h3 className="text-white font-semibold">미들웨어 설정 (Next.js)</h3>
               </div>
             </div>
             <p className="text-white/60 text-sm mb-4">
-              프로젝트 루트에 <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">x402.config.ts</code> 생성:
+              프로젝트 루트에 <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">middleware.ts</code> 생성:
             </p>
             <CodeBlock
-              code={`// x402.config.ts
-// x402 설정 파일 - 가격과 결제 정책을 정의합니다.
+              code={`// middleware.ts
+import { paymentMiddleware } from "@x402/next";
 
-export const x402Config = {
-  // 결제를 받을 지갑 주소 (Base 네트워크)
-  wallet: "0xYourWalletAddress",
+// 환경 변수 로드
+const network = process.env.NETWORK || "base-sepolia";
+const payTo = process.env.RECEIVING_WALLET_ADDRESS!;
+const facilitatorUrl = process.env.FACILITATOR_URL;
 
-  // 사람(브라우저)은 무료 접근
-  humanAccess: "free",
-
-  // AI 에이전트 가격 (경로별 USDC)
-  aiPricing: {
-    "/docs/**": 0.01,          // 일반 문서: $0.01
-    "/api-reference/**": 0.02, // API 레퍼런스: $0.02
+// 경로별 결제 요구사항 정의
+export const middleware = paymentMiddleware(
+  {
+    "GET /docs/:path*": {
+      price: "$0.01",              // USDC 금액
+      network: network,
+      description: "문서 접근",
+    },
+    "GET /api/premium/:path*": {
+      price: "$0.02",
+      network: network,
+      description: "프리미엄 API",
+    },
   },
+  {
+    payTo: payTo,
+    facilitatorUrl: facilitatorUrl,
+  }
+);
+
+export const config = {
+  matcher: ["/docs/:path*", "/api/premium/:path*"],
 };`}
               language="typescript"
             />
           </div>
 
-          {/* Step 3 */}
-          <div className="glass rounded-xl p-6">
+          {/* Step 3b - Express Alternative */}
+          <div className="glass rounded-xl p-6 border border-white/10">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <FileCode className="h-5 w-5 text-amber-400" />
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                <FileCode className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <span className="text-amber-400 text-sm font-mono">Step 3</span>
-                <h3 className="text-white font-semibold">미들웨어 추가</h3>
+                <span className="text-blue-400 text-sm font-mono">대안</span>
+                <h3 className="text-white font-semibold">Express 서버 설정</h3>
               </div>
             </div>
-            <p className="text-white/60 text-sm mb-4">
-              Next.js의 경우 <code className="text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">middleware.ts</code> 생성:
-            </p>
             <CodeBlock
-              code={`// middleware.ts
-import { x402Middleware } from "x402-next";
-import { x402Config } from "./x402.config";
+              code={`// server.ts
+import express from "express";
+import { paymentMiddleware } from "@x402/express";
 
-// 미들웨어가 요청을 분석하여:
-// - 브라우저(사람) → 무료 통과
-// - AI 에이전트 → 402 응답 반환
-export const middleware = x402Middleware(x402Config);
+const app = express();
 
-export const config = {
-  matcher: ["/docs/:path*"],
-};`}
+// 결제 미들웨어 적용
+app.use(paymentMiddleware({
+  "GET /api/premium": {
+    price: "$0.01",
+    network: process.env.NETWORK || "base-sepolia",
+    payTo: process.env.RECEIVING_WALLET_ADDRESS!,
+    description: "Premium API endpoint",
+  },
+}));
+
+// 보호된 엔드포인트
+app.get("/api/premium", (req, res) => {
+  res.json({ data: "Premium content" });
+});
+
+app.listen(3000);`}
               language="typescript"
             />
           </div>
@@ -164,15 +243,96 @@ export const config = {
           {/* Step 4 */}
           <div className="glass rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <Rocket className="h-5 w-5 text-emerald-400" />
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <Rocket className="h-5 w-5 text-amber-400" />
               </div>
               <div>
-                <span className="text-emerald-400 text-sm font-mono">Step 4</span>
-                <h3 className="text-white font-semibold">배포</h3>
+                <span className="text-amber-400 text-sm font-mono">Step 4</span>
+                <h3 className="text-white font-semibold">테스트 및 배포</h3>
               </div>
             </div>
-            <CodeBlock code="vercel deploy" language="bash" />
+            <CodeBlock
+              code={`# 로컬 테스트
+npm run dev
+
+# 배포 (Vercel)
+vercel deploy
+
+# 배포 (기타)
+npm run build && npm start`}
+              language="bash"
+            />
+          </div>
+        </section>
+
+        {/* Security Notes */}
+        <section className="mt-12">
+          <div className="glass rounded-xl p-6 border border-red-500/30">
+            <div className="flex items-start gap-4">
+              <Shield className="h-6 w-6 text-red-400 shrink-0" />
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">보안 주의사항</h3>
+                <ul className="space-y-3 text-white/60 text-sm">
+                  <li className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                    <span>프라이빗 키를 코드에 절대 하드코딩하지 마세요. 환경 변수를 사용하세요.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                    <span>최대 결제 한도(maxPaymentAmount)를 설정하여 예상치 못한 대량 결제를 방지하세요.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                    <span>프로덕션 배포 전 테스트넷(base-sepolia)에서 충분히 테스트하세요.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                    <span>사용자에게 정확한 비용을 미리 표시하세요 (402 응답의 가격 정보 활용).</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Facilitator Setup */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <Cog className="h-6 w-6 text-purple-400" />
+            퍼실리테이터 설정 (선택)
+          </h2>
+          <div className="glass rounded-xl p-6 border border-purple-500/30">
+            <p className="text-white/60 mb-4">
+              <strong className="text-purple-400">Coinbase CDP 퍼실리테이터</strong>를 사용하면
+              Base 메인넷에서 수수료 없이 USDC 정산을 받을 수 있습니다.
+            </p>
+            <ol className="space-y-3 text-white/60 text-sm">
+              <li className="flex items-start gap-3">
+                <span className="text-purple-400 font-mono">1.</span>
+                <span>
+                  <a href="https://portal.cdp.coinbase.com" target="_blank" rel="noreferrer" className="text-blue-400 underline hover:text-blue-300">
+                    Coinbase CDP Portal
+                  </a>
+                  에서 계정 생성
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-purple-400 font-mono">2.</span>
+                <span>x402 프로젝트 생성 및 API 키 발급</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-purple-400 font-mono">3.</span>
+                <span>
+                  <code className="text-amber-400 bg-black/30 px-1 rounded">FACILITATOR_URL</code> 환경 변수에 CDP 엔드포인트 설정
+                </span>
+              </li>
+            </ol>
+            <div className="mt-4 p-4 rounded-lg bg-emerald-500/10">
+              <p className="text-emerald-400 text-sm">
+                <strong>팁:</strong> 퍼실리테이터 없이도 x402를 사용할 수 있습니다.
+                기본 설정으로 시작하고, 필요시 퍼실리테이터를 추가하세요.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -186,7 +346,7 @@ export const config = {
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4">설정 완료!</h3>
                 <p className="text-white/60 mb-6">
-                  이제 문서 사이트에 x402가 적용되었습니다. 접근 방식에 따라 다르게 동작합니다:
+                  이제 프로젝트에 x402가 적용되었습니다. 접근 방식에 따라 다르게 동작합니다:
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="bg-black/30 rounded-lg p-4">

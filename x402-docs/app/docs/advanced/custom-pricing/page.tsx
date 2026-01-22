@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, DollarSign, Clock, TrendingUp, Layers, Lightbulb, CheckCircle2 } from "lucide-react";
+import { ArrowRight, DollarSign, Clock, TrendingUp, Layers, Lightbulb, CheckCircle2, Sparkles, Timer } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 
@@ -51,9 +51,65 @@ export default function CustomPricingPage() {
           <p className="text-white/80">
             <strong className="text-purple-400">참고:</strong> 아래 코드 예제들은 동적 가격 책정의{" "}
             <em className="text-purple-300">개념적 구현</em>을 보여줍니다.
-            실제 구현은 사용하는 프레임워크와 x402 SDK 버전에 따라 달라질 수 있습니다.
+            실제{" "}
+            <code className="text-emerald-400 bg-emerald-500/10 px-1 rounded">@x402/express</code> 또는{" "}
+            <code className="text-emerald-400 bg-emerald-500/10 px-1 rounded">@x402/next</code> 미들웨어에서는
+            경로별 가격을 객체로 정의하는 방식을 사용합니다.
           </p>
         </div>
+
+        {/* Real-World Example: Token Metrics */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <Sparkles className="h-6 w-6 text-amber-400" />
+            실제 사례: Token Metrics API
+          </h2>
+          <div className="glass rounded-xl p-6 border border-amber-500/30">
+            <p className="text-white/60 mb-4">
+              Token Metrics는 x402를 사용하여 AI 암호화폐 분석 API를 제공합니다.
+              요청당 <span className="text-emerald-400 font-semibold">$0.017 ~ $0.068</span> 범위로 가격을 책정합니다.
+            </p>
+            <CodeBlock
+              code={`// Token Metrics 스타일 가격 책정 예시
+// 실제 @x402/express 미들웨어 패턴
+
+import { paymentMiddleware } from "@x402/express";
+
+app.use(paymentMiddleware({
+  // 기본 시장 데이터 - 가장 저렴
+  "GET /api/market-data": {
+    price: "$0.017",
+    network: "base",
+    payTo: "0x...",
+    description: "시장 데이터 조회",
+  },
+
+  // AI 기반 분석 - 2배 가격
+  "GET /api/ai-analysis": {
+    price: "$0.034",
+    network: "base",
+    payTo: "0x...",
+    description: "AI 기반 분석 리포트",
+  },
+
+  // 프리미엄 트레이딩 시그널 - 4배 가격
+  "GET /api/premium-signals": {
+    price: "$0.068",
+    network: "base",
+    payTo: "0x...",
+    description: "프리미엄 트레이딩 시그널",
+  },
+}));`}
+              language="typescript"
+            />
+            <div className="mt-4 p-4 rounded-lg bg-amber-500/10">
+              <p className="text-amber-400 text-sm">
+                <strong>핵심 인사이트:</strong> Token Metrics는 API의 가치에 따라 4배까지 가격을 차등화합니다.
+                기본 데이터는 저렴하게, 프리미엄 분석은 높은 가격으로 책정하여 다양한 고객층을 확보합니다.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Dynamic Pricing Section */}
         <section className="mb-16">
@@ -265,62 +321,117 @@ getPricing: async (path: string, context: RequestContext) => {
 
           <div className="glass rounded-xl p-6">
             <CodeBlock
-              code={`// middleware.ts
-// 티어(등급)별 가격 정책을 선언적으로 정의하는 예제입니다.
-// 콘텐츠의 가치에 따라 4단계로 가격을 차등 적용합니다.
+              code={`// middleware.ts (Express)
+// 실제 @x402/express를 사용한 티어별 가격 구현
 
-import { x402Middleware, TieredPricing } from "x402-middleware";
+import express from "express";
+import { paymentMiddleware } from "@x402/express";
 
-// TieredPricing 클래스로 경로별 가격 매핑 생성
-const pricing = new TieredPricing({
-  tiers: {
-    // =====================================
-    // 무료 티어 (Free Tier)
-    // =====================================
-    // 진입 장벽을 낮추기 위해 시작 문서는 무료로 제공
-    // AI 에이전트도 이 경로는 무료로 접근 가능
-    free: {
-      paths: ["/docs/getting-started/**", "/docs/installation"],
-      price: 0,  // $0.00 - 완전 무료
-    },
+const app = express();
+const payTo = process.env.RECEIVING_WALLET_ADDRESS!;
+const network = process.env.NETWORK || "base";
 
-    // =====================================
-    // 기본 티어 (Basic Tier)
-    // =====================================
-    // API 레퍼런스, 가이드 등 일반적인 문서
-    // 대부분의 요청이 이 티어에 해당
-    basic: {
-      paths: ["/docs/api/**", "/docs/guides/**"],
-      price: 0.01,  // $0.01 (1센트) - 기본 가격
-    },
-
-    // =====================================
-    // 고급 티어 (Advanced Tier)
-    // =====================================
-    // 아키텍처, 베스트 프랙티스 등 심화 내용
-    // 더 높은 가치를 제공하므로 2배 가격
-    advanced: {
-      paths: ["/docs/advanced/**"],
-      price: 0.02,  // $0.02 (2센트)
-    },
-
-    // =====================================
-    // 엔터프라이즈 티어 (Enterprise Tier)
-    // =====================================
-    // 스케일링, 보안, 규정 준수 등 전문 내용
-    // 기업용 고가치 콘텐츠에 프리미엄 가격 적용
-    enterprise: {
-      paths: ["/docs/enterprise/**"],
-      price: 0.05,  // $0.05 (5센트) - 프리미엄 가격
-    },
+// 티어별 가격 정의
+app.use(paymentMiddleware({
+  // =====================================
+  // 기본 티어 - API 레퍼런스
+  // =====================================
+  "GET /docs/api/:path*": {
+    price: "$0.01",
+    network: network,
+    payTo: payTo,
+    description: "API 문서",
   },
-});
 
-// 설정된 pricing 객체를 미들웨어에 전달
-// 요청이 들어오면 자동으로 경로를 매칭하여 가격 적용
-export const middleware = x402Middleware({ pricing });`}
+  // =====================================
+  // 고급 티어 - 심화 가이드
+  // =====================================
+  "GET /docs/advanced/:path*": {
+    price: "$0.02",
+    network: network,
+    payTo: payTo,
+    description: "고급 문서",
+  },
+
+  // =====================================
+  // 엔터프라이즈 티어 - 전문 콘텐츠
+  // =====================================
+  "GET /docs/enterprise/:path*": {
+    price: "$0.05",
+    network: network,
+    payTo: payTo,
+    description: "엔터프라이즈 문서",
+  },
+}));
+
+// 무료 경로는 미들웨어 매처에서 제외하거나
+// 별도 라우터로 처리합니다
+app.get("/docs/getting-started/:path*", (req, res) => {
+  // 무료 접근 허용
+});`}
               language="typescript"
             />
+          </div>
+        </section>
+
+        {/* V2 Session-Based Access */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <Timer className="h-6 w-6 text-blue-400" />
+            V2: 세션 기반 접근
+          </h2>
+          <p className="text-white/60 mb-6">
+            <code className="text-emerald-400 bg-emerald-500/10 px-1 rounded">@x402/paywall</code> 패키지를 사용하면
+            단일 결제로 일정 시간 동안 여러 리소스에 접근할 수 있는 세션을 구현할 수 있습니다.
+          </p>
+
+          <div className="glass rounded-xl p-6 border border-blue-500/30">
+            <p className="text-white/60 text-sm mb-4">
+              <strong className="text-blue-400">개념 예시:</strong> 세션 기반 가격 책정
+            </p>
+            <CodeBlock
+              code={`// 세션 기반 접근 (개념적 구현)
+// 실제 구현은 @x402/paywall 문서 참조
+
+// 세션 패스 정의
+const sessionPasses = {
+  // 1시간 패스 - 모든 문서 접근
+  hourly: {
+    price: "$0.10",
+    duration: 3600,        // 1시간 (초 단위)
+    accessPaths: ["/docs/**"],
+    description: "1시간 무제한 문서 접근",
+  },
+
+  // 24시간 패스 - 문서 + API 접근
+  daily: {
+    price: "$0.50",
+    duration: 86400,       // 24시간
+    accessPaths: ["/docs/**", "/api/**"],
+    description: "24시간 전체 접근",
+  },
+
+  // 주간 패스 - 프리미엄 콘텐츠 포함
+  weekly: {
+    price: "$2.00",
+    duration: 604800,      // 7일
+    accessPaths: ["/**"],  // 모든 경로
+    description: "7일 프리미엄 접근",
+  },
+};
+
+// 장점:
+// - 자주 사용하는 AI 에이전트에게 비용 효율적
+// - 반복 결제 오버헤드 감소
+// - 예측 가능한 수익 모델`}
+              language="typescript"
+            />
+            <div className="mt-4 p-4 rounded-lg bg-blue-500/10">
+              <p className="text-blue-400 text-sm">
+                <strong>V2 기능:</strong> @x402/paywall은 x402 V2에서 도입된 패키지로,
+                지갑 기반 세션 관리와 반복 접근 최적화를 지원합니다.
+              </p>
+            </div>
           </div>
         </section>
 

@@ -1,7 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Globe, Building2, Code, Layers, ExternalLink, Github } from "lucide-react";
+import {
+  ArrowLeft,
+  Globe,
+  Building2,
+  Code,
+  Layers,
+  ExternalLink,
+  Github,
+  TrendingUp,
+  Users,
+  Bot,
+  FileText,
+  Briefcase,
+  Wrench,
+  Zap
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Language Icons
@@ -32,6 +47,273 @@ const GoIcon = () => (
   </svg>
 );
 
+// Protocol Statistics Data
+const protocolStats = [
+  { value: "35M+", label: "총 트랜잭션", description: "2025년 9월 출시 이후" },
+  { value: "$10M+", label: "거래량", description: "USDC 기반 결제" },
+  { value: "119M", label: "Base 누적", description: "네트워크 트랜잭션" },
+  { value: "$77B", label: "USDC 유통량", description: "16개 블록체인" },
+];
+
+// Protocol Founders
+const founders = [
+  {
+    name: "Coinbase",
+    initials: "CB",
+    role: "프로토콜 창시자",
+    description: "Coinbase Developer Platform(CDP)을 통해 x402 프로토콜을 개발하고 주요 퍼실리테이터를 운영합니다. Base 네트워크에서 수수료 없는 USDC 정산을 제공합니다.",
+    bgColor: "bg-blue-500/20",
+    textColor: "text-blue-400",
+    link: "https://docs.cdp.coinbase.com/x402",
+  },
+  {
+    name: "Cloudflare",
+    initials: "CF",
+    role: "공동 창시자",
+    description: "x402 프로토콜의 공동 창시자로, Workers 통합과 엣지 컴퓨팅 인프라를 제공합니다. 글로벌 분산 네트워크로 빠른 결제 처리를 지원합니다.",
+    bgColor: "bg-orange-500/20",
+    textColor: "text-orange-400",
+    link: "https://developers.cloudflare.com/agents/x402/",
+  },
+];
+
+// Strategic Partners
+const strategicPartners = [
+  {
+    name: "Circle",
+    initials: "CI",
+    role: "USDC 발행사",
+    description: "세계 최대 규제 스테이블코인 USDC를 발행합니다. Gateway 제품으로 고처리량 에이전트 트랜잭션을 지원합니다.",
+    bgColor: "bg-green-500/20",
+    textColor: "text-green-400",
+    link: "https://www.circle.com/",
+  },
+  {
+    name: "AWS",
+    initials: "AWS",
+    role: "클라우드 파트너",
+    description: "클라우드 인프라 및 AI 서비스를 통해 x402 생태계를 지원하는 협력 파트너입니다.",
+    bgColor: "bg-yellow-500/20",
+    textColor: "text-yellow-400",
+    link: "https://aws.amazon.com/",
+  },
+  {
+    name: "Anthropic",
+    initials: "AN",
+    role: "AI 파트너",
+    description: "Claude AI와 x402를 통합하여 AI 에이전트가 자율적으로 유료 서비스에 결제할 수 있도록 합니다.",
+    bgColor: "bg-amber-500/20",
+    textColor: "text-amber-400",
+    link: "https://www.anthropic.com/",
+  },
+  {
+    name: "NEAR",
+    initials: "NR",
+    role: "블록체인 파트너",
+    description: "NEAR Protocol 블록체인 네트워크에서 x402 결제를 지원하는 파트너입니다.",
+    bgColor: "bg-cyan-500/20",
+    textColor: "text-cyan-400",
+    link: "https://near.org/",
+  },
+];
+
+// Enterprise Collaborators
+const enterpriseCollaborators = [
+  {
+    name: "Google",
+    initials: "G",
+    integration: "Agent Payments Protocol (AP2)",
+    description: "x402 구조를 확장한 AP2(Agent-to-Payment) 프로토콜을 발표하여 AI 에이전트 간 결제 표준을 구축합니다.",
+    bgColor: "bg-red-500/20",
+    textColor: "text-red-400",
+    link: "https://cloud.google.com/",
+  },
+  {
+    name: "Visa",
+    initials: "V",
+    integration: "Trusted Agent Protocol (TAP)",
+    description: "신뢰할 수 있는 에이전트 프로토콜(TAP)에 x402 지원을 추가하여 기업 결제 인프라와 통합합니다.",
+    bgColor: "bg-indigo-500/20",
+    textColor: "text-indigo-400",
+    link: "https://visa.com/",
+  },
+  {
+    name: "MetaMask",
+    initials: "MM",
+    integration: "지갑 통합",
+    description: "가장 널리 사용되는 Web3 지갑과의 협력으로 에이전트 기반 결제를 지원합니다.",
+    bgColor: "bg-orange-500/20",
+    textColor: "text-orange-400",
+    link: "https://metamask.io/",
+  },
+];
+
+// Infrastructure & Facilitators (expanded)
+const infrastructureProjects = [
+  {
+    name: "Coinbase CDP",
+    initials: "CB",
+    type: "공식 퍼실리테이터",
+    description: "Coinbase Developer Platform에서 제공하는 공식 퍼실리테이터입니다. Base 네트워크에 최적화되어 있습니다.",
+    networks: "Base, Ethereum",
+    tokens: "USDC",
+    bgColor: "bg-blue-500/20",
+    textColor: "text-blue-400",
+    link: "https://docs.cdp.coinbase.com/x402",
+  },
+  {
+    name: "x402.org",
+    initials: "x4",
+    type: "커뮤니티 퍼실리테이터",
+    description: "커뮤니티에서 운영하는 오픈 퍼실리테이터입니다. 다양한 네트워크를 지원합니다.",
+    networks: "Base, Polygon, +",
+    tokens: "USDC",
+    bgColor: "bg-purple-500/20",
+    textColor: "text-purple-400",
+    link: "https://x402.org",
+  },
+  {
+    name: "PayAI",
+    initials: "PA",
+    type: "AI 특화 퍼실리테이터",
+    description: "AI 에이전트 결제에 특화된 퍼실리테이터입니다. Solana 네트워크도 지원합니다.",
+    networks: "Solana, Base, Polygon",
+    tokens: "USDC, SPL",
+    bgColor: "bg-amber-500/20",
+    textColor: "text-amber-400",
+    link: "https://payai.network",
+  },
+  {
+    name: "thirdweb",
+    initials: "3W",
+    type: "개발자 플랫폼",
+    description: "Web3 개발자 플랫폼으로 SDK에서 x402를 지원합니다. Nexus를 통해 AI 에이전트가 계정이나 API 키 없이 서비스를 이용할 수 있습니다.",
+    networks: "멀티체인",
+    tokens: "USDC",
+    bgColor: "bg-pink-500/20",
+    textColor: "text-pink-400",
+    link: "https://thirdweb.com/",
+  },
+  {
+    name: "Crossmint",
+    initials: "CM",
+    type: "결제 플랫폼",
+    description: "기업과 에이전트를 위한 올인원 플랫폼입니다. 크립토 월렛, 온램프, 스테이블코인 오케스트레이션을 제공합니다.",
+    networks: "멀티체인",
+    tokens: "USDC",
+    bgColor: "bg-teal-500/20",
+    textColor: "text-teal-400",
+    link: "https://crossmint.com/",
+  },
+  {
+    name: "Daydreams",
+    initials: "DD",
+    type: "Agent 프레임워크",
+    description: "AI 에이전트 프레임워크로 x402 결제를 기본 지원합니다. 에이전트 개발을 위한 도구를 제공합니다.",
+    networks: "-",
+    tokens: "-",
+    bgColor: "bg-violet-500/20",
+    textColor: "text-violet-400",
+    link: "#",
+  },
+  {
+    name: "AIsa",
+    initials: "AI",
+    type: "결제 프로세서",
+    description: "x402 결제 프로세서로 10.5M+ 누적 트랜잭션을 처리했습니다. 대규모 에이전트 결제에 최적화되어 있습니다.",
+    networks: "멀티체인",
+    tokens: "USDC",
+    bgColor: "bg-emerald-500/20",
+    textColor: "text-emerald-400",
+    link: "#",
+    stats: "10.5M+ 트랜잭션",
+  },
+  {
+    name: "Gloria",
+    initials: "GL",
+    type: "데이터 제공자",
+    description: "AI 에이전트를 위한 실시간 뉴스 데이터를 제공합니다. x402로 요청당 결제가 가능합니다.",
+    networks: "-",
+    tokens: "USDC",
+    bgColor: "bg-rose-500/20",
+    textColor: "text-rose-400",
+    link: "#",
+  },
+];
+
+// Developer Tools
+const developerTools = [
+  {
+    name: "x402-mcp",
+    description: "MCP 서버에서 유료 도구를 활성화하는 경량 래퍼입니다. Claude Desktop과 유료 API를 연결합니다.",
+    link: "https://github.com/anthropics/x402-mcp",
+    type: "MCP",
+  },
+  {
+    name: "Vercel AI Starter",
+    description: "x402 + AI SDK + AI Gateway가 통합된 Next.js 템플릿입니다. 빠르게 시작할 수 있습니다.",
+    link: "https://vercel.com/templates/next.js/x402-ai-starter",
+    type: "템플릿",
+  },
+  {
+    name: "Zuplo",
+    description: "API 플랫폼에서 x402 통합을 지원합니다. API 수익화를 쉽게 구현할 수 있습니다.",
+    link: "https://zuplo.com/",
+    type: "플랫폼",
+  },
+  {
+    name: "@x402/axios",
+    description: "Axios 인터셉터 패턴으로 자동 결제 플로우를 처리합니다. 기존 코드에 쉽게 통합됩니다.",
+    link: "https://www.npmjs.com/package/@x402/axios",
+    type: "npm",
+  },
+];
+
+// Supported Networks (expanded)
+const supportedNetworks = [
+  { name: "Base Mainnet", caipId: "eip155:8453", token: "USDC", status: "active" },
+  { name: "Base Sepolia", caipId: "eip155:84532", token: "USDC (테스트)", status: "active" },
+  { name: "Ethereum Mainnet", caipId: "eip155:1", token: "USDC", status: "active" },
+  { name: "Solana Mainnet", caipId: "solana:5eykt4...", token: "SPL USDC", status: "active" },
+  { name: "Polygon", caipId: "eip155:137", token: "USDC", status: "active" },
+  { name: "Arbitrum", caipId: "eip155:42161", token: "USDC", status: "partial" },
+  { name: "Optimism", caipId: "eip155:10", token: "USDC", status: "partial" },
+  { name: "Avalanche", caipId: "eip155:43114", token: "USDC", status: "active" },
+  { name: "Sui", caipId: "sui:mainnet", token: "USDC", status: "active" },
+  { name: "NEAR", caipId: "near:mainnet", token: "USDC", status: "active" },
+  { name: "Sei", caipId: "sei:atlantic-2", token: "USDC", status: "upcoming" },
+  { name: "Peaq", caipId: "eip155:3338", token: "USDC", status: "upcoming" },
+  { name: "IoTeX", caipId: "eip155:4689", token: "USDC", status: "upcoming" },
+];
+
+// Use Cases
+const useCases = [
+  {
+    icon: Bot,
+    title: "AI 에이전트 결제",
+    description: "AI 에이전트가 API, 데이터 피드, 컴퓨트 리소스에 자율적으로 결제합니다. 사전 계정이나 API 키 없이 즉시 접근이 가능합니다.",
+    example: "Claude가 유료 데이터 API를 직접 호출하고 결제",
+  },
+  {
+    icon: Code,
+    title: "API 수익화",
+    description: "API 요청당 과금으로 구독 복잡성을 제거합니다. 최소 결제 금액 없이 마이크로페이먼트가 가능합니다.",
+    example: "Token Metrics: $0.017~$0.068/요청",
+  },
+  {
+    icon: FileText,
+    title: "콘텐츠 마이크로페이먼트",
+    description: "기사, 동영상, 이미지 등 콘텐츠별 결제로 번들 구독을 대체합니다. 초 단위 스트리밍 과금도 가능합니다.",
+    example: "뉴스 기사 $0.01, 동영상 초당 $0.001",
+  },
+  {
+    icon: Users,
+    title: "Agent-to-Agent 거래",
+    description: "AI 에이전트 간 직접 거래가 가능합니다. 자율적인 구매자와 판매자가 24/7 거래하는 에이전트 마켓플레이스를 구축합니다.",
+    example: "데이터 에이전트 → 분석 에이전트 결제",
+  },
+];
+
 export default function EcosystemPage() {
   return (
     <div className="min-h-screen py-20">
@@ -51,10 +333,134 @@ export default function EcosystemPage() {
         {/* Overview */}
         <div className="glass rounded-2xl p-8 mb-12">
           <p className="text-lg text-white/80 leading-relaxed">
-            x402는 오픈 프로토콜로, 다양한 SDK, 퍼실리테이터, 도구들이 활발하게 개발되고 있습니다.
-            주요 생태계 구성 요소들을 소개합니다.
+            x402는 Coinbase와 Cloudflare가 공동 개발한 오픈 프로토콜입니다.
+            2025년 9월 출시 이후 급속히 성장하여 Google, Visa, MetaMask 등 글로벌 기업들이
+            생태계에 참여하고 있습니다. 주요 생태계 구성 요소들을 소개합니다.
           </p>
         </div>
+
+        {/* Protocol Statistics */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
+            <TrendingUp className="h-6 w-6 text-emerald-400" />
+            프로토콜 현황
+          </h2>
+
+          <div className="glass rounded-2xl p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {protocolStats.map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-emerald-400 mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm font-medium text-white mb-1">{stat.label}</div>
+                  <div className="text-xs text-white/40">{stat.description}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/30 text-center">
+              출처: Coinbase, Circle, Base Network 공식 자료 (2025년 기준)
+            </div>
+          </div>
+        </section>
+
+        {/* Protocol Founders */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
+            <Zap className="h-6 w-6 text-emerald-400" />
+            프로토콜 창시자
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            {founders.map((founder) => (
+              <div key={founder.name} className="glass rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-12 h-12 rounded-lg ${founder.bgColor} flex items-center justify-center`}>
+                    <span className={`${founder.textColor} font-bold`}>{founder.initials}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium text-lg">{founder.name}</h3>
+                    <span className="text-emerald-400 text-sm">{founder.role}</span>
+                  </div>
+                </div>
+                <p className="text-white/60 text-sm mb-4 leading-relaxed">
+                  {founder.description}
+                </p>
+                <a
+                  href={founder.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm"
+                >
+                  문서 보기 <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-lg font-medium text-white mb-3 flex items-center gap-2">
+            <Briefcase className="h-5 w-5 text-white/50" />
+            전략 파트너
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {strategicPartners.map((partner) => (
+              <a
+                key={partner.name}
+                href={partner.link}
+                target="_blank"
+                rel="noreferrer"
+                className="glass rounded-xl p-4 hover:bg-white/5 transition-colors group"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`w-8 h-8 rounded-lg ${partner.bgColor} flex items-center justify-center`}>
+                    <span className={`${partner.textColor} font-bold text-xs`}>{partner.initials}</span>
+                  </div>
+                  <span className="text-white font-medium text-sm group-hover:text-emerald-400 transition-colors">
+                    {partner.name}
+                  </span>
+                </div>
+                <div className="text-white/50 text-xs">{partner.role}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* Enterprise Collaborators */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
+            <Building2 className="h-6 w-6 text-emerald-400" />
+            엔터프라이즈 협력사
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {enterpriseCollaborators.map((company) => (
+              <a
+                key={company.name}
+                href={company.link}
+                target="_blank"
+                rel="noreferrer"
+                className="glass rounded-xl p-5 hover:bg-white/5 transition-colors group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-10 h-10 rounded-lg ${company.bgColor} flex items-center justify-center`}>
+                    <span className={`${company.textColor} font-bold text-sm`}>{company.initials}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium group-hover:text-emerald-400 transition-colors">
+                      {company.name}
+                    </h3>
+                  </div>
+                </div>
+                <div className="inline-block bg-white/10 rounded-full px-2 py-0.5 text-xs text-white/70 mb-3">
+                  {company.integration}
+                </div>
+                <p className="text-white/50 text-xs leading-relaxed">
+                  {company.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* Official SDKs */}
         <section className="mb-12">
@@ -144,115 +550,91 @@ export default function EcosystemPage() {
           </div>
         </section>
 
-        {/* 퍼실리테이터s */}
+        {/* Facilitators & Infrastructure */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
             <Building2 className="h-6 w-6 text-emerald-400" />
-            퍼실리테이터s
+            퍼실리테이터 및 인프라
           </h2>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="glass rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                  <span className="text-blue-400 font-bold text-sm">CB</span>
+            {infrastructureProjects.map((project) => (
+              <div key={project.name} className="glass rounded-xl p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-10 h-10 rounded-lg ${project.bgColor} flex items-center justify-center`}>
+                    <span className={`${project.textColor} font-bold text-sm`}>{project.initials}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium">{project.name}</h3>
+                    <span className="text-white/50 text-xs">{project.type}</span>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-white font-medium">Coinbase CDP</h3>
-                  <span className="text-white/50 text-xs">공식 퍼실리테이터</span>
+                <p className="text-white/60 text-sm mb-3 leading-relaxed">
+                  {project.description}
+                </p>
+                {project.stats && (
+                  <div className="inline-block bg-emerald-500/20 text-emerald-400 rounded-full px-2 py-0.5 text-xs mb-3">
+                    {project.stats}
+                  </div>
+                )}
+                <div className="space-y-1.5 text-sm">
+                  {project.networks !== "-" && (
+                    <div className="flex justify-between text-white/70">
+                      <span>지원 네트워크</span>
+                      <span className="text-emerald-400">{project.networks}</span>
+                    </div>
+                  )}
+                  {project.tokens !== "-" && (
+                    <div className="flex justify-between text-white/70">
+                      <span>지원 토큰</span>
+                      <span className="text-emerald-400">{project.tokens}</span>
+                    </div>
+                  )}
                 </div>
+                {project.link !== "#" && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm mt-3"
+                  >
+                    웹사이트 <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
               </div>
-              <p className="text-white/60 text-sm mb-4">
-                Coinbase Developer Platform에서 제공하는 공식 퍼실리테이터입니다.
-                Base 네트워크에 최적화되어 있습니다.
-              </p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-white/70">
-                  <span>지원 네트워크</span>
-                  <span className="text-emerald-400">Base, Ethereum</span>
-                </div>
-                <div className="flex justify-between text-white/70">
-                  <span>지원 토큰</span>
-                  <span className="text-emerald-400">USDC</span>
-                </div>
-              </div>
-              <a
-                href="https://docs.cdp.coinbase.com/x402"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm mt-4"
-              >
-                문서 보기 <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
+            ))}
+          </div>
+        </section>
 
-            <div className="glass rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                  <span className="text-purple-400 font-bold text-sm">x4</span>
-                </div>
-                <div>
-                  <h3 className="text-white font-medium">x402.org</h3>
-                  <span className="text-white/50 text-xs">커뮤니티 퍼실리테이터</span>
-                </div>
-              </div>
-              <p className="text-white/60 text-sm mb-4">
-                커뮤니티에서 운영하는 오픈 퍼실리테이터입니다.
-                다양한 네트워크를 지원합니다.
-              </p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-white/70">
-                  <span>지원 네트워크</span>
-                  <span className="text-emerald-400">Base, Polygon, +</span>
-                </div>
-                <div className="flex justify-between text-white/70">
-                  <span>지원 토큰</span>
-                  <span className="text-emerald-400">USDC</span>
-                </div>
-              </div>
-              <a
-                href="https://x402.org"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm mt-4"
-              >
-                웹사이트 <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
+        {/* Developer Tools */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
+            <Wrench className="h-6 w-6 text-emerald-400" />
+            개발자 도구
+          </h2>
 
-            <div className="glass rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                  <span className="text-amber-400 font-bold text-sm">PA</span>
-                </div>
-                <div>
-                  <h3 className="text-white font-medium">PayAI</h3>
-                  <span className="text-white/50 text-xs">AI 특화 퍼실리테이터</span>
-                </div>
-              </div>
-              <p className="text-white/60 text-sm mb-4">
-                AI 에이전트 결제에 특화된 퍼실리테이터입니다.
-                Solana 네트워크도 지원합니다.
-              </p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-white/70">
-                  <span>지원 네트워크</span>
-                  <span className="text-emerald-400">Solana, Base, Polygon</span>
-                </div>
-                <div className="flex justify-between text-white/70">
-                  <span>지원 토큰</span>
-                  <span className="text-emerald-400">USDC, SPL</span>
-                </div>
-              </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {developerTools.map((tool) => (
               <a
-                href="https://payai.network"
+                key={tool.name}
+                href={tool.link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm mt-4"
+                className="glass rounded-xl p-5 hover:bg-white/5 transition-colors group"
               >
-                웹사이트 <ExternalLink className="h-3 w-3" />
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-white font-medium group-hover:text-emerald-400 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <span className="bg-white/10 rounded-full px-2 py-0.5 text-xs text-white/50">
+                    {tool.type}
+                  </span>
+                </div>
+                <p className="text-white/50 text-sm leading-relaxed">
+                  {tool.description}
+                </p>
               </a>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -274,50 +656,58 @@ export default function EcosystemPage() {
                 </tr>
               </thead>
               <tbody className="text-white/70">
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Base Mainnet</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:8453</td>
-                  <td className="py-3 px-4">USDC</td>
-                  <td className="py-3 px-4"><span className="text-emerald-400">✓ 활성</span></td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Base Sepolia</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:84532</td>
-                  <td className="py-3 px-4">USDC (테스트)</td>
-                  <td className="py-3 px-4"><span className="text-emerald-400">✓ 활성</span></td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Ethereum Mainnet</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:1</td>
-                  <td className="py-3 px-4">USDC</td>
-                  <td className="py-3 px-4"><span className="text-emerald-400">✓ 활성</span></td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Solana Mainnet</td>
-                  <td className="py-3 px-4 font-mono text-xs">solana:5eykt4...</td>
-                  <td className="py-3 px-4">SPL USDC</td>
-                  <td className="py-3 px-4"><span className="text-emerald-400">✓ 활성</span></td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Polygon</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:137</td>
-                  <td className="py-3 px-4">USDC</td>
-                  <td className="py-3 px-4"><span className="text-emerald-400">✓ 활성</span></td>
-                </tr>
-                <tr className="border-b border-white/5">
-                  <td className="py-3 px-4 font-medium text-white">Arbitrum</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:42161</td>
-                  <td className="py-3 px-4">USDC</td>
-                  <td className="py-3 px-4"><span className="text-amber-400">◐ 일부</span></td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4 font-medium text-white">Optimism</td>
-                  <td className="py-3 px-4 font-mono text-xs">eip155:10</td>
-                  <td className="py-3 px-4">USDC</td>
-                  <td className="py-3 px-4"><span className="text-amber-400">◐ 일부</span></td>
-                </tr>
+                {supportedNetworks.map((network, index) => (
+                  <tr
+                    key={network.name}
+                    className={index < supportedNetworks.length - 1 ? "border-b border-white/5" : ""}
+                  >
+                    <td className="py-3 px-4 font-medium text-white">{network.name}</td>
+                    <td className="py-3 px-4 font-mono text-xs">{network.caipId}</td>
+                    <td className="py-3 px-4">{network.token}</td>
+                    <td className="py-3 px-4">
+                      {network.status === "active" && (
+                        <span className="text-emerald-400">✓ 활성</span>
+                      )}
+                      {network.status === "partial" && (
+                        <span className="text-amber-400">◐ 일부</span>
+                      )}
+                      {network.status === "upcoming" && (
+                        <span className="text-blue-400">○ 예정</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* Use Cases */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-white mb-4 flex items-center gap-3">
+            <Globe className="h-6 w-6 text-emerald-400" />
+            활용 사례
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {useCases.map((useCase) => {
+              const IconComponent = useCase.icon;
+              return (
+                <div key={useCase.title} className="glass rounded-xl p-6">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-4">
+                    <IconComponent className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <h3 className="text-white font-medium mb-2">{useCase.title}</h3>
+                  <p className="text-white/60 text-sm mb-4 leading-relaxed">
+                    {useCase.description}
+                  </p>
+                  <div className="bg-black/30 rounded-lg p-3 text-xs">
+                    <span className="text-emerald-400">예시: </span>
+                    <span className="text-white/50">{useCase.example}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -387,6 +777,36 @@ export default function EcosystemPage() {
                 <ExternalLink className="h-4 w-4 text-white/30 group-hover:text-emerald-400 transition-colors" />
               </div>
               <p className="text-white/50 text-sm mt-2">Cloudflare Workers 구현 가이드</p>
+            </a>
+
+            <a
+              href="https://www.x402.org/ecosystem"
+              target="_blank"
+              rel="noreferrer"
+              className="glass rounded-xl p-6 hover:bg-white/5 transition-colors group"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-medium group-hover:text-emerald-400 transition-colors">
+                  x402.org 생태계
+                </h3>
+                <ExternalLink className="h-4 w-4 text-white/30 group-hover:text-emerald-400 transition-colors" />
+              </div>
+              <p className="text-white/50 text-sm mt-2">커뮤니티 생태계 포털</p>
+            </a>
+
+            <a
+              href="https://solana.com/x402/what-is-x402"
+              target="_blank"
+              rel="noreferrer"
+              className="glass rounded-xl p-6 hover:bg-white/5 transition-colors group"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-medium group-hover:text-emerald-400 transition-colors">
+                  Solana x402 가이드
+                </h3>
+                <ExternalLink className="h-4 w-4 text-white/30 group-hover:text-emerald-400 transition-colors" />
+              </div>
+              <p className="text-white/50 text-sm mt-2">Solana 네트워크 통합 가이드</p>
             </a>
           </div>
         </section>

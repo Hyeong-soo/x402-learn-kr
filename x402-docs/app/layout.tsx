@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { HumanVerification } from "@/components/human-verification";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
-import { WalletProvider } from "@/lib/wagmi/provider";
-import { FrameProvider } from "@/components/FrameProvider";
 import { cn } from "@/lib/utils";
+
+const Providers = dynamic(
+  () => import("./providers").then((mod) => mod.Providers),
+  { ssr: false }
+);
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -121,33 +125,31 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <FrameProvider>
-          <WalletProvider>
-            <HumanVerification />
-            <div className="relative flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <footer className="border-t border-white/5 py-6 md:py-0">
-                <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
-                  <p className="text-center text-sm leading-loose text-white/40 md:text-left">
-                    Built with{" "}
-                    <a
-                      href="https://x402.org"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-medium text-white/60 hover:text-emerald-400 transition-colors underline underline-offset-4"
-                    >
-                      x402 Protocol
-                    </a>
-                  </p>
-                  <p className="text-center text-sm text-white/40 md:text-right">
-                    Learn402
-                  </p>
-                </div>
-              </footer>
-            </div>
-          </WalletProvider>
-        </FrameProvider>
+        <Providers>
+          <HumanVerification />
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <footer className="border-t border-white/5 py-6 md:py-0">
+              <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+                <p className="text-center text-sm leading-loose text-white/40 md:text-left">
+                  Built with{" "}
+                  <a
+                    href="https://x402.org"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-white/60 hover:text-emerald-400 transition-colors underline underline-offset-4"
+                  >
+                    x402 Protocol
+                  </a>
+                </p>
+                <p className="text-center text-sm text-white/40 md:text-right">
+                  Learn402
+                </p>
+              </div>
+            </footer>
+          </div>
+        </Providers>
       </body>
     </html>
   );

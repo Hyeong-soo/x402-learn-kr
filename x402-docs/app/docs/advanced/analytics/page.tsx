@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, TrendingUp, DollarSign, Users, Activity, Database, LineChart, PieChart, Lightbulb, CheckCircle2 } from "lucide-react";
+import { BarChart3, TrendingUp, DollarSign, Users, Activity, Database, LineChart, PieChart, Lightbulb, CheckCircle2, Shield, Code, ExternalLink } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 
@@ -157,6 +157,128 @@ export async function trackPayment(event: PaymentEvent): Promise<void> {
 }`}
               language="typescript"
             />
+          </div>
+        </section>
+
+        {/* Blockchain Transaction Verification */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <Shield className="h-6 w-6 text-emerald-400" />
+            블록체인 트랜잭션 검증
+          </h2>
+          <p className="text-white/60 mb-6">
+            x402 결제의 txHash를 사용하여 블록체인에서 실제 정산을 검증할 수 있습니다.
+          </p>
+
+          <div className="glass rounded-xl p-6">
+            <CodeBlock
+              code={`// transaction-verification.ts
+// txHash를 사용한 블록체인 검증
+
+import { createPublicClient, http } from "viem";
+import { base, baseSepolia } from "viem/chains";
+
+// 네트워크별 클라이언트 설정
+const clients = {
+  "base": createPublicClient({ chain: base, transport: http() }),
+  "base-sepolia": createPublicClient({ chain: baseSepolia, transport: http() }),
+};
+
+// 트랜잭션 검증 함수
+export async function verifyPayment(
+  txHash: \`0x\${string}\`,
+  network: "base" | "base-sepolia",
+  expectedAmount: bigint,
+  expectedRecipient: string
+): Promise<{ verified: boolean; receipt?: any }> {
+  const client = clients[network];
+
+  try {
+    // 트랜잭션 영수증 조회
+    const receipt = await client.getTransactionReceipt({
+      hash: txHash,
+    });
+
+    if (receipt.status !== "success") {
+      return { verified: false };
+    }
+
+    // USDC Transfer 이벤트 파싱
+    // (실제 구현에서는 로그 디코딩 필요)
+
+    return { verified: true, receipt };
+  } catch (error) {
+    console.error("Verification failed:", error);
+    return { verified: false };
+  }
+}
+
+// 사용 예시
+const result = await verifyPayment(
+  "0x1234...abcd",
+  "base",
+  BigInt(10000),  // 0.01 USDC (6 decimals)
+  "0xRecipient..."
+);`}
+              language="typescript"
+            />
+            <div className="mt-4 p-4 rounded-lg bg-emerald-500/10">
+              <p className="text-emerald-400 text-sm">
+                <strong>팁:</strong> txHash를 데이터베이스에 저장하면 나중에 블록체인 탐색기(Basescan)에서
+                결제 내역을 확인할 수 있습니다.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* HTTP Headers Reference */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+            <Code className="h-6 w-6 text-purple-400" />
+            x402 HTTP 헤더 분석
+          </h2>
+          <p className="text-white/60 mb-6">
+            x402 프로토콜에서 사용되는 HTTP 헤더를 분석하면 결제 플로우를 추적할 수 있습니다.
+          </p>
+
+          <div className="glass rounded-xl overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left p-4 text-white/80 font-medium">헤더</th>
+                  <th className="text-left p-4 text-white/80 font-medium">방향</th>
+                  <th className="text-left p-4 text-white/80 font-medium">설명</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-white/5">
+                  <td className="p-4">
+                    <code className="text-emerald-400 font-mono text-sm">PAYMENT-REQUIRED</code>
+                  </td>
+                  <td className="p-4 text-white/60">서버 → 클라이언트</td>
+                  <td className="p-4 text-white/60 text-sm">402 응답에 포함된 결제 요구사항 (가격, 네트워크, 수신자)</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="p-4">
+                    <code className="text-blue-400 font-mono text-sm">PAYMENT-SIGNATURE</code>
+                  </td>
+                  <td className="p-4 text-white/60">클라이언트 → 서버</td>
+                  <td className="p-4 text-white/60 text-sm">클라이언트의 EIP-712 서명 페이로드</td>
+                </tr>
+                <tr>
+                  <td className="p-4">
+                    <code className="text-purple-400 font-mono text-sm">PAYMENT-RESPONSE</code>
+                  </td>
+                  <td className="p-4 text-white/60">서버 → 클라이언트</td>
+                  <td className="p-4 text-white/60 text-sm">정산 확인 및 txHash (검증용)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 p-4 glass rounded-lg">
+            <p className="text-white/60 text-sm">
+              <strong className="text-purple-400">분석 활용:</strong> 헤더를 로깅하면 결제 플로우 디버깅, 실패 원인 분석, 성능 모니터링에 활용할 수 있습니다.
+            </p>
           </div>
         </section>
 
@@ -444,6 +566,19 @@ export async function getAgentTypeDistribution() {
                 <h4 className="text-white font-medium mb-1">프라이버시 고려</h4>
                 <p className="text-white/60 text-sm">
                   에이전트 ID는 지갑 주소로 익명화되어 있지만, 사용 패턴 데이터는 신중하게 다루세요.
+                </p>
+              </div>
+            </div>
+
+            <div className="glass rounded-xl p-6 flex items-start gap-4">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                <span className="text-emerald-400 font-mono text-sm">5</span>
+              </div>
+              <div>
+                <h4 className="text-white font-medium mb-1">외부 분석 플랫폼 연동</h4>
+                <p className="text-white/60 text-sm">
+                  Mixpanel, Amplitude, 또는 자체 분석 시스템과 연동하여 x402 결제 이벤트를 기존 분석 파이프라인에 통합하세요.
+                  txHash를 이벤트 속성으로 저장하면 블록체인 데이터와 연결할 수 있습니다.
                 </p>
               </div>
             </div>

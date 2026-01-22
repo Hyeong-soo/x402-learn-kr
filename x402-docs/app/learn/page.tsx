@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Layers, Workflow, Coins, Globe, Cpu } from "lucid
 import { CourseSchema } from "@/components/StructuredData";
 import { BreadcrumbSchema } from "@/components/BreadcrumbSchema";
 
-const BASE_URL = "https://x402-learn-kr.vercel.app";
+const BASE_URL = "https://learn402.xyz";
 const PAGE_URL = `${BASE_URL}/learn`;
 
 export const metadata: Metadata = {

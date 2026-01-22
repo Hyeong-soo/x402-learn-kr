@@ -14,7 +14,7 @@ const Providers = dynamic(
 
 const inter = Inter({ subsets: ["latin"] });
 
-const BASE_URL = "https://learn402.xyz";
+const BASE_URL = "https://www.learn402.xyz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

@@ -116,7 +116,7 @@ claude mcp add x402 -- npx x402-fetch-mcp
 claude mcp list
 # 출력: x402 - ✓ Connected`;
 
-  const testPrompt = `https://learn402.xyz/demo/protected-content 를 fetch 도구로 가져와줘`;
+  const testPrompt = `https://www.learn402.xyz/demo/protected-content 를 fetch 도구로 가져와줘`;
 
   // Stepper 상태 계산
   const getStepStatus = (stepNum: number) => {

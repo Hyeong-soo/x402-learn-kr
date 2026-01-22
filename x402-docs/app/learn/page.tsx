@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Layers, Workflow, Coins, Globe, Cpu } from "lucid
 import { CourseSchema } from "@/components/StructuredData";
 import { BreadcrumbSchema } from "@/components/BreadcrumbSchema";
 
-const BASE_URL = "https://learn402.xyz";
+const BASE_URL = "https://www.learn402.xyz";
 const PAGE_URL = `${BASE_URL}/learn`;
 
 export const metadata: Metadata = {

@@ -15,4 +15,4 @@ Allow: /api/verify-human
 Disallow: /api/
 
 # Sitemap 위치
-Sitemap: https://learn402.xyz/sitemap1.xml
+Sitemap: https://www.learn402.xyz/sitemap1.xml

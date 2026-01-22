@@ -19,7 +19,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-const BASE_URL = "https://learn402.xyz";
+const BASE_URL = "https://www.learn402.xyz";
 const PAGE_URL = `${BASE_URL}/docs`;
 
 export const metadata: Metadata = {

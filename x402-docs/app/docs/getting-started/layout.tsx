@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { BreadcrumbSchema } from "@/components/BreadcrumbSchema";
 
-const BASE_URL = "https://learn402.xyz";
+const BASE_URL = "https://www.learn402.xyz";
 const PAGE_URL = `${BASE_URL}/docs/getting-started`;
 
 export const metadata: Metadata = {

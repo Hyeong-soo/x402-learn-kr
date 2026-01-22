@@ -44,7 +44,11 @@
       "Bash(git -C /Users/henry/ClaudeWorkplace/x402-for-opensource log --oneline --max-count=20)",
       "Bash(git -C /Users/henry/ClaudeWorkplace/x402-for-opensource log --oneline)",
       "Bash(npm run typecheck:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:www.x402.org)",
+      "WebFetch(domain:blog.cloudflare.com)",
+      "WebFetch(domain:solana.com)",
+      "WebFetch(domain:docs.base.org)"
     ]
   }
 }

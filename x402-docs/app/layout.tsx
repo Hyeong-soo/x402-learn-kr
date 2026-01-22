@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import dynamic from "next/dynamic";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { HumanVerification } from "@/components/human-verification";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { cn } from "@/lib/utils";
-
-const Providers = dynamic(
-  () => import("./providers").then((mod) => mod.Providers),
-  { ssr: false }
-);
+import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 

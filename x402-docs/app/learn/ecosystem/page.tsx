@@ -18,6 +18,24 @@ import {
   Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  CoinbaseLogo,
+  CloudflareLogo,
+  CircleLogo,
+  AWSLogo,
+  AnthropicLogo,
+  NEARLogo,
+  GoogleLogo,
+  VisaLogo,
+  MetaMaskLogo,
+  ThirdwebLogo,
+  CrossmintLogo,
+  PayAILogo,
+  VercelLogo,
+  ZuploLogo,
+  NpmLogo,
+  GitHubLogo,
+} from "@/components/CompanyLogos";
 
 // Language Icons
 const TypeScriptIcon = () => (
@@ -47,11 +65,32 @@ const GoIcon = () => (
   </svg>
 );
 
+// Company Logo mapping
+const getCompanyLogo = (name: string, size: "sm" | "md" | "lg" = "md") => {
+  const sizeClass = size === "sm" ? "w-5 h-5" : size === "lg" ? "w-8 h-8" : "w-6 h-6";
+  const logos: Record<string, React.ReactNode> = {
+    "Coinbase": <CoinbaseLogo className={sizeClass} />,
+    "Coinbase CDP": <CoinbaseLogo className={sizeClass} />,
+    "Cloudflare": <CloudflareLogo className={sizeClass} />,
+    "Circle": <CircleLogo className={sizeClass} />,
+    "AWS": <AWSLogo className={sizeClass} />,
+    "Anthropic": <AnthropicLogo className={sizeClass} />,
+    "NEAR": <NEARLogo className={sizeClass} />,
+    "Google": <GoogleLogo className={sizeClass} />,
+    "Visa": <VisaLogo className={sizeClass} />,
+    "MetaMask": <MetaMaskLogo className={sizeClass} />,
+    "thirdweb": <ThirdwebLogo className={sizeClass} />,
+    "Crossmint": <CrossmintLogo className={sizeClass} />,
+    "PayAI": <PayAILogo className={sizeClass} />,
+  };
+  return logos[name] || null;
+};
+
 // Protocol Statistics Data
 const protocolStats = [
-  { value: "35M+", label: "총 트랜잭션", description: "2025년 9월 출시 이후" },
-  { value: "$10M+", label: "거래량", description: "USDC 기반 결제" },
-  { value: "119M", label: "Base 누적", description: "네트워크 트랜잭션" },
+  { value: "100M+", label: "총 트랜잭션", description: "2025년 5월 출시 이후" },
+  { value: "$24M+", label: "거래량", description: "USDC 기반 결제" },
+  { value: "$600M", label: "연간 거래량", description: "2025년 12월 기준" },
   { value: "$77B", label: "USDC 유통량", description: "16개 블록체인" },
 ];
 
@@ -244,9 +283,9 @@ const infrastructureProjects = [
 // Developer Tools
 const developerTools = [
   {
-    name: "x402-mcp",
-    description: "MCP 서버에서 유료 도구를 활성화하는 경량 래퍼입니다. Claude Desktop과 유료 API를 연결합니다.",
-    link: "https://github.com/anthropics/x402-mcp",
+    name: "Payments MCP",
+    description: "Coinbase의 공식 MCP 서버입니다. 지갑, 온램프, x402 결제를 통합하여 AI 에이전트 상거래를 지원합니다.",
+    link: "https://github.com/coinbase/payments-mcp",
     type: "MCP",
   },
   {
@@ -334,7 +373,7 @@ export default function EcosystemPage() {
         <div className="glass rounded-2xl p-8 mb-12">
           <p className="text-lg text-white/80 leading-relaxed">
             x402는 Coinbase와 Cloudflare가 공동 개발한 오픈 프로토콜입니다.
-            2025년 9월 출시 이후 급속히 성장하여 Google, Visa, MetaMask 등 글로벌 기업들이
+            2025년 5월 출시 이후 급속히 성장하여 Google, Visa, MetaMask 등 글로벌 기업들이
             생태계에 참여하고 있습니다. 주요 생태계 구성 요소들을 소개합니다.
           </p>
         </div>
@@ -359,7 +398,7 @@ export default function EcosystemPage() {
               ))}
             </div>
             <div className="mt-6 pt-4 border-t border-white/10 text-xs text-white/30 text-center">
-              출처: Coinbase, Circle, Base Network 공식 자료 (2025년 기준)
+              출처: Coinbase, Circle, Dune Analytics (2025년 12월 기준)
             </div>
           </div>
         </section>
@@ -376,7 +415,7 @@ export default function EcosystemPage() {
               <div key={founder.name} className="glass rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`w-12 h-12 rounded-lg ${founder.bgColor} flex items-center justify-center`}>
-                    <span className={`${founder.textColor} font-bold`}>{founder.initials}</span>
+                    {getCompanyLogo(founder.name, "lg") || <span className={`${founder.textColor} font-bold`}>{founder.initials}</span>}
                   </div>
                   <div>
                     <h3 className="text-white font-medium text-lg">{founder.name}</h3>
@@ -413,7 +452,7 @@ export default function EcosystemPage() {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className={`w-8 h-8 rounded-lg ${partner.bgColor} flex items-center justify-center`}>
-                    <span className={`${partner.textColor} font-bold text-xs`}>{partner.initials}</span>
+                    {getCompanyLogo(partner.name, "md") || <span className={`${partner.textColor} font-bold text-xs`}>{partner.initials}</span>}
                   </div>
                   <span className="text-white font-medium text-sm group-hover:text-emerald-400 transition-colors">
                     {partner.name}
@@ -443,7 +482,7 @@ export default function EcosystemPage() {
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-10 h-10 rounded-lg ${company.bgColor} flex items-center justify-center`}>
-                    <span className={`${company.textColor} font-bold text-sm`}>{company.initials}</span>
+                    {getCompanyLogo(company.name, "md") || <span className={`${company.textColor} font-bold text-sm`}>{company.initials}</span>}
                   </div>
                   <div>
                     <h3 className="text-white font-medium group-hover:text-emerald-400 transition-colors">
@@ -520,7 +559,7 @@ export default function EcosystemPage() {
               </p>
               <div className="bg-black/30 rounded-lg p-4 font-mono text-xs">
                 <div className="text-emerald-400">pip install x402</div>
-                <div className="text-emerald-400 mt-2">pip install x402[fastapi]  # FastAPI 미들웨어</div>
+                <div className="text-white/50 mt-2"># FastAPI, Flask, httpx, requests 미들웨어 포함</div>
               </div>
             </div>
 
@@ -562,7 +601,7 @@ export default function EcosystemPage() {
               <div key={project.name} className="glass rounded-xl p-5">
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-10 h-10 rounded-lg ${project.bgColor} flex items-center justify-center`}>
-                    <span className={`${project.textColor} font-bold text-sm`}>{project.initials}</span>
+                    {getCompanyLogo(project.name, "md") || <span className={`${project.textColor} font-bold text-sm`}>{project.initials}</span>}
                   </div>
                   <div>
                     <h3 className="text-white font-medium">{project.name}</h3>

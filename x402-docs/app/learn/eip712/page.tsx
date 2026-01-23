@@ -363,7 +363,7 @@ async function signTransferWithAuthorization(
           </Button>
           <Button className="bg-emerald-500 hover:bg-emerald-400 text-black" asChild>
             <Link href="/learn/usdc-transfer">
-              USDC transferWithAuthorization
+              USDC 전송 권한
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

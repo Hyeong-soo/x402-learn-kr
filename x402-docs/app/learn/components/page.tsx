@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Smartphone, Server, Building2, Layers, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/CodeBlock";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 
 export default function ComponentsPage() {
   return (
@@ -77,7 +78,7 @@ export default function ComponentsPage() {
                 <h3 className="text-white font-medium mb-2 text-sm">SDK</h3>
                 <CodeBlock
                   code={`npm install @x402/fetch @x402/axios
-pip install x402  # Python`}
+pip install x402`}
                   language="bash"
                 />
               </div>
@@ -133,7 +134,7 @@ pip install x402  # Python`}
                 <h3 className="text-white font-medium mb-2 text-sm">SDK</h3>
                 <CodeBlock
                   code={`npm install @x402/express @x402/next @x402/hono
-pip install x402[fastapi]  # Python`}
+pip install x402`}
                   language="bash"
                 />
               </div>
@@ -185,9 +186,9 @@ pip install x402[fastapi]  # Python`}
                     <span>Coinbase CDP</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
-                  <a href="https://x402.org/facilitator" target="_blank" rel="noreferrer"
+                  <a href="https://x402.org/ecosystem" target="_blank" rel="noreferrer"
                     className="flex items-center gap-2 text-sm text-white/70 hover:text-purple-400 transition-colors">
-                    <span>x402.org</span>
+                    <span>x402 생태계</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                   <a href="https://payai.network" target="_blank" rel="noreferrer"
@@ -282,38 +283,40 @@ POST /settle   - 온체인 정산`}
         </section>
 
         {/* Architecture Diagram */}
-        <div className="glass rounded-2xl p-8 mb-12">
+        <div className="glass rounded-2xl p-8 mb-8">
           <h2 className="text-xl font-semibold text-white mb-6">전체 아키텍처</h2>
-          <CodeBlock
-            code={`┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   클라이언트     │     │   리소스 서버    │     │   퍼실리테이터   │
-│   (AI Agent)    │     │   (API Server)  │     │   (검증/정산)    │
-└────────┬────────┘     └────────┬────────┘     └────────┬────────┘
-         │                       │                       │
-         │  1. GET /resource     │                       │
-         │──────────────────────>│                       │
-         │                       │                       │
-         │  2. 402 + 결제정보    │                       │
-         │<──────────────────────│                       │
-         │                       │                       │
-         │  3. 서명 생성         │                       │
-         │  (로컬)               │                       │
-         │                       │                       │
-         │  4. GET + 서명        │                       │
-         │──────────────────────>│                       │
-         │                       │  5. 검증 요청         │
-         │                       │──────────────────────>│
-         │                       │                       │  6. 온체인 정산
-         │                       │                       │─────────────────┐
-         │                       │                       │                 │
-         │                       │                       │<────────────────┘
-         │                       │  검증 완료            │
-         │                       │<──────────────────────│
-         │  7. 200 + 콘텐츠      │                       │
-         │<──────────────────────│                       │
-         │                       │                       │`}
-            language="text"
-          />
+          <ArchitectureDiagram />
+        </div>
+
+        {/* Settlement Note */}
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-5 mb-12">
+          <h3 className="text-amber-400 font-medium mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Settlement Timing에 대하여
+          </h3>
+          <p className="text-white/70 text-sm leading-relaxed mb-3">
+            위 다이어그램은 <strong className="text-white">검증 완료 후 즉시 콘텐츠를 반환</strong>하고,
+            <strong className="text-amber-400"> 온체인 정산은 비동기로 처리</strong>하는 방식을 보여줍니다.
+            이는 x402 V2의 기본 동작이자 Cloudflare가 제안한 Deferred Settlement 방식입니다.
+          </p>
+          <div className="grid md:grid-cols-2 gap-3 text-xs">
+            <div className="bg-black/20 rounded-lg p-3">
+              <div className="text-blue-400 font-medium mb-1">Coinbase (x402 V2)</div>
+              <p className="text-white/60">
+                Settlement timing 선택 가능: <code className="text-blue-300">before</code> (정산 후 응답)
+                또는 <code className="text-blue-300">after</code> (응답 후 정산, 기본값)
+              </p>
+            </div>
+            <div className="bg-black/20 rounded-lg p-3">
+              <div className="text-purple-400 font-medium mb-1">Cloudflare (Deferred)</div>
+              <p className="text-white/60">
+                AI 에이전트/크롤러용으로 검증과 정산을 분리.
+                배치/일일 단위로 통합 정산 가능
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Navigation */}

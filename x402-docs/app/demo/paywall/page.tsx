@@ -52,7 +52,7 @@ export default function PaywallDemoPage() {
     checkOrCreateHumanToken();
   }, []);
 
-  const curlCommand = `curl -X GET "http://localhost:3010/demo/protected-content" \\
+  const curlCommand = `curl -X GET "https://www.learn402.xyz/demo/protected-content" \\
   -H "User-Agent: AI-Agent/1.0" \\
   -H "Accept: application/json"`;
 
@@ -210,19 +210,27 @@ export default function PaywallDemoPage() {
               </div>
 
               <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
-                <h4 className="text-amber-400 font-medium mb-2 text-sm sm:text-base">예상 응답:</h4>
+                <h4 className="text-amber-400 font-medium mb-2 text-sm sm:text-base">예상 응답 (HTTP 402):</h4>
                 <div className="overflow-x-auto text-sm">
                   <CodeBlock
                     code={`{
-  "error": "Payment Required",
-  "message": "AI agents must pay $0.01 USDC",
-  "price": 0.01,
-  "network": "eip155:84532",
-  "paymentDetails": { ... }
+  "x402Version": 2,
+  "accepts": [{
+    "scheme": "exact",
+    "network": "eip155:84532",
+    "amount": "10000",
+    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "payTo": "0x...",
+    "description": "Access to /demo/protected-content",
+    "extra": { "name": "USDC", "version": "2" }
+  }]
 }`}
                     language="json"
                   />
                 </div>
+                <p className="text-white/50 mt-2 text-xs">
+                  <code className="text-amber-400">amount: &quot;10000&quot;</code> = $0.01 USDC (6 decimals)
+                </p>
               </div>
             </div>
           </div>

@@ -48,7 +48,13 @@
       "WebFetch(domain:www.x402.org)",
       "WebFetch(domain:blog.cloudflare.com)",
       "WebFetch(domain:solana.com)",
-      "WebFetch(domain:docs.base.org)"
+      "WebFetch(domain:docs.base.org)",
+      "Bash(npm:*)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(gh repo create:*)",
+      "Bash(nvm use)",
+      "Bash(git stash drop:*)"
     ]
   }
 }
